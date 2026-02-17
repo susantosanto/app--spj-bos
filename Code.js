@@ -106,3 +106,13 @@ function processExcelByFileId(fileId) {
         return { success: false, error: "Gagal membaca Excel: " + e.toString() };
     }
 }
+
+function getGoogleDocContent(fileId) {
+    try {
+        // Mengambil file Google Doc dan mengonversinya menjadi HTML String raw
+        const htmlContent = DriveApp.getFileById(fileId).getAs(MimeType.HTML).getDataAsString();
+        return { success: true, html: htmlContent };
+    } catch (e) {
+        return { success: false, error: e.toString() };
+    }
+}
