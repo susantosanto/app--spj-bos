@@ -52,7 +52,7 @@ function processExcelByFileId(fileId) {
 
         const sheet = spreadsheet.getSheets()[0]; // Ambil sheet pertama
         const values = sheet.getDataRange().getValues();
-        const transactions = [];
+        const transactionMap = {};
 
         // Loop mulai dari baris 2 (Indeks 1) untuk melewati Header
         for (let i = 1; i < values.length; i++) {
@@ -87,19 +87,47 @@ function processExcelByFileId(fileId) {
                         penerima = "RM. Family";
                     }
 
-                    transactions.push({
-                        id: noBukti + "_" + i,
-                        tanggal: tanggal,
-                        noBukti: noBukti,
-                        uraian: uraian,
-                        pengeluaran: pengeluaran,
-                        penerima: penerima,
-                        type: type,
-                        vendorStyle: vendorStyle
-                    });
+                    // LOGIC MERGE: Satukan transaksi jika No Bukti sama (Khususnya Makan & Snack)
+                    if (transactionMap[noBukti]) {
+                        // Jika No Bukti sudah ada, tambahkan nominalnya (Merge Amount)
+                        transactionMap[noBukti].pengeluaran += pengeluaran;
+
+                        // LOGIC BARU: Menggabungkan uraian "Makan" dan "Snack" menjadi format yang benar
+                        const existingUraian = transactionMap[noBukti].uraian;
+                        const uLowExisting = existingUraian.toLowerCase();
+
+                        // Cek apakah ini adalah kasus penggabungan Konsumsi Makan dan Snack
+                        const isMergeCandidate = (uLowExisting.includes('makan') && uLow.includes('snack')) ||
+                            (uLowExisting.includes('snack') && uLow.includes('makan'));
+
+                        if (isMergeCandidate && uLowExisting.includes('konsumsi') && uLow.includes('konsumsi')) {
+                            // Ekstrak nama kegiatan dari uraian yang sudah ada dengan menghapus kata kunci.
+                            const activityName = existingUraian
+                                .replace(/belanja /i, '')
+                                .replace(/konsumsi (makan|snack) /i, '')
+                                .trim();
+
+                            // Bentuk uraian baru sesuai format yang diinginkan: Konsumsi (Makan & Snack) nama kegiatan
+                            transactionMap[noBukti].uraian = `Konsumsi (Makan & Snack) ${activityName}`;
+                        }
+                    } else {
+                        transactionMap[noBukti] = {
+                            id: noBukti + "_" + i,
+                            tanggal: tanggal,
+                            noBukti: noBukti,
+                            uraian: uraian,
+                            pengeluaran: pengeluaran,
+                            penerima: penerima,
+                            type: type,
+                            vendorStyle: vendorStyle
+                        };
+                    }
                 }
             }
         }
+
+        // Konversi Map kembali menjadi Array untuk dikirim ke Frontend
+        const transactions = Object.values(transactionMap);
 
         return { success: true, data: transactions };
     } catch (e) {
@@ -109,9 +137,48 @@ function processExcelByFileId(fileId) {
 
 function getGoogleDocContent(fileId) {
     try {
-        // Mengambil file Google Doc dan mengonversinya menjadi HTML String raw
-        const htmlContent = DriveApp.getFileById(fileId).getAs(MimeType.HTML).getDataAsString();
+        const file = DriveApp.getFileById(fileId);
+        let docIdToRead = fileId;
+        let tempFileId = null;
+
+        // Jika file adalah Word (.docx), konversi sementara ke Google Docs agar bisa diambil HTML-nya
+        if (file.getMimeType() === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+            const blob = file.getBlob();
+            const config = { title: "temp_convert_doc_" + fileId, parents: [{ id: "root" }] };
+            const tempFile = Drive.Files.insert(config, blob, { convert: true });
+            docIdToRead = tempFile.id;
+            tempFileId = tempFile.id;
+        }
+
+        const htmlContent = DriveApp.getFileById(docIdToRead).getAs(MimeType.HTML).getDataAsString();
+
+        if (tempFileId) {
+            Drive.Files.remove(tempFileId);
+        }
+
         return { success: true, html: htmlContent };
+    } catch (e) {
+        return { success: false, error: e.toString() };
+    }
+}
+
+function getTemplatesFromFolder() {
+    try {
+        const folders = DriveApp.getFoldersByName("TEMPLATE");
+        if (!folders.hasNext()) {
+            return { success: false, error: "Folder 'TEMPLATE' tidak ditemukan." };
+        }
+        const folder = folders.next();
+        const files = folder.getFiles();
+        const templates = [];
+        while (files.hasNext()) {
+            const file = files.next();
+            const mime = file.getMimeType();
+            if (mime === MimeType.GOOGLE_DOCS || mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                templates.push({ name: file.getName(), id: file.getId() });
+            }
+        }
+        return { success: true, templates: templates };
     } catch (e) {
         return { success: false, error: e.toString() };
     }

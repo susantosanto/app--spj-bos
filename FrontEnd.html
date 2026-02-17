@@ -779,13 +779,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label>ID Template Google Doc (Opsional)</label>
-                        <input type="text" id="driveDocId" placeholder="Tempel ID File Google Doc disini..." onchange="loadDocFromDrive()">
+                        <label>Gunakan Template Drive</label>
+                        <select id="driveTemplateSelect" onchange="handleTemplateChange()"
+                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                            <option value="">-- Gunakan Layout Bawaan --</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label>Jenis Dokumen</label>
-                        <select id="docType" onchange="updatePreview()"
+                        <select id="docType" onchange="handleDocTypeChange()"
                             style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
                             <option value="kwitansi">Kwitansi SPJ</option>
                             <option value="nota">Nota Toko / Invoice</option>
@@ -793,6 +796,12 @@
                             <option value="berita_acara">Berita Acara Serah Terima</option>
                             <option value="undangan">Surat Undangan</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nomor Surat</label>
+                        <input type="text" id="custNomorSurat" oninput="updatePreview()"
+                            placeholder="Contoh: 001/SD/2025">
                     </div>
 
                     <div class="form-group">
@@ -812,7 +821,8 @@
 
                     <div class="form-group">
                         <label>Uraian Belanja</label>
-                        <textarea id="custUraian" oninput="updatePreview()" rows="3" style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+                        <textarea id="custUraian" oninput="updatePreview()" rows="3"
+                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -823,6 +833,16 @@
                     <div class="form-group">
                         <label>Tanggal Transaksi</label>
                         <input type="text" id="custTanggal" oninput="updatePreview()" placeholder="dd/mm/yyyy">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Surat / Pesan</label>
+                        <input type="text" id="custTanggalPesan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Kegiatan</label>
+                        <input type="text" id="custTanggalKegiatan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
                     </div>
 
                     <div class="form-group">
@@ -883,7 +903,7 @@
                         <i data-lucide="x" size="20"></i>
                     </button>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Tanggal</label>
                     <input type="date" id="addDate">
@@ -961,6 +981,9 @@
                     }
                 })
                 .getSchoolData();
+
+            // Load Templates from Drive Folder "TEMPLATE"
+            google.script.run.withSuccessHandler(populateTemplates).getTemplatesFromFolder();
         });
 
         // View Navigation Logic
@@ -986,6 +1009,9 @@
         let currentLayout = 'portrait';
         let logoBase64 = null;
         let stampBase64 = null;
+        let availableTemplates = [];
+        let cachedTemplateHtml = "";
+        let currentTemplateId = "";
 
         // Fungsi Terbilang untuk Rupiah
         function terbilang(nilai) {
@@ -1023,13 +1049,13 @@
             // Asumsi format dd/mm/yyyy
             const parts = dateStr.split('/');
             if (parts.length !== 3) return { dayName: '...', fullDate: dateStr };
-            
+
             const d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            
+
             const dayName = days[d.getDay()];
-            return { dayName: dayName, fullDate: `${parts[0]} ${months[parseInt(parts[1])-1]} ${parts[2]}` };
+            return { dayName: dayName, fullDate: `${parts[0]} ${months[parseInt(parts[1]) - 1]} ${parts[2]}` };
         }
 
         function openPreview() {
@@ -1081,23 +1107,87 @@
             }
         }
 
-        function loadDocFromDrive() {
-            const docId = document.getElementById('driveDocId').value;
-            if(!docId) return;
+        function populateTemplates(response) {
+            if (response.success && response.templates.length > 0) {
+                availableTemplates = response.templates;
+                const select = document.getElementById('driveTemplateSelect');
+                availableTemplates.forEach(tpl => {
+                    const opt = document.createElement('option');
+                    opt.value = tpl.id;
+                    opt.text = tpl.name;
+                    select.appendChild(opt);
+                });
+            }
+        }
 
-            document.getElementById('paperContent').innerHTML = '<div style="text-align:center; padding:50px;">Loading Google Doc...</div>';
-            
+        function handleDocTypeChange() {
+            const docType = document.getElementById('docType').value;
+            const select = document.getElementById('driveTemplateSelect');
+
+            // Reset selection first
+            select.value = "";
+            cachedTemplateHtml = "";
+            currentTemplateId = "";
+
+            // Auto-select template based on keyword match
+            let keyword = "";
+            if (docType === 'pesanan') keyword = "pesanan";
+            else if (docType === 'undangan') keyword = "undangan";
+            else if (docType === 'berita_acara') keyword = "berita acara";
+
+            if (keyword && availableTemplates.length > 0) {
+                const match = availableTemplates.find(t => t.name.toLowerCase().includes(keyword));
+                if (match) {
+                    select.value = match.id;
+                    handleTemplateChange(); // Trigger load
+                    return;
+                }
+            }
+
+            updatePreview();
+        }
+
+        function handleTemplateChange() {
+            const templateId = document.getElementById('driveTemplateSelect').value;
+            if (!templateId) {
+                cachedTemplateHtml = "";
+                currentTemplateId = "";
+                updatePreview();
+                return;
+            }
+
+            if (templateId === currentTemplateId && cachedTemplateHtml) {
+                renderTemplate(cachedTemplateHtml);
+            } else {
+                loadDocFromDrive(templateId);
+            }
+        }
+
+        function loadDocFromDrive(docId) {
+            currentTemplateId = docId;
+            document.getElementById('paperContent').innerHTML = '<div style="text-align:center; padding:50px; color: var(--text-muted);"><i data-lucide="loader-2" class="spin"></i><br>Mengambil Template dari Drive...</div>';
+            lucide.createIcons();
+
             google.script.run.withSuccessHandler(res => {
-                if(res.success) {
-                    // Google Doc HTML biasanya memiliki style inline yang kompleks, kita masukkan langsung
-                    document.getElementById('paperContent').innerHTML = res.html;
+                if (res.success) {
+                    cachedTemplateHtml = res.html;
+                    renderTemplate(res.html);
                 } else {
                     alert("Gagal memuat Doc: " + res.error);
+                    document.getElementById('driveTemplateSelect').value = "";
+                    updatePreview();
                 }
             }).getGoogleDocContent(docId);
         }
 
         function updatePreview() {
+            // If a Drive template is selected, use it instead of hardcoded HTML
+            const templateId = document.getElementById('driveTemplateSelect').value;
+            if (templateId && cachedTemplateHtml) {
+                renderTemplate(cachedTemplateHtml);
+                return;
+            }
+
             const docType = document.getElementById('docType').value;
             const vendorStyle = document.getElementById('vendorStyle').value;
             const vendorName = document.getElementById('custVendorName').value || "TOKO SUMBER JAYA";
@@ -1105,8 +1195,17 @@
             const uraian = document.getElementById('custUraian').value || "Belanja Barang Jasa";
             const jumlah = parseFloat(document.getElementById('custJumlah').value) || 0;
             const tanggal = document.getElementById('custTanggal').value || "01/01/2025";
+            const nomorSurat = document.getElementById('custNomorSurat').value || "020/SD-BOS/2025";
+            const tanggalPesan = document.getElementById('custTanggalPesan').value || tanggal;
+            const tanggalKegiatan = document.getElementById('custTanggalKegiatan').value || tanggal;
+
             const terbilangText = terbilang(jumlah) + " Rupiah";
             const dateInfo = getDateText(tanggal);
+            const datePesanInfo = getDateText(tanggalPesan);
+            const dateKegiatanInfo = getDateText(tanggalKegiatan);
+
+            // Versi Uraian Bersih (Hanya Nama Kegiatan) untuk Surat Pesanan & Undangan
+            const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \(Makan & Snack\) /i, "");
 
             const schoolData = {
                 name: document.getElementById('schoolName').value || "SD NEGERI 01 CONTOH",
@@ -1255,10 +1354,10 @@
                     <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
                         ${schoolKop}
                         <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-                            <p>${schoolData.kecamatan}, ${tanggal}</p>
+                            <p>${schoolData.kecamatan}, ${datePesanInfo.fullDate}</p>
                         </div>
                         <div style="display: grid; grid-template-columns: 100px 20px 1fr; gap: 5px; margin-bottom: 30px;">
-                            <div>Nomor</div><div>:</div><div>020/SDN-PSH/V/2025</div>
+                            <div>Nomor</div><div>:</div><div>${nomorSurat}</div>
                             <div>Sifat</div><div>:</div><div>Biasa</div>
                             <div>Lampiran</div><div>:</div><div>-</div>
                             <div>Perihal</div><div>:</div><div style="font-weight: bold; text-decoration: underline;">Surat Pesanan</div>
@@ -1272,7 +1371,7 @@
 
                         <p>Assalamualaikum Wr, Wb.</p>
                         <p style="text-indent: 40px; text-align: justify; line-height: 1.5;">
-                            Dengan Hormat, Bersamaan ini kami sampaikan bahwa sehubungan dengan akan dilaksanakannya Sosialisasi Peningkatan kompetensi guru untuk memperkuat literasi tahun 2025, Kami bermaksud ingin memesan kebutuhan dengan rincian sebagai berikut:
+                            Dengan Hormat, Bersamaan ini kami sampaikan bahwa sehubungan dengan akan dilaksanakannya kegiatan pada tanggal <b>${dateKegiatanInfo.fullDate}</b>, Kami bermaksud ingin memesan kebutuhan dengan rincian sebagai berikut:
                         </p>
 
                         <div style="margin: 20px auto; width: 90%;">
@@ -1284,7 +1383,7 @@
                                 </tr>
                                 <tr>
                                     <td style="border: 1px solid #000; padding: 8px; text-align: center;">1</td>
-                                    <td style="border: 1px solid #000; padding: 8px;">${uraian}</td>
+                                    <td style="border: 1px solid #000; padding: 8px;">${cleanUraian}</td>
                                     <td style="border: 1px solid #000; padding: 8px; text-align: center;">1 Paket</td>
                                 </tr>
                             </table>
@@ -1489,6 +1588,56 @@
             document.getElementById('paperContent').innerHTML = html;
         }
 
+        function renderTemplate(htmlContent) {
+            // Get Current Data
+            const vendorName = document.getElementById('custVendorName').value || "-";
+            const vendorAddress = document.getElementById('custVendorAddress').value || "-";
+            const uraian = document.getElementById('custUraian').value || "-";
+            const jumlah = parseFloat(document.getElementById('custJumlah').value) || 0;
+            const docType = document.getElementById('docType').value;
+            const tanggal = document.getElementById('custTanggal').value || "-";
+            const nomorSurat = document.getElementById('custNomorSurat').value || "-";
+            const tanggalPesan = document.getElementById('custTanggalPesan').value || tanggal;
+            const tanggalKegiatan = document.getElementById('custTanggalKegiatan').value || tanggal;
+            const terbilangText = terbilang(jumlah) + " Rupiah";
+
+            const schoolData = {
+                name: document.getElementById('schoolName').value || "",
+                kecamatan: document.getElementById('kecamatan').value || "",
+                principal: document.getElementById('principalName').value || "",
+                principalNip: document.getElementById('principalNip').value || "",
+                treasurer: document.getElementById('treasurerName').value || "",
+                treasurerNip: document.getElementById('treasurerNip').value || ""
+            };
+
+            // Logika Uraian: Jika Surat Pesanan/Undangan, buang awalan "Konsumsi..."
+            let uraianForTemplate = uraian;
+            if (docType === 'pesanan' || docType === 'undangan') {
+                uraianForTemplate = uraian.replace(/^(Belanja )?Konsumsi \(Makan & Snack\) /i, "");
+            }
+
+            // Replace Placeholders
+            let filledHtml = htmlContent;
+            filledHtml = filledHtml.replace(/{{NO_BUKTI}}/g, "AUTO"); // Bisa diambil dari tx.noBukti jika ada
+            filledHtml = filledHtml.replace(/{{TANGGAL}}/g, tanggal);
+            filledHtml = filledHtml.replace(/{{TANGGAL_PESAN}}/g, tanggalPesan);
+            filledHtml = filledHtml.replace(/{{TANGGAL_KEGIATAN}}/g, tanggalKegiatan);
+            filledHtml = filledHtml.replace(/{{NOMOR_SURAT}}/g, nomorSurat);
+            filledHtml = filledHtml.replace(/{{URAIAN}}/g, uraianForTemplate);
+            filledHtml = filledHtml.replace(/{{JUMLAH}}/g, "Rp " + jumlah.toLocaleString('id-ID'));
+            filledHtml = filledHtml.replace(/{{TERBILANG}}/g, terbilangText);
+            filledHtml = filledHtml.replace(/{{PENERIMA}}/g, vendorName);
+            filledHtml = filledHtml.replace(/{{ALAMAT_TOKO}}/g, vendorAddress);
+            filledHtml = filledHtml.replace(/{{NAMA_SEKOLAH}}/g, schoolData.name);
+            filledHtml = filledHtml.replace(/{{KEPALA_SEKOLAH}}/g, schoolData.principal);
+            filledHtml = filledHtml.replace(/{{NIP_KEPALA}}/g, schoolData.principalNip);
+            filledHtml = filledHtml.replace(/{{KECAMATAN}}/g, schoolData.kecamatan);
+            filledHtml = filledHtml.replace(/{{BENDAHARA}}/g, schoolData.treasurer);
+            filledHtml = filledHtml.replace(/{{NIP_BENDAHARA}}/g, schoolData.treasurerNip);
+
+            document.getElementById('paperContent').innerHTML = filledHtml;
+        }
+
         // Action: Save School Data
         function saveData() {
             const formData = {
@@ -1575,7 +1724,7 @@
             document.getElementById('addUraian').value = '';
             document.getElementById('addPenerima').value = '';
             document.getElementById('addJumlah').value = '';
-            
+
             document.getElementById('addModal').style.display = 'flex';
             lucide.createIcons();
         }
@@ -1621,13 +1770,13 @@
             allTransactions.push(newTx);
             renderTransactions(allTransactions);
             closeAddModal();
-            
+
             // Show feedback
             document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi (Termasuk manual)`;
         }
 
         function removeTransaction(id) {
-            if(confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) {
+            if (confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) {
                 allTransactions = allTransactions.filter(tx => tx.id !== id);
                 renderTransactions(allTransactions);
                 document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
@@ -1644,7 +1793,10 @@
             document.getElementById('custUraian').value = tx.uraian;
             document.getElementById('custJumlah').value = tx.pengeluaran;
             document.getElementById('custTanggal').value = tx.tanggal;
-            document.getElementById('driveDocId').value = ""; // Reset doc ID
+            document.getElementById('custTanggalPesan').value = tx.tanggal;
+            document.getElementById('custTanggalKegiatan').value = tx.tanggal;
+            document.getElementById('custNomorSurat').value = "020/SD-BOS/" + new Date().getFullYear();
+            // document.getElementById('driveTemplateSelect').value = ""; // Don't reset if user wants to keep using template
 
             const docTypeSelect = document.getElementById('docType');
             if (tx.type === 'konsumsi') {
@@ -1657,7 +1809,8 @@
                 docTypeSelect.value = 'kwitansi';
             }
 
-            openPreview();
+            handleDocTypeChange(); // This will trigger openPreview and auto-select template
+            document.getElementById('previewModal').style.display = 'flex'; // Ensure modal opens
         }
 
         // --- Drive Picker Logic ---
