@@ -60,7 +60,9 @@ function processExcelByFileId(fileId) {
             const noBukti = String(row[3] || "").trim(); // Kolom D (Indeks 3)
 
             // KRITERIA UTAMA: Hanya ambil yang ada No Bukti
-            if (noBukti && noBukti !== "" && noBukti !== "NO BUKTI") {
+            // EXCLUDE: Pajak (PPH, PPN, PPH21) biasanya punya format No Bukti khusus atau terdeteksi di uraian
+            const isTax = noBukti.toUpperCase().includes('PPH') || noBukti.toUpperCase().includes('PPN') || noBukti.toUpperCase().includes('PAJAK');
+            if (noBukti && noBukti !== "" && noBukti !== "NO BUKTI" && !isTax) {
                 const tanggalRaw = row[0]; // Kolom A
                 let tanggal = "";
 
@@ -71,47 +73,71 @@ function processExcelByFileId(fileId) {
                 }
 
                 const uraian = String(row[4] || "").trim(); // Kolom E
-                const pengeluaran = parseFloat(String(row[6] || 0).replace(/[^\d]/g, '')) || 0; // Kolom G
+
+                // FIX: Parsing nominal yang lebih akurat (Support Number & String berformat)
+                let pengeluaran = 0;
+                if (typeof row[6] === 'number') {
+                    pengeluaran = row[6];
+                } else {
+                    // Jika berupa string, bersihkan format (misal: "Rp 1.500.000,00")
+                    let str = String(row[6] || "0").replace(/[^0-9,.-]/g, '');
+                    // Handle format Indonesia: 1.000.000,00 -> 1000000.00
+                    if (str.indexOf(',') > -1) {
+                        str = str.replace(/\./g, '').replace(',', '.');
+                    } else if (str.indexOf('.') > -1) {
+                        // Asumsi titik sebagai ribuan jika tidak ada koma
+                        str = str.replace(/\./g, '');
+                    }
+                    pengeluaran = parseFloat(str) || 0;
+                }
 
                 if (pengeluaran > 0) {
-                    // Klasifikasi otomatis
+                    // Klasifikasi otomatis dan penandaan item konsumsi
                     let type = "nota";
                     let vendorStyle = "standard";
                     let penerima = uraian;
                     const uLow = uraian.toLowerCase();
+                    const isKonsumsi = uLow.includes('makan') || uLow.includes('gas') || uLow.includes('konsumsi');
 
                     if (uLow.includes('honor') || uLow.includes('aisah') || uLow.includes('nur') || uLow.includes('susanto') || uLow.includes('herman')) {
                         type = "kwitansi";
-                    } else if (uLow.includes('makan') || uLow.includes('gas') || uLow.includes('konsumsi')) {
+                    } else if (isKonsumsi) {
                         vendorStyle = "rm-family";
                         penerima = "RM. Family";
                     }
 
-                    // LOGIC MERGE: Satukan transaksi jika No Bukti sama (Khususnya Makan & Snack)
-                    if (transactionMap[noBukti]) {
-                        // Jika No Bukti sudah ada, tambahkan nominalnya (Merge Amount)
-                        transactionMap[noBukti].pengeluaran += pengeluaran;
+                    // LOGIC MERGE BARU: Hanya gabungkan jika item saat ini & item yang sudah ada adalah "konsumsi"
+                    const existingTx = transactionMap[noBukti];
+                    const shouldMerge = isKonsumsi && existingTx && existingTx.isKonsumsi;
 
-                        // LOGIC BARU: Menggabungkan uraian "Makan" dan "Snack" menjadi format yang benar
-                        const existingUraian = transactionMap[noBukti].uraian;
-                        const uLowExisting = existingUraian.toLowerCase();
+                    if (shouldMerge) {
+                        // Jika ya, gabungkan nominal dan perbaiki uraian jika merupakan pasangan makan/snack
+                        existingTx.pengeluaran += pengeluaran;
 
-                        // Cek apakah ini adalah kasus penggabungan Konsumsi Makan dan Snack
-                        const isMergeCandidate = (uLowExisting.includes('makan') && uLow.includes('snack')) ||
-                            (uLowExisting.includes('snack') && uLow.includes('makan'));
+                        const existingUraian = existingTx.uraian.toLowerCase();
+                        const newUraian = uraian.toLowerCase();
+                        const isMakanSnackPair = (existingUraian.includes('makan') && newUraian.includes('snack')) ||
+                            (existingUraian.includes('snack') && newUraian.includes('makan'));
 
-                        if (isMergeCandidate && uLowExisting.includes('konsumsi') && uLow.includes('konsumsi')) {
-                            // Ekstrak nama kegiatan dari uraian yang sudah ada dengan menghapus kata kunci.
-                            const activityName = existingUraian
-                                .replace(/belanja /i, '')
-                                .replace(/konsumsi (makan|snack) /i, '')
+                        if (isMakanSnackPair) {
+                            const cleanActivityName = (existingTx.uraian + " " + uraian)
+                                .replace(/belanja /ig, '')
+                                .replace(/konsumsi /ig, '')
+                                .replace(/\(makan & snack\)/ig, '')
+                                .replace(/\(makan\)/ig, '')
+                                .replace(/\(snack\)/ig, '')
+                                .replace(/\s+/g, ' ')
                                 .trim();
 
-                            // Bentuk uraian baru sesuai format yang diinginkan: Konsumsi (Makan & Snack) nama kegiatan
-                            transactionMap[noBukti].uraian = `Konsumsi (Makan & Snack) ${activityName}`;
+                            // Ambil nama unik dari uraian (menghilangkan duplikasi kata jika ada)
+                            const words = cleanActivityName.split(' ');
+                            const uniqueWords = [...new Set(words)];
+                            existingTx.uraian = `Konsumsi (Makan & Snack) ${uniqueWords.join(' ')}`;
                         }
                     } else {
-                        transactionMap[noBukti] = {
+                        // Jika tidak, buat entri baru. Gunakan key unik jika noBukti sudah ada untuk item non-konsumsi.
+                        const key = existingTx ? noBukti + "_" + i : noBukti;
+                        transactionMap[key] = {
                             id: noBukti + "_" + i,
                             tanggal: tanggal,
                             noBukti: noBukti,
@@ -119,7 +145,8 @@ function processExcelByFileId(fileId) {
                             pengeluaran: pengeluaran,
                             penerima: penerima,
                             type: type,
-                            vendorStyle: vendorStyle
+                            vendorStyle: vendorStyle,
+                            isKonsumsi: isKonsumsi // Flag untuk pengecekan selanjutnya
                         };
                     }
                 }
@@ -128,6 +155,7 @@ function processExcelByFileId(fileId) {
 
         // Konversi Map kembali menjadi Array untuk dikirim ke Frontend
         const transactions = Object.values(transactionMap);
+        transactions.forEach(tx => delete tx.isKonsumsi); // Hapus flag sebelum kirim ke frontend
 
         return { success: true, data: transactions };
     } catch (e) {
@@ -135,51 +163,29 @@ function processExcelByFileId(fileId) {
     }
 }
 
-function getGoogleDocContent(fileId) {
+function getLogoKBB() {
     try {
-        const file = DriveApp.getFileById(fileId);
-        let docIdToRead = fileId;
-        let tempFileId = null;
-
-        // Jika file adalah Word (.docx), konversi sementara ke Google Docs agar bisa diambil HTML-nya
-        if (file.getMimeType() === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-            const blob = file.getBlob();
-            const config = { title: "temp_convert_doc_" + fileId, parents: [{ id: "root" }] };
-            const tempFile = Drive.Files.insert(config, blob, { convert: true });
-            docIdToRead = tempFile.id;
-            tempFileId = tempFile.id;
-        }
-
-        const htmlContent = DriveApp.getFileById(docIdToRead).getAs(MimeType.HTML).getDataAsString();
-
-        if (tempFileId) {
-            Drive.Files.remove(tempFileId);
-        }
-
-        return { success: true, html: htmlContent };
+        const folders = DriveApp.getFoldersByName("TEMPLATE");
+        if (!folders.hasNext()) return null;
+        const folder = folders.next();
+        const files = folder.getFilesByName("logo-kbb.png");
+        if (!files.hasNext()) return null;
+        const file = files.next();
+        const bytes = file.getBlob().getBytes();
+        const base64 = Utilities.base64Encode(bytes);
+        const mimeType = file.getMimeType();
+        return `data:${mimeType};base64,${base64}`;
     } catch (e) {
-        return { success: false, error: e.toString() };
+        return null;
     }
 }
 
-function getTemplatesFromFolder() {
-    try {
-        const folders = DriveApp.getFoldersByName("TEMPLATE");
-        if (!folders.hasNext()) {
-            return { success: false, error: "Folder 'TEMPLATE' tidak ditemukan." };
-        }
-        const folder = folders.next();
-        const files = folder.getFiles();
-        const templates = [];
-        while (files.hasNext()) {
-            const file = files.next();
-            const mime = file.getMimeType();
-            if (mime === MimeType.GOOGLE_DOCS || mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                templates.push({ name: file.getName(), id: file.getId() });
-            }
-        }
-        return { success: true, templates: templates };
-    } catch (e) {
-        return { success: false, error: e.toString() };
-    }
+function saveSchoolData(data) {
+    const props = PropertiesService.getScriptProperties();
+    props.setProperties(data);
+    return "Data berhasil disimpan!";
+}
+
+function getSchoolData() {
+    return PropertiesService.getScriptProperties().getProperties();
 }

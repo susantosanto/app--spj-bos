@@ -117,6 +117,196 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* --- Custom Notification Styles --- */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 320px;
+            pointer-events: auto;
+            border-left: 4px solid var(--primary);
+            animation: toastIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast.error {
+            border-left-color: #ef4444;
+        }
+
+        .toast.success {
+            border-left-color: #10b981;
+        }
+
+        .toast-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .toast.success .toast-icon {
+            background: #ecfdf5;
+            color: #10b981;
+        }
+
+        .toast.error .toast-icon {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .toast-content {
+            flex-grow: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        @keyframes toastIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-out {
+            animation: toastOut 0.3s ease-in forwards !important;
+        }
+
+        @keyframes toastOut {
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* --- Custom Confirm Modal --- */
+        .confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 11000;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .confirm-modal {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.95);
+            animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes modalScaleUp {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .confirm-icon {
+            width: 64px;
+            height: 64px;
+            background: #fef2f2;
+            color: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .confirm-modal h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .confirm-modal p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .confirm-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .confirm-btn-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .confirm-btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .confirm-btn-ok {
+            background: #ef4444;
+            color: white;
+            border: none;
+        }
+
+        .confirm-btn-ok:hover {
+            background: #dc2626;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
         .sidebar-footer {
             padding: 12px;
             font-size: 11px;
@@ -614,8 +804,8 @@
         <section id="upload-view" class="view-section active">
             <div class="header-center">
                 <h2>Mulai Dokumentasi SPJ</h2>
-                <p>Unggah file PDF Buku Kas Umum (BKU) Anda. AI kami akan mengekstrak setiap transaksi belanja untuk
-                    dibuatkan kwitansi otomatis.</p>
+                <p>Unggah file Buku Kas Umum (BKU) Anda. AI kami akan mengekstrak setiap transaksi belanja untuk
+                    dibuatkan kwitansi dan kelengkapan nya otomatis.</p>
             </div>
 
             <div style="max-width: 600px; margin: 0 auto 60px;">
@@ -625,13 +815,7 @@
                         style="background: #22c55e; color: white; width: 80px; height: 80px;">
                         <i data-lucide="hard-drive" size="40"></i>
                     </div>
-                    <h3 style="color: #166534; font-size: 24px;">Ambil dari Google Drive</h3>
-                    <p style="color: #166534; letter-spacing: 2px;">PROSES OTOMATIS TANPA UPLOAD</p>
-                    <div style="margin-top: 20px; font-size: 14px; color: #166534; opacity: 0.8;">
-                        <i data-lucide="check-circle" size="14"
-                            style="display:inline-block; vertical-align:middle;"></i>
-                        Aman, Cepat & Tanpa Batas Ukuran File
-                    </div>
+                    <h3 style="color: #166534; font-size: 24px;">Unggah File dari Google Drive</h3>
                 </div>
             </div>
 
@@ -778,13 +962,8 @@
                         </button>
                     </div>
 
-                    <div class="form-group">
-                        <label>Gunakan Template Drive</label>
-                        <select id="driveTemplateSelect" onchange="handleTemplateChange()"
-                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
-                            <option value="">-- Gunakan Layout Bawaan --</option>
-                        </select>
-                    </div>
+
+
 
                     <div class="form-group">
                         <label>Jenis Dokumen</label>
@@ -795,22 +974,34 @@
                             <option value="pesanan">Surat Pesanan (Formal)</option>
                             <option value="berita_acara">Berita Acara Serah Terima</option>
                             <option value="undangan">Surat Undangan</option>
+                            <option value="notulen">Notulen Kegiatan</option>
+                            <option value="daftar_hadir">Daftar Hadir</option>
+                            <option value="dokumentasi">Lembar Dokumentasi</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Nomor Surat</label>
+                        <label>Nomor Surat / Berita Acara</label>
                         <input type="text" id="custNomorSurat" oninput="updatePreview()"
                             placeholder="Contoh: 001/SD/2025">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Perihal / Subject</label>
+                        <input type="text" id="custPerihal" oninput="updatePreview()"
+                            placeholder="Contoh: Undangan Lomba">
                     </div>
 
                     <div class="form-group">
                         <label>Template Vendor</label>
                         <select id="vendorStyle" onchange="updatePreview()"
                             style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
-                            <option value="standard">Standard Style</option>
+                            <option value="standard">Standard / Modern</option>
                             <option value="rm-family">RM Family (Landscape)</option>
-                            <option value="toko-prima">Toko Prima (Modern)</option>
+                            <option value="cahya-cellular">Cahya Cellular (Blue)</option>
+                            <option value="media-komputer">Media Komputer (Media)</option>
+                            <option value="mitra-photocopy">Mitra Photocopy (Service)</option>
+                            <option value="sinar-abadi">Sinar Abadi (Classic Red)</option>
                         </select>
                     </div>
 
@@ -820,7 +1011,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Uraian Belanja</label>
+                        <label>Uraian Belanja / Kegiatan</label>
                         <textarea id="custUraian" oninput="updatePreview()" rows="3"
                             style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
                     </div>
@@ -830,8 +1021,75 @@
                         <input type="number" id="custJumlah" oninput="updatePreview()">
                     </div>
 
+                    <!-- Dynamic Items for Nota -->
+                    <div id="notaItemsSection"
+                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Rincian
+                            Barang (Khusus Nota)</label>
+                        <div id="notaItemsList" style="display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Items will be added here -->
+                        </div>
+                        <button onclick="addNotaItem()" class="btn-primary"
+                            style="margin-top: 10px; padding: 5px 10px; font-size: 12px; background: #22c55e;">
+                            <i data-lucide="plus" size="14"></i> Tambah Item
+                        </button>
+                    </div>
+
+                    <!-- Documentation Section -->
+                    <div id="documentationSection"
+                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Foto
+                            Kegiatan</label>
+                        <input type="file" onchange="handleDocPhotoUpload(this)" accept="image/*"
+                            style="font-size: 12px;">
+                        <div style="margin-top: 10px; font-size: 11px; color: #666;">Silakan upload foto dokumentasi
+                            kegiatan.</div>
+                    </div>
+
+                    <!-- Notulen Section -->
+                    <div id="notulenSection"
+                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                        <div class="form-group">
+                            <label>Waktu Kegiatan</label>
+                            <input type="text" id="custWaktu" oninput="updatePreview()"
+                                placeholder="Contoh: 08.00 - 10.00 WIB">
+                        </div>
+                        <div class="form-group">
+                            <label>Hasil Pembahasan (Pisahkan dengan Enter)</label>
+                            <textarea id="custHasil" oninput="updatePreview()" rows="5"
+                                placeholder="1. Poin satu&#10;2. Poin dua"
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Kesimpulan</label>
+                            <textarea id="custKesimpulan" oninput="updatePreview()" rows="3"
+                                placeholder="Kesimpulan rapat..."
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Section -->
+                    <div id="attendanceSection"
+                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Daftar
+                            Hadir</label>
+                        <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                            <button onclick="addAttendanceRow()" class="btn-primary"
+                                style="flex:1; padding: 5px; font-size: 11px; background: #22c55e;">
+                                <i data-lucide="plus" size="12"></i> Baris
+                            </button>
+                            <button onclick="loadDefaultAttendance()" class="btn-primary"
+                                style="flex:1; padding: 5px; font-size: 11px; background: #3b82f6;">
+                                <i data-lucide="users" size="12"></i> Load Guru
+                            </button>
+                        </div>
+                        <div id="attendanceList" style="display: flex; flex-direction: column; gap: 5px;"></div>
+                    </div>
+
+
+
                     <div class="form-group">
-                        <label>Tanggal Transaksi</label>
+                        <label>Tanggal Transaksi / BAST</label>
                         <input type="text" id="custTanggal" oninput="updatePreview()" placeholder="dd/mm/yyyy">
                     </div>
 
@@ -846,8 +1104,27 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Tempat Kegiatan</label>
+                        <input type="text" id="custTempatKegiatan" oninput="updatePreview()"
+                            placeholder="Contoh: SD Negeri 1 ...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Waktu Kegiatan</label>
+                        <input type="text" id="custWaktuKegiatan" oninput="updatePreview()"
+                            placeholder="Contoh: 08.00 sd Selesai">
+                    </div>
+
+                    <div class="form-group">
                         <label>Alamat Vendor</label>
                         <input type="text" id="custVendorAddress" oninput="updatePreview()" placeholder="Alamat Toko">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tembusan (Opsional)</label>
+                        <textarea id="custTembusan" oninput="updatePreview()" rows="2"
+                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"
+                            placeholder="1. Pengawas...&#10;2. K3S..."></textarea>
                     </div>
 
                     <div class="form-group">
@@ -961,6 +1238,24 @@
         </div>
     </div>
 
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="confirmOverlay" class="confirm-overlay">
+        <div class="confirm-modal">
+            <div class="confirm-icon">
+                <i data-lucide="alert-triangle" size="32"></i>
+            </div>
+            <h3 id="confirmTitle">Konfirmasi Hapus</h3>
+            <p id="confirmMessage">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
+            <div class="confirm-actions">
+                <button class="confirm-btn-cancel" onclick="closeConfirm(false)">Batal</button>
+                <button class="confirm-btn-ok" onclick="closeConfirm(true)">Hapus Data</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
@@ -982,8 +1277,7 @@
                 })
                 .getSchoolData();
 
-            // Load Templates from Drive Folder "TEMPLATE"
-            google.script.run.withSuccessHandler(populateTemplates).getTemplatesFromFolder();
+
         });
 
         // View Navigation Logic
@@ -1009,9 +1303,18 @@
         let currentLayout = 'portrait';
         let logoBase64 = null;
         let stampBase64 = null;
-        let availableTemplates = [];
-        let cachedTemplateHtml = "";
-        let currentTemplateId = "";
+        // let availableTemplates = []; // Removed
+        // let cachedTemplateHtml = ""; // Removed
+        // let currentTemplateId = ""; // Removed
+        let logoKBBBase64 = null;
+        let docPhotoBase64 = null;
+
+        // Load KBB Logo on start
+        window.addEventListener('load', () => {
+            google.script.run.withSuccessHandler(res => {
+                if (res) logoKBBBase64 = res;
+            }).getLogoKBB();
+        });
 
         // Fungsi Terbilang untuk Rupiah
         function terbilang(nilai) {
@@ -1059,6 +1362,19 @@
         }
 
         function openPreview() {
+            // Initialize customizer with global school data
+            // These fields now directly pull from the settings form, no need for separate cust inputs
+            // document.getElementById('custSchoolName').value = document.getElementById('schoolName').value || "SD NEGERI 01 CONTOH";
+            // document.getElementById('custKecamatan').value = document.getElementById('kecamatan').value || "Cikalongwetan";
+            // document.getElementById('custSchoolAddress').value = document.getElementById('schoolAddress').value || "Jl. Pendidikan No. 123";
+            // document.getElementById('custPrincipalName').value = document.getElementById('principalName').value || "NAMA KEPALA SEKOLAH";
+            // document.getElementById('custPrincipalNip').value = document.getElementById('principalNip').value || "19XXXXXXXX XXXXXX X XXX";
+
+            document.getElementById('custPerihal').value = "Permohonan Belanja";
+            document.getElementById('custTempatKegiatan').value = document.getElementById('schoolName').value || "Sekolah";
+            document.getElementById('custWaktuKegiatan').value = "08.00 sd Selesai";
+            document.getElementById('custTembusan').value = "1. Pengawas Pembina\n2. Arsip";
+
             document.getElementById('previewModal').style.display = 'flex';
             updatePreview();
             lucide.createIcons();
@@ -1107,86 +1423,97 @@
             }
         }
 
-        function populateTemplates(response) {
-            if (response.success && response.templates.length > 0) {
-                availableTemplates = response.templates;
-                const select = document.getElementById('driveTemplateSelect');
-                availableTemplates.forEach(tpl => {
-                    const opt = document.createElement('option');
-                    opt.value = tpl.id;
-                    opt.text = tpl.name;
-                    select.appendChild(opt);
-                });
+        function handleDocPhotoUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    docPhotoBase64 = e.target.result;
+                    updatePreview();
+                };
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
         function handleDocTypeChange() {
             const docType = document.getElementById('docType').value;
-            const select = document.getElementById('driveTemplateSelect');
+            const notaSection = document.getElementById('notaItemsSection');
+            const notulenSection = document.getElementById('notulenSection');
+            const attendanceSection = document.getElementById('attendanceSection');
+            const documentationSection = document.getElementById('documentationSection');
 
-            // Reset selection first
-            select.value = "";
-            cachedTemplateHtml = "";
-            currentTemplateId = "";
+            // Hide all special sections
+            notaSection.style.display = 'none';
+            notulenSection.style.display = 'none';
+            attendanceSection.style.display = 'none';
+            documentationSection.style.display = 'none';
 
-            // Auto-select template based on keyword match
-            let keyword = "";
-            if (docType === 'pesanan') keyword = "pesanan";
-            else if (docType === 'undangan') keyword = "undangan";
-            else if (docType === 'berita_acara') keyword = "berita acara";
-
-            if (keyword && availableTemplates.length > 0) {
-                const match = availableTemplates.find(t => t.name.toLowerCase().includes(keyword));
-                if (match) {
-                    select.value = match.id;
-                    handleTemplateChange(); // Trigger load
-                    return;
+            if (docType === 'nota') {
+                notaSection.style.display = 'block';
+                if (document.getElementById('notaItemsList').children.length === 0) {
+                    addNotaItem();
                 }
+            } else if (docType === 'notulen') {
+                notulenSection.style.display = 'block';
+            } else if (docType === 'daftar_hadir') {
+                attendanceSection.style.display = 'block';
+                if (document.getElementById('attendanceList').children.length === 0) {
+                    loadDefaultAttendance();
+                }
+            } else if (docType === 'dokumentasi') {
+                documentationSection.style.display = 'block';
             }
-
             updatePreview();
         }
 
-        function handleTemplateChange() {
-            const templateId = document.getElementById('driveTemplateSelect').value;
-            if (!templateId) {
-                cachedTemplateHtml = "";
-                currentTemplateId = "";
-                updatePreview();
-                return;
-            }
-
-            if (templateId === currentTemplateId && cachedTemplateHtml) {
-                renderTemplate(cachedTemplateHtml);
-            } else {
-                loadDocFromDrive(templateId);
-            }
+        function addAttendanceRow(nama = "", jabatan = "") {
+            const list = document.getElementById('attendanceList');
+            const div = document.createElement('div');
+            div.className = 'attendance-row';
+            div.style = 'display: grid; grid-template-columns: 1fr 1fr 30px; gap: 5px; align-items: center;';
+            div.innerHTML = `
+                <input type="text" placeholder="Nama" value="${nama}" oninput="updatePreview()" style="padding: 5px; font-size: 11px;">
+                <input type="text" placeholder="Jabatan" value="${jabatan}" oninput="updatePreview()" style="padding: 5px; font-size: 11px;">
+                <button onclick="this.parentElement.remove(); updatePreview();" style="border:none; background:none; color:red; cursor:pointer;"><i data-lucide="trash-2" size="12"></i></button>
+            `;
+            list.appendChild(div);
+            lucide.createIcons();
         }
 
-        function loadDocFromDrive(docId) {
-            currentTemplateId = docId;
-            document.getElementById('paperContent').innerHTML = '<div style="text-align:center; padding:50px; color: var(--text-muted);"><i data-lucide="loader-2" class="spin"></i><br>Mengambil Template dari Drive...</div>';
-            lucide.createIcons();
+        function loadDefaultAttendance() {
+            const list = document.getElementById('attendanceList');
+            list.innerHTML = "";
+            const teachers = [
+                { n: "Yuniarti, S.Pd", j: "Kepala Sekolah" },
+                { n: "Ahmad, S.Pd", j: "Guru Kelas" },
+                { n: "Deni Mulyani, S.Pd", j: "Guru Kelas" },
+                { n: "Siti Aisah Nur Fitri", j: "Guru Kelas" },
+                { n: "Sarah Siti Nuryati", j: "Guru Kelas" },
+                { n: "Rinda Sri Agung Wahyuni, S.Pd", j: "Guru Kelas" },
+                { n: "Fika Agustina, S,Pd", j: "Guru Kelas" },
+                { n: "Nur’Asiah, S.Pd", j: "Guru PAI" },
+                { n: "Meytha Murty", j: "Guru Kelas" },
+                { n: "Vani, S.Pd", j: "Guru Kelas" }
+            ];
+            teachers.forEach(t => addAttendanceRow(t.n, t.j));
+            updatePreview();
+        }
 
-            google.script.run.withSuccessHandler(res => {
-                if (res.success) {
-                    cachedTemplateHtml = res.html;
-                    renderTemplate(res.html);
-                } else {
-                    alert("Gagal memuat Doc: " + res.error);
-                    document.getElementById('driveTemplateSelect').value = "";
-                    updatePreview();
-                }
-            }).getGoogleDocContent(docId);
+        function addNotaItem(nama = "", qty = 1, harga = 0) {
+            const list = document.getElementById('notaItemsList');
+            const div = document.createElement('div');
+            div.className = 'nota-item-row';
+            div.style = 'display: grid; grid-template-columns: 1fr 50px 100px 30px; gap: 5px; align-items: center;';
+            div.innerHTML = `
+                <input type="text" placeholder="Nama Barang" value="${nama}" oninput="updatePreview()" style="padding: 5px; font-size: 12px;">
+                <input type="number" placeholder="Qty" value="${qty}" oninput="updatePreview()" style="padding: 5px; font-size: 12px;">
+                <input type="number" placeholder="Harga" value="${harga}" oninput="updatePreview()" style="padding: 5px; font-size: 12px;">
+                <button onclick="this.parentElement.remove(); updatePreview();" style="border:none; background:none; color:red; cursor:pointer;"><i data-lucide="trash-2" size="14"></i></button>
+            `;
+            list.appendChild(div);
+            lucide.createIcons();
         }
 
         function updatePreview() {
-            // If a Drive template is selected, use it instead of hardcoded HTML
-            const templateId = document.getElementById('driveTemplateSelect').value;
-            if (templateId && cachedTemplateHtml) {
-                renderTemplate(cachedTemplateHtml);
-                return;
-            }
 
             const docType = document.getElementById('docType').value;
             const vendorStyle = document.getElementById('vendorStyle').value;
@@ -1205,144 +1532,410 @@
             const dateKegiatanInfo = getDateText(tanggalKegiatan);
 
             // Versi Uraian Bersih (Hanya Nama Kegiatan) untuk Surat Pesanan & Undangan
-            const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \(Makan & Snack\) /i, "");
+            const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "")
+                .replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
 
             const schoolData = {
                 name: document.getElementById('schoolName').value || "SD NEGERI 01 CONTOH",
                 address: document.getElementById('schoolAddress').value || "Jl. Pendidikan No. 123",
                 kecamatan: document.getElementById('kecamatan').value || "Cikalongwetan",
                 npsn: document.getElementById('npsn').value || "12345678",
-                principal: document.getElementById('principalName').value || "JAJANG SETIA P, S.Pd.SD.",
-                principalNip: document.getElementById('principalNip').value || "197206271999031002",
+                principal: document.getElementById('principalName').value || "NAMA KEPALA SEKOLAH",
+                principalNip: document.getElementById('principalNip').value || "19XXXXXXXX XXXXXX X XXX",
                 treasurer: document.getElementById('treasurerName').value || "NAMA BENDAHARA",
                 treasurerNip: document.getElementById('treasurerNip').value || "19XXXXXXXX XXXXXX X XXX"
             };
+
+            const perihal = document.getElementById('custPerihal').value || "Surat Pesanan";
+            const tempatKegiatan = document.getElementById('custTempatKegiatan').value || "Sekolah";
+            const waktuKegiatan = document.getElementById('custWaktuKegiatan').value || "08.00 sd Selesai";
+            const tembusan = document.getElementById('custTembusan').value || "";
 
             let html = '';
 
             // --- TEMPLATE KOP SURAT SEKOLAH ---
             const schoolKop = `
-                <div style="text-align: center; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px; font-family: 'Times New Roman', serif;">
-                    <h3 style="margin:0; font-size: 16px; text-transform: uppercase;">PEMERINTAH KABUPATEN BANDUNG BARAT</h3>
-                    <h3 style="margin:0; font-size: 16px; text-transform: uppercase;">DINAS PENDIDIKAN</h3>
-                    <h2 style="margin:0; font-size: 18px; text-transform: uppercase; font-weight: bold;">${schoolData.name}</h2>
-                    <h3 style="margin:0; font-size: 14px; text-transform: uppercase;">KECAMATAN ${schoolData.kecamatan}</h3>
-                    <p style="margin:0; font-size: 11px; font-style: italic;">${schoolData.address} - Kabupaten Bandung Barat</p>
+                <div style="display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px; font-family: 'Times New Roman', serif;">
+                    <div style="width: 80px;">
+                        ${logoKBBBase64 ? `<img src="${logoKBBBase64}" style="width: 70px;">` : ''}
+                    </div>
+                    <div style="flex-grow: 1; text-align: center; margin-right: 80px;">
+                        <h3 style="margin:0; font-size: 16px; text-transform: uppercase;">PEMERINTAH KABUPATEN BANDUNG BARAT</h3>
+                        <h3 style="margin:0; font-size: 16px; text-transform: uppercase;">DINAS PENDIDIKAN</h3>
+                        <h2 style="margin:0; font-size: 18px; text-transform: uppercase; font-weight: bold;">${schoolData.name}</h2>
+                        <h3 style="margin:0; font-size: 14px; text-transform: uppercase;">KECAMATAN ${schoolData.kecamatan}</h3>
+                        <p style="margin:0; font-size: 11px; font-style: italic;">${schoolData.address} - Kabupaten Bandung Barat</p>
+                    </div>
                 </div>
             `;
 
             if (docType === 'nota') {
+                // Get manual items if any
+                const itemRows = document.querySelectorAll('.nota-item-row');
+                let itemsHtml = '';
+                let totalManual = 0;
+
+                if (itemRows.length > 0) {
+                    itemRows.forEach((row, index) => {
+                        const inputs = row.querySelectorAll('input');
+                        const name = inputs[0].value || "-";
+                        const qty = parseFloat(inputs[1].value) || 0;
+                        const price = parseFloat(inputs[2].value) || 0;
+                        const sub = qty * price;
+                        totalManual += sub;
+
+                        itemsHtml += `
+                            <tr style="height: 25px; border-bottom: 1px solid #000;">
+                                <td style="border-right: 2px solid #000; padding: 0 8px;">${name}</td>
+                                <td style="border-right: 2px solid #000; text-align: center; width: 60px;">${qty}</td>
+                                <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${price.toLocaleString('id-ID')}</td>
+                                <td style="text-align: right; padding-right: 8px; width: 120px;">${sub.toLocaleString('id-ID')}</td>
+                            </tr>
+                        `;
+                    });
+
+                    // Fill remaining empty rows (up to 12)
+                    const remaining = 12 - itemRows.length;
+                    for (let i = 0; i < remaining; i++) {
+                        itemsHtml += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>`;
+                    }
+                } else {
+                    // Default fallback
+                    itemsHtml = `
+                        <tr style="height: 25px; border-bottom: 1px solid #000;">
+                            <td style="border-right: 2px solid #000; padding: 0 8px;">${uraian}</td>
+                            <td style="border-right: 2px solid #000; text-align: center; width: 60px;">1</td>
+                            <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${jumlah.toLocaleString('id-ID')}</td>
+                            <td style="text-align: right; padding-right: 8px; width: 120px;">${jumlah.toLocaleString('id-ID')}</td>
+                        </tr>
+                    ` + Array(11).fill('<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>').join('');
+                }
+
                 if (vendorStyle === 'rm-family') {
-                    // --- LAYOUT NOTA RM FAMILY (SESUAI GAMBAR) ---
+                    // --- LAYOUT NOTA RM FAMILY (Landscape / Classic) ---
                     html = `
-                        <div style="font-family: Arial, sans-serif; color: #000; border: 1px solid #ccc; padding: 20px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <div>
-                                    <h2 style="margin:0; font-size: 16px;">RUMAH MAKAN</h2>
-                                    <h1 style="margin:0; font-size: 32px; font-family: 'Arial Black', sans-serif; letter-spacing: 2px;">" ${vendorName} "</h1>
-                                    <p style="margin:5px 0 0 0; font-size: 12px; line-height: 1.2;">${vendorAddress}<br>HP. 087XXXXXXXXX</p>
+                        <div style="font-family: 'Arial Narrow', Arial, sans-serif; color: #000; border: 2px solid #000; padding: 20px; background: #fff; width: 100%;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="text-align: center; width: 350px;">
+                                    <h2 style="margin:0; font-size: 18px; font-weight: bold; letter-spacing: 1px;">RUMAH MAKAN</h2>
+                                    <h1 style="margin:0; font-size: 42px; font-family: 'Arial Black', sans-serif; line-height: 1;">"${vendorName}"</h1>
+                                    <p style="margin:5px 0 0 0; font-size: 11px; font-weight: bold;">${vendorAddress}</p>
                                 </div>
-                                <div style="width: 250px;">
-                                    <table style="width: 100%; font-size: 12px;">
-                                        <tr><td>Bapak/Ibu</td><td style="border-bottom: 1px dotted #000; width: 100%;">: ${schoolData.name}</td></tr>
-                                        <tr><td>Tgl</td><td style="border-bottom: 1px dotted #000;">: ${tanggal}</td></tr>
+                                <div style="width: 250px; font-size: 13px;">
+                                    <table style="width: 100%;">
+                                        <tr><td style="width: 60px;">Bapak/Ibu</td><td style="border-bottom: 2px solid #000;">: ${schoolData.name.substring(0, 25)}</td></tr>
+                                        <tr><td colspan="2" style="border-bottom: 2px solid #000; height: 15px;"></td></tr>
+                                        <tr><td colspan="2" style="border-bottom: 2px solid #000; height: 15px;"></td></tr>
+                                        <tr><td>Tgl.</td><td style="border-bottom: 2px solid #000; text-align: center;">${tanggal.split('/')[0]} / ${tanggal.split('/')[1]} / ${tanggal.split('/')[2]}</td></tr>
+                                        <tr><td>No.</td><td style="border-bottom: 2px solid #000;">: ${nomorSurat}</td></tr>
                                     </table>
                                 </div>
                             </div>
 
-                            <div style="background: #000; color: #fff; text-align: center; padding: 5px; margin: 20px 0; font-weight: bold;">MENERIMA PESANAN</div>
+                            <div style="background: #000; color: #fff; text-align: center; padding: 4px; margin: 10px 0; font-weight: bold; font-size: 13px;">MENERIMA PESANAN</div>
 
-                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000;">
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; font-size: 13px;">
                                 <thead>
-                                    <tr style="border-bottom: 2px solid #000;">
-                                        <th style="border-right: 2px solid #000; padding: 8px;">MAKANAN / MINUMAN</th>
-                                        <th style="border-right: 2px solid #000; padding: 8px; width: 60px;">JML</th>
-                                        <th style="border-right: 2px solid #000; padding: 8px; width: 100px;">H. SATUAN</th>
-                                        <th style="padding: 8px; width: 120px;">SUB TOTAL</th>
+                                    <tr style="border-bottom: 2px solid #000; font-weight: bold;">
+                                        <th style="border-right: 2px solid #000; padding: 5px; text-align: center;">MAKANAN / MINUMAN</th>
+                                        <th style="border-right: 2px solid #000; padding: 5px; width: 40px; text-align: center;">JML</th>
+                                        <th style="border-right: 2px solid #000; padding: 5px; width: 80px; text-align: center;">H. SATUAN</th>
+                                        <th style="padding: 5px; width: 110px; text-align: center;">SUB TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${Array(12).fill().map((_, i) => `
-                                        <tr style="height: 25px; border-bottom: 1px solid #000;">
-                                            <td style="border-right: 2px solid #000; padding: 0 8px;">${i === 0 ? uraian : ''}</td>
-                                            <td style="border-right: 2px solid #000; text-align: center;">${i === 0 ? '1' : ''}</td>
-                                            <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px;">${i === 0 ? jumlah.toLocaleString('id-ID') : ''}</td>
-                                            <td style="text-align: right; padding-right: 8px;">${i === 0 ? jumlah.toLocaleString('id-ID') : ''}</td>
+                                    ${itemsHtml}
+                                </tbody>
+                            </table>
+                            
+                            <div style="display: flex; margin-top: 10px;">
+                                <div style="flex-grow: 1; display: flex; justify-content: space-around; font-size: 13px; font-weight: bold; padding-top: 20px;">
+                                    <div style="text-align: center;">Tanda Terima<br><br><br>( ................. )</div>
+                                    <div style="text-align: center;">Hormat Kami<br><br><br>( ................. )</div>
+                                </div>
+                                <div style="width: 200px; border-left: 2px solid #000;">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 14px; font-weight: bold;">
+                                        <tr style="border-bottom: 1px solid #000;">
+                                            <td style="padding: 5px;">Total</td>
+                                            <td style="padding: 5px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
                                         </tr>
-                                    `).join('')}
+                                        <tr style="border-bottom: 1px solid #000;">
+                                            <td style="padding: 5px;">DP</td>
+                                            <td style="padding: 5px; text-align: right;">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 5px;">Sisa</td>
+                                            <td style="padding: 5px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div style="text-align: center; font-style: italic; font-family: 'Brush Script MT', cursive; font-size: 18px; margin-top: 10px;">Terima Kasih Atas Kunjungan Anda</div>
+                        </div>
+                    `;
+                } else if (vendorStyle === 'cahya-cellular') {
+                    // --- LAYOUT NOTA CAHYA CELLULAR (Blue Theme) ---
+                    html = `
+                        <div style="font-family: Arial, sans-serif; color: #1e40af; border: 2px solid #1e40af; padding: 20px; background: #fff; width: 100%; border-radius: 5px;">
+                            <div style="display: flex; justify-content: space-between; position: relative;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 60px; height: 60px; border: 3px solid #1e40af; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px;">CC</div>
+                                    <div style="text-align: center;">
+                                        <h1 style="margin:0; font-size: 24px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase;">${vendorName}</h1>
+                                    </div>
+                                </div>
+                                <div style="text-align: left; font-size: 12px; font-weight: 600;">
+                                    Cikalongwetan, ........................<br>
+                                    Kepada Yth. <br><br>
+                                    <div style="height: 2px; background: #ef4444; width: 180px; margin: 5px 0;"></div>
+                                    <div style="height: 2px; background: #ef4444; width: 180px;"></div>
+                                </div>
+                            </div>
+                            
+                            <p style="margin: 10px 0; font-size: 12px; font-weight: bold; text-transform: uppercase;">KARTU INTERNET - AKSESORIS - HP BARU - SECOND - HP ALL OPERATOR</p>
+                            <p style="margin: 0; font-size: 10px; font-weight: bold;">Alamat: ${vendorAddress}</p>
+                            <p style="margin: 2px 0 10px 0; font-size: 10px; font-weight: bold;">HP. 082 116 52 5553 / 089 666 8888 06 / 085 719 799 7990</p>
+                            
+                            <div style="height: 3px; background: #1e40af; margin-bottom: 2px;"></div>
+                            <div style="text-align: right; font-weight: bold; font-size: 14px; margin-bottom: 5px;">Nota No : _________</div>
+
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #1e40af;">
+                                <thead>
+                                    <tr style="background: #3b82f6; color: #fff;">
+                                        <th style="border: 2px solid #1e40af; padding: 5px; width: 80px;">BANYAKNYA</th>
+                                        <th style="border: 2px solid #1e40af; padding: 5px;">NAMA BARANG</th>
+                                        <th style="border: 2px solid #1e40af; padding: 5px; width: 100px;">HARGA SATUAN</th>
+                                        <th style="border: 2px solid #1e40af; padding: 5px; width: 120px;">JUMLAH RP.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${itemsHtml.replaceAll('border-right: 2px solid #000', 'border: 2px solid #1e40af').replaceAll('border-bottom: 1px solid #000', 'border: 2px solid #1e40af')}
+                                </tbody>
+                            </table>
+                            
+                            <div style="display: flex; margin-top: 10px;">
+                                <div style="flex-grow: 1; font-size: 10px; font-weight: bold;">
+                                    <p>Perhatian !</p>
+                                    <p>Barang Yang Sudah Dibeli Tidak Dapat Ditukar/Dikembalikan</p>
+                                    <div style="display: flex; justify-content: space-around; margin-top: 40px; font-size: 12px;">
+                                        <div style="text-align: center;">Yang Menerima<br><br><br>( _________ )</div>
+                                        <div style="text-align: center;">Hormat Kami<br><br><br>( _________ )</div>
+                                    </div>
+                                </div>
+                                <div style="width: 180px;">
+                                    <table style="width: 100%; border-collapse: collapse; font-weight: bold; font-size: 12px; color: #fff;">
+                                        <tr><td style="background: #3b82f6; padding: 4px; border: 1px solid #1e40af; text-align: right;">Jumlah</td><td style="border: 1px solid #1e40af; color: #000; width: 100px; text-align: center;">${jumlah.toLocaleString('id-ID')}</td></tr>
+                                        <tr><td style="background: #3b82f6; padding: 4px; border: 1px solid #1e40af; text-align: right;">Uang Muka</td><td style="border: 1px solid #1e40af; color: #000; text-align: center;">-</td></tr>
+                                        <tr><td style="background: #3b82f6; padding: 4px; border: 1px solid #1e40af; text-align: right;">Sisa</td><td style="border: 1px solid #1e40af; color: #000; text-align: center;">${jumlah.toLocaleString('id-ID')}</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (vendorStyle === 'media-komputer') {
+                    // --- LAYOUT MEDIA KOMPUTER (Black Theme) ---
+                    html = `
+                        <div style="font-family: Arial, sans-serif; color: #000; border: 1px solid #666; padding: 30px; background: #fff; width: 100%;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <div style="display: flex; align-items: flex-start; gap: 15px;">
+                                    <div style="width: 60px; height: 60px; background: #0ea5e9; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">BS</div>
+                                    <div>
+                                        <h1 style="margin:0; font-size: 48px; font-family: 'Impact', sans-serif; font-weight: normal; font-style: italic; line-height: 1;">MEDIA</h1>
+                                        <p style="margin:5px 0 0 0; font-size: 10px; font-weight: bold;">Terima Jual Beli/Service Laptop, Notebook, Printer & Aksesoris</p>
+                                        <p style="margin:0; font-size: 10px;">${vendorAddress}</p>
+                                    </div>
+                                </div>
+                                <div style="text-align: left; font-size: 12px;">
+                                    Cikalongwetan, ........................<br>
+                                    Tuan/Toko : _______________________<br><br>
+                                    <div style="border-bottom: 2px dashed #000; width: 150px;"></div>
+                                </div>
+                            </div>
+                            
+                            <div style="height: 3px; background: #000; margin: 15px 0 2px 0;"></div>
+                            <div style="height: 1px; background: #000; margin-bottom: 15px;"></div>
+
+                            <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; font-size: 13px;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #000; font-weight: bold;">
+                                        <th style="border-right: 1px solid #000; padding: 8px; width: 40px; text-align: center;">NO</th>
+                                        <th style="border-right: 1px solid #000; padding: 8px; text-align: center;">ITEM / SERVICE</th>
+                                        <th style="border-right: 1px solid #000; padding: 8px; width: 100px; text-align: center;">HARGA SATUAN</th>
+                                        <th style="padding: 8px; width: 120px; text-align: center;">JUMLAH</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${itemsHtml.replaceAll('border-right: 2px solid #000', 'border: 1px solid #000').replaceAll('border-bottom: 1px solid #000', 'border: 1px solid #000')}
+                                </tbody>
+                            </table>
+                            
+                            <div style="display: flex; margin-top: 20px;">
+                                <div style="flex-grow: 1;">
+                                    <div style="display: flex; justify-content: space-around; font-size: 13px;">
+                                        <div style="text-align: center;">Yang Terima,<br><br><br>( ................. )</div>
+                                        <div style="text-align: center;">Hormat Kami,<br><br><br>( ................. )</div>
+                                    </div>
+                                    <p style="margin-top: 15px; font-size: 11px; font-weight: bold; font-style: italic;">Barang yang sudah dibeli tidak dapat dikembalikan</p>
+                                </div>
+                                <div style="width: 250px; text-align: right; font-weight: bold; font-size: 16px; padding-top: 10px;">
+                                    JUMLAH Rp. <span style="display: inline-block; width: 120px; border-bottom: 2px solid #000; text-align: right; padding-bottom: 5px;">${jumlah.toLocaleString('id-ID')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (vendorStyle === 'mitra-photocopy') {
+                    // --- LAYOUT MITRA PHOTOCOPY (Simple) ---
+                    html = `
+                        <div style="font-family: Arial, sans-serif; color: #000; border: 1px solid #ddd; padding: 15px; background: #fff; width: 100%;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <h1 style="margin:0; font-size: 28px; font-weight: normal; letter-spacing: 2px;">MITRA PHOTO COPY</h1>
+                                    <p style="margin:5px 0 0 0; font-size: 11px;">${vendorAddress}</p>
+                                    <p style="margin:0; font-size: 10px; font-weight: bold; text-transform: uppercase;">Melayani: Penjilidan Hard Cover, Soft Cover, Laminating, Alat Tulis Kantor Dll.</p>
+                                </div>
+                                <div style="text-align: left; font-size: 12px;">
+                                    Cikalongwetan, ........................ 201 .....<br>
+                                    _________________________________________<br>
+                                    NPWP: 24.251.003.0 - 045.00
+                                </div>
+                            </div>
+                            
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; margin-top: 15px; font-size: 13px;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #000; font-weight: bold;">
+                                        <th style="border-right: 2px solid #000; padding: 5px; width: 80px;">Banyaknya</th>
+                                        <th style="border-right: 2px solid #000; padding: 5px;">Jenis Jasa</th>
+                                        <th style="border-right: 2px solid #000; padding: 5px; width: 100px;">Harga Satuan (Rp)</th>
+                                        <th style="padding: 5px; width: 120px;">Jumlah (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${itemsHtml}
+                                </tbody>
+                            </table>
+                            
+                            <div style="display: flex; margin-top: 10px;">
+                                <div style="flex-grow: 1; display: flex; align-items: flex-end; padding-bottom: 20px;">
+                                    <h2 style="font-size: 24px; font-weight: normal;">Hormat Kami</h2>
+                                </div>
+                                <div style="width: 180px; font-size: 12px; font-weight: bold;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr><td style="padding: 5px; text-align: right;">Jumlah Rp.</td><td style="border: 1px solid #000; padding: 5px; text-align: center; width: 100px;">${jumlah.toLocaleString('id-ID')}</td></tr>
+                                        <tr><td style="padding: 5px; text-align: right;">Uang Muka Rp.</td><td style="border: 1px solid #000; padding: 5px; text-align: center;">-</td></tr>
+                                        <tr><td style="padding: 5px; text-align: right;">Sisa Rp.</td><td style="border: 1px solid #000; padding: 5px; text-align: center;">${jumlah.toLocaleString('id-ID')}</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (vendorStyle === 'sinar-abadi') {
+                    // --- LAYOUT SINAR ABADI (Classic Red) ---
+                    html = `
+                        <div style="font-family: 'Times New Roman', serif; color: #1e3a8a; border: 3px double #1e3a8a; padding: 25px; background: #fff; width: 100%; position: relative;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="display: flex; gap: 20px;">
+                                    <div style="width: 65px; height: 65px; background: #ef4444; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 30px; border: 3px solid #1e3a8a;">SA</div>
+                                    <div>
+                                        <h1 style="margin:0; font-size: 32px; font-weight: 900; color: #ef4444; font-family: 'Arial Black', sans-serif;">TB. ${vendorName}</h1>
+                                        <p style="margin:0; font-size: 11px; font-weight: bold;">${vendorAddress}</p>
+                                        <p style="margin:0; font-size: 11px; font-weight: bold;">Menjual: Bahan Bangunan Kayu Dll</p>
+                                        <p style="margin:0; font-size: 11px;">Melayani Eceran dan Grosir</p>
+                                    </div>
+                                </div>
+                                <div style="text-align: left; font-size: 12px; color: #1e3a8a;">
+                                    Cikalongwetan, ........................<br>
+                                    Tuan : _______________________<br>
+                                    Toko : _______________________<br><br>
+                                    <div style="border-bottom: 2px solid #1e3a8a; width: 180px;"></div>
+                                </div>
+                            </div>
+                            
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #1e3a8a; margin-top: 20px; font-size: 14px; position: relative; z-index: 1;">
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 120px; font-weight: bold; color: rgba(239, 68, 68, 0.1); z-index: -1;">SA</div>
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #1e3a8a; font-weight: bold; text-align: center;">
+                                        <th style="border-right: 2px solid #1e3a8a; padding: 8px; width: 80px;">Banyak-nya</th>
+                                        <th style="border-right: 2px solid #1e3a8a; padding: 8px;">NAMA BARANG</th>
+                                        <th style="border-right: 2px solid #1e3a8a; padding: 8px; width: 100px;">HARGA SATUAN</th>
+                                        <th style="padding: 8px; width: 130px;">JUMLAH</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${itemsHtml.replaceAll('border-right: 2px solid #000', 'border-right: 2px solid #1e3a8a').replaceAll('border-bottom: 1px solid #000', 'border-bottom: 1px solid #1e3a8a')}
+                                </tbody>
+                            </table>
+                            
+                            <div style="display: flex; margin-top: 15px; font-weight: bold;">
+                                <div style="flex-grow: 1; font-size: 12px;">
+                                    <p style="margin:0;">Pembayaran Transfer : Bank BCA</p>
+                                    <p style="margin:0;">No. 2730110549 a/n : Hendri Fardiansyah</p>
+                                    <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+                                        <div style="text-align: center;">Tanda Terima,<br><br><br>( ................. )</div>
+                                        <div style="text-align: center; border: 2px solid #ef4444; padding: 5px; color: #ef4444; font-size: 10px; width: 120px; margin-top: 10px;">Perhatian !<br>Barang yang sudah dibeli tidak dapat dikembalikan</div>
+                                        <div style="text-align: center;">Hormat Kami,<br><br><br>( ................. )</div>
+                                    </div>
+                                </div>
+                                <div style="width: 250px; text-align: right; font-size: 18px; color: #1e3a8a; padding-top: 10px;">
+                                    JUMLAH Rp. <span style="display: inline-block; width: 120px; border-bottom: 2px solid #1e3a8a; text-align: right;">${jumlah.toLocaleString('id-ID')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (vendorStyle === 'standard') {
+                    // --- LAYOUT MODERN STANDARD --- (Formerly Toko Prima)
+                    html = `
+                        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #000; border: 2px solid #000; padding: 25px; background: #fff;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
+                                <div style="display: flex; gap: 20px; align-items: flex-start;">
+                                    ${logoBase64 ? `<img src="${logoBase64}" style="height: 70px; border-radius: 8px;">` : `<div style="padding: 10px 15px; background: #000; color: #fff; font-weight: bold; border-radius: 8px; font-size: 20px;">${vendorName.substring(0, 5).toUpperCase()}</div>`}
+                                    <div>
+                                        <h1 style="margin:0; font-size: 24px; font-weight: 800; color: #000; text-transform: uppercase;">${vendorName}</h1>
+                                        <p style="margin:4px 0 0 0; font-size: 11px; white-space: pre-line; line-height: 1.3;">${vendorAddress}</p>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="display: inline-block; border: 2px solid #000; padding: 10px 15px; text-align: left; min-width: 200px; border-radius: 4px;">
+                                        <p style="margin:0; font-size: 11px; color: #666;">Kepada Yth:</p>
+                                        <p style="margin:4px 0 0 0; font-size: 13px; font-weight: bold;">${schoolData.name}</p>
+                                        <p style="margin:2px 0 0 0; font-size: 11px;">Kecamatan ${schoolData.kecamatan}</p>
+                                    </div>
+                                    <p style="margin:10px 0 0 0; font-size: 12px; font-weight: bold;">TANGGAL: ${tanggal}</p>
+                                </div>
+                            </div>
+
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; margin-bottom: 20px;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #000; background: #000; color: #fff;">
+                                        <th style="padding: 10px; text-align: left; border-right: 1px solid #fff;">BANYAKNYA</th>
+                                        <th style="padding: 10px; text-align: left; border-right: 1px solid #fff;">NAMA BARANG / JASA</th>
+                                        <th style="padding: 10px; text-align: right; border-right: 1px solid #fff; width: 110px;">HARGA</th>
+                                        <th style="padding: 10px; text-align: right; width: 130px;">JUMLAH</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${itemsHtml}
                                 </tbody>
                                 <tfoot>
-                                    <tr style="border-top: 2px solid #000;">
-                                        <td colspan="3" style="border-right: 2px solid #000; text-align: right; padding: 8px; font-weight: bold;">Total Rp.</td>
-                                        <td style="text-align: right; padding: 8px; font-weight: bold;">${jumlah.toLocaleString('id-ID')}</td>
+                                    <tr style="border-top: 2px solid #000; font-weight: bold; font-size: 14px;">
+                                        <td colspan="3" style="text-align: right; padding: 12px; border-right: 2px solid #000;">TOTAL BAYAR Rp.</td>
+                                        <td style="text-align: right; padding: 12px; background: #f8fafc;">${jumlah.toLocaleString('id-ID')}</td>
                                     </tr>
                                 </tfoot>
                             </table>
 
-                            <div style="display: flex; justify-content: space-between; margin-top: 20px; font-size: 13px;">
-                                <div style="text-align: center; width: 150px;">
-                                    <p>Tanda Terima,</p><br><br><br>
-                                    <p>( ........................... )</p>
+                            <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                                <div style="text-align: center; width: 180px;">
+                                    <p style="margin:0; font-size: 13px;">Tanda Terima,</p>
+                                    <br><br><br>
+                                    <p style="margin:0; font-weight: bold; border-bottom: 1px solid #000;">( ......................... )</p>
                                 </div>
-                                <div style="text-align: center; width: 150px;">
-                                    <p>Hormat Kami,</p><br><br><br>
-                                    <p style="font-weight: bold;">${vendorName}</p>
+                                <div style="text-align: center;">
+                                     <p style="font-style: italic; margin-top: 20px; font-size: 14px; color: #444;">Terima Kasih Atas Kepercayaan Anda</p>
                                 </div>
-                            </div>
-                            <p style="text-align: center; font-style: italic; margin-top: 30px; font-family: serif; font-size: 18px;">Terima Kasih Atas Kunjungan Anda</p>
-                        </div>
-                    `;
-                } else if (vendorStyle === 'toko-prima') {
-                    // --- LAYOUT TOKO PRIMA (MODERN GRID) ---
-                    html = `
-                        <div style="font-family: 'Outfit', sans-serif; padding: 20px; border: 1px solid #eee;">
-                            <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;">
-                                ${logoBase64 ? `<img src="${logoBase64}" style="height: 70px;">` : `<div style="padding: 10px; background: #000; color: #fff; font-weight: bold; border-radius: 8px; font-size: 24px;">PRIMA</div>`}
-                                <div style="font-size: 11px; line-height: 1.3;">
-                                    <p style="margin:0;">Alat-alat Listrik - Elektronik - Sepeda - ATK - Photo Copy</p>
-                                    <p style="margin:0;">Penjilidan - Laminating - Cetak Photo - Scan - dll</p>
-                                    <p style="margin:0; font-weight: bold; margin-top: 4px;">MENERIMA PESANAN :</p>
-                                    <p style="margin:0;">Perlengkapan Sekolah - Kartu Undangan - Kartu Nama - Kop Surat - Stempel - Banner dsb.</p>
-                                </div>
-                                <div style="flex-grow: 1; border: 2px solid #000; border-radius: 12px; padding: 10px; font-size: 12px; max-width: 200px;">
-                                    <p style="margin:0;">Kepada Yth,</p>
-                                    <p style="margin:5px 0; font-weight: bold;">${schoolData.name}</p>
-                                    <hr style="border:0; border-top: 1px dotted #000;">
-                                </div>
-                            </div>
-                            <h2 style="font-size: 14px; margin-bottom: 10px;">Nota No : ..............................</h2>
-                            <table style="width: 100%; border-collapse: separate; border-spacing: 4px;">
-                                <tr>
-                                    <th style="background: #e2e8f0; border-radius: 8px; padding: 10px; width: 80px;">BANYAKNYA</th>
-                                    <th style="background: #e2e8f0; border-radius: 8px; padding: 10px;">NAMA BARANG / JASA</th>
-                                    <th style="background: #e2e8f0; border-radius: 8px; padding: 10px; width: 100px;">HARGA</th>
-                                    <th style="background: #e2e8f0; border-radius: 8px; padding: 10px; width: 120px;">JUMLAH</th>
-                                </tr>
-                                ${Array(8).fill().map((_, i) => `
-                                    <tr>
-                                        <td style="border: 1px solid #cbd5e1; border-radius: 8px; height: 35px; text-align: center;">${i === 0 ? '1' : ''}</td>
-                                        <td style="border: 1px solid #cbd5e1; border-radius: 8px; padding-left: 10px;">${i === 0 ? uraian : ''}</td>
-                                        <td style="border: 1px solid #cbd5e1; border-radius: 8px; text-align: right; padding-right: 10px;">${i === 0 ? jumlah.toLocaleString('id-ID') : ''}</td>
-                                        <td style="border: 1px solid #cbd5e1; border-radius: 8px; text-align: right; padding-right: 10px;">${i === 0 ? jumlah.toLocaleString('id-ID') : ''}</td>
-                                    </tr>
-                                `).join('')}
-                            </table>
-                            <div style="display: flex; justify-content: flex-end; margin-top: 10px; gap: 20px;">
-                                <div style="text-align: center; width: 150px; margin-top: 40px;">
-                                    <p>Tanda Terima</p><br><br><br>
-                                    <hr style="border: 0; border-top: 1px solid #000; width: 100%;">
-                                </div>
-                                <div style="text-align: center; width: 150px; margin-top: 40px;">
-                                    <p>Hormat Kami</p><br><br><br>
-                                    <hr style="border: 0; border-top: 1px solid #000; width: 100%;">
-                                </div>
-                                <div style="width: 200px;">
-                                    <div style="display: flex; justify-content: space-between; padding: 8px; background: #f8fafc; border-radius: 8px; margin-bottom: 4px;">
-                                        <span>Total Rp</span><span>${jumlah.toLocaleString('id-ID')}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; padding: 8px; background: #f8fafc; border-radius: 8px;">
-                                        <span>Sisa Rp</span><span>0</span>
-                                    </div>
+                                <div style="text-align: center; width: 180px;">
+                                    <p style="margin:0; font-size: 13px;">Hormat Kami,</p>
+                                    <br><br><br>
+                                    <p style="margin:0; font-weight: bold; border-bottom: 1px solid #000;">${vendorName}</p>
                                 </div>
                             </div>
                         </div>
@@ -1360,7 +1953,7 @@
                             <div>Nomor</div><div>:</div><div>${nomorSurat}</div>
                             <div>Sifat</div><div>:</div><div>Biasa</div>
                             <div>Lampiran</div><div>:</div><div>-</div>
-                            <div>Perihal</div><div>:</div><div style="font-weight: bold; text-decoration: underline;">Surat Pesanan</div>
+                            <div>Perihal</div><div>:</div><div style="font-weight: bold; text-decoration: underline;">${perihal}</div>
                             
                             <div style="grid-column: 3; margin-top: 10px;">
                                 <strong>Kepada Yth,</strong><br>
@@ -1409,7 +2002,7 @@
                         
                         <div style="text-align: center; margin-bottom: 30px;">
                             <h3 style="text-decoration: underline; margin: 0; font-size: 16px;">BERITA ACARA SERAH TERIMA BARANG/JASA</h3>
-                            <p style="margin: 5px 0 0 0;">Nomor: 021/BA-ST/BOS/2025</p>
+                            <p style="margin: 5px 0 0 0;">Nomor: ${nomorSurat}</p>
                         </div>
 
                         <p style="text-align: justify; line-height: 1.6;">
@@ -1500,7 +2093,7 @@
                         <h1 style="text-align: center; text-decoration: underline; margin-bottom: 20px; font-size: 24px; letter-spacing: 5px;">KUITANSI</h1>
                         
                         <div style="display: grid; grid-template-columns: 180px 20px 1fr; gap: 10px; line-height: 2;">
-                            <div style="font-weight: bold;">Nomor</div><div>:</div><div style="border-bottom: 1px dashed #000;">KW/020/BOS/2025</div>
+                            <div style="font-weight: bold;">Nomor</div><div>:</div><div style="border-bottom: 1px dashed #000;">${nomorSurat}</div>
                             
                             <div>Sudah terima dari</div><div>:</div><div style="border-bottom: 1px dashed #000; font-weight: bold;">BENDAHARA BOS ${schoolData.name}</div>
                             
@@ -1509,22 +2102,30 @@
                             <div>Untuk pembayaran</div><div>:</div><div style="border-bottom: 1px dashed #000;">${uraian}</div>
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; margin-top: 40px;">
-                            <div style="text-align: center;">
-                                <p style="margin-bottom: 5px;">Menyetujui</p>
-                                <p style="font-weight: bold; margin-bottom: 60px;">Kepala Sekolah,</p>
-                                <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p>
-                                <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px;">
+                            <div style="text-align: center; border: 1px solid #000; padding: 10px 15px; min-width: 150px; height: fit-content; margin-bottom: 10px;">
+                                <p style="margin:0; font-size: 11px;">Jumlah Rp.</p>
+                                <p style="margin:0; font-size: 18px; font-weight: bold;">${jumlah.toLocaleString('id-ID')},-</p>
                             </div>
-                            <div style="text-align: center;">
-                                <p style="margin-bottom: 5px;">&nbsp;</p>
-                                <p style="font-weight: bold; margin-bottom: 60px;">Bendahara,</p>
-                                <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.treasurer}</p>
-                                <p style="margin:0;">NIP. ${schoolData.treasurerNip}</p>
-                            </div>
-                            <div style="text-align: center; border: 1px solid #000; padding: 20px; height: fit-content; align-self: center;">
-                                <p style="margin:0; font-size: 14px;">Terbilang Rp.</p>
-                                <p style="margin:0; font-size: 20px; font-weight: bold;">${jumlah.toLocaleString('id-ID')},-</p>
+                            
+                            <div style="display: flex; gap: 40px;">
+                                <div style="text-align: center;">
+                                    <p style="margin-bottom: 5px; font-size: 13px;">Setuju Dibayar,</p>
+                                    <p style="font-weight: bold; margin-bottom: 60px; font-size: 13px;">Kepala Sekolah</p>
+                                    <p style="font-weight: bold; text-decoration: underline; margin:0; font-size: 12px;">${schoolData.principal}</p>
+                                    <p style="margin:0; font-size: 11px;">NIP. ${schoolData.principalNip}</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <p style="margin-bottom: 5px; font-size: 13px;">Lunas Dibayar,</p>
+                                    <p style="font-weight: bold; margin-bottom: 60px; font-size: 13px;">Bendahara</p>
+                                    <p style="font-weight: bold; text-decoration: underline; margin:0; font-size: 12px;">${schoolData.treasurer}</p>
+                                    <p style="margin:0; font-size: 11px;">NIP. ${schoolData.treasurerNip}</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <p style="margin-bottom: 5px; font-size: 13px;">&nbsp;</p>
+                                    <p style="font-weight: bold; margin-bottom: 60px; font-size: 13px;">Penerima</p>
+                                    <p style="font-weight: bold; margin:0; font-size: 14px; white-space: nowrap;">( ................................. )</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1535,13 +2136,13 @@
                     <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
                         ${schoolKop}
                         <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-                            <p>${schoolData.kecamatan}, 02 April 2025</p>
+                            <p>${schoolData.kecamatan}, ${datePesanInfo.fullDate}</p>
                         </div>
                         <div style="display: grid; grid-template-columns: 100px 20px 1fr; gap: 5px; margin-bottom: 30px;">
-                            <div>Nomor</div><div>:</div><div>018/KKKS-GZM/IV/2025</div>
+                            <div>Nomor</div><div>:</div><div>${nomorSurat}</div>
                             <div>Sifat</div><div>:</div><div>Biasa</div>
                             <div>Lampiran</div><div>:</div><div>-</div>
-                            <div>Perihal</div><div>:</div><div style="font-weight: bold; text-decoration: underline;">Undangan Lomba FLS2N</div>
+                            <div>Perihal</div><div>:</div><div style="font-weight: bold; text-decoration: underline;">${perihal}</div>
                             
                             <div style="grid-column: 3; margin-top: 10px;">
                                 <strong>Kepada Yth,</strong><br>
@@ -1552,15 +2153,15 @@
 
                         <p>Assalamualaikum Wr, Wb.</p>
                         <p style="text-indent: 40px; text-align: justify; line-height: 1.5;">
-                            Dengan Hormat, Bersamaan ini kami sampaikan bahwa pelaksanaan Lomba Bakat Minat Kreativitas Siswa (LBMKS) cabang lomba FLS2N tingkat Gugus KH. Zaenal Musthofa tahun 2025 akan dilaksanakan pada:
+                            Dengan Hormat, Bersamaan ini kami sampaikan bahwa pelaksanaan <b>${cleanUraian}</b> tahun 2025 akan dilaksanakan pada:
                         </p>
 
                         <div style="margin: 20px 40px; line-height: 2;">
                             <div style="display: grid; grid-template-columns: 100px 20px 1fr;">
-                                <div>Hari</div><div>:</div><div>Rabu sd Kamis</div>
-                                <div>Tanggal</div><div>:</div><div>16 sd 17 April 2025</div>
-                                <div>Tempat</div><div>:</div><div>SD Negeri 1 Rajamandalawetan</div>
-                                <div>Waktu</div><div>:</div><div>08.00 sd Selesai</div>
+                                <div>Hari</div><div>:</div><div>${dateKegiatanInfo.dayName}</div>
+                                <div>Tanggal</div><div>:</div><div>${dateKegiatanInfo.fullDate}</div>
+                                <div>Tempat</div><div>:</div><div>${schoolData.name} - ${tempatKegiatan}</div>
+                                <div>Waktu</div><div>:</div><div>${waktuKegiatan}</div>
                             </div>
                         </div>
 
@@ -1576,67 +2177,170 @@
 
                         <div style="margin-top: 40px; font-size: 11px;">
                             <p style="text-decoration: underline; margin:0;">Tembusan:</p>
-                            <ol style="margin:0; padding-left: 20px;">
-                                <li>Pengawas Bina Kecamatan ${schoolData.kecamatan}</li>
-                                <li>K3S Kecamatan ${schoolData.kecamatan}</li>
-                            </ol>
+                            <div style="white-space: pre-line; margin:0; padding-left: 20px;">${tembusan}</div>
                         </div>
                     </div>
                 `;
+            } else if (docType === 'notulen') {
+                html = getNotulenHtml(uraian, dateInfo, schoolData, schoolKop);
+            } else if (docType === 'daftar_hadir') {
+                html = getDaftarHadirHtml(uraian, schoolData, schoolKop);
+            } else if (docType === 'dokumentasi') {
+                html = getDokumentasiHtml(uraian, dateInfo, schoolData, schoolKop);
             }
 
             document.getElementById('paperContent').innerHTML = html;
         }
 
-        function renderTemplate(htmlContent) {
-            // Get Current Data
-            const vendorName = document.getElementById('custVendorName').value || "-";
-            const vendorAddress = document.getElementById('custVendorAddress').value || "-";
-            const uraian = document.getElementById('custUraian').value || "-";
-            const jumlah = parseFloat(document.getElementById('custJumlah').value) || 0;
-            const docType = document.getElementById('docType').value;
-            const tanggal = document.getElementById('custTanggal').value || "-";
-            const nomorSurat = document.getElementById('custNomorSurat').value || "-";
-            const tanggalPesan = document.getElementById('custTanggalPesan').value || tanggal;
-            const tanggalKegiatan = document.getElementById('custTanggalKegiatan').value || tanggal;
-            const terbilangText = terbilang(jumlah) + " Rupiah";
+        /**
+         * Dynamic Document Templates Helper Functions
+         */
+        function getNotulenHtml(uraian, dateInfo, schoolData, schoolKop) {
+            const waktu = document.getElementById('custWaktu').value || "11.00 – 12.30 WIB";
+            const hasilLines = (document.getElementById('custHasil').value || "1. Pembahasan satu\n2. Pembahasan dua").split('\n');
+            const kesimpulan = document.getElementById('custKesimpulan').value || "Kesimpulan rapat...";
+            return `
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                    ${schoolKop}
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h2 style="text-decoration: underline; margin-bottom: 20px;">NOTULEN</h2>
+                    </div>
+                    <table style="width: 100%; margin-bottom: 20px; line-height: 1.6;">
+                        <tr><td style="width: 140px;">Nama Rapat</td><td>: ${uraian}</td></tr>
+                        <tr><td>Hari, Tanggal</td><td>: ${dateInfo.dayName}, ${dateInfo.fullDate}</td></tr>
+                        <tr><td>Waktu</td><td>: Pukul ${waktu}</td></tr>
+                        <tr><td>Tempat</td><td>: Ruang Guru ${schoolData.name}</td></tr>
+                    </table>
+                    <p style="font-weight: bold; margin-bottom: 10px;">Hasil Pembahasan dan Keputusan:</p>
+                    <ol style="padding-left: 20px; margin-bottom: 20px; line-height: 1.6; text-align: justify;">
+                        ${hasilLines.map(line => `<li>${line.replace(/^\d+\.\s*/, '')}</li>`).join('')}
+                    </ol>
+                    <p style="font-weight: bold; margin-bottom: 10px;">Kesimpulan:</p>
+                    <p style="text-align: justify; line-height: 1.6; margin-bottom: 40px;">${kesimpulan}</p>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <div style="text-align: center;">
+                            <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${dateInfo.fullDate}</p>
+                            <p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p>
+                            <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p>
+                            <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
 
-            const schoolData = {
-                name: document.getElementById('schoolName').value || "",
-                kecamatan: document.getElementById('kecamatan').value || "",
-                principal: document.getElementById('principalName').value || "",
-                principalNip: document.getElementById('principalNip').value || "",
-                treasurer: document.getElementById('treasurerName').value || "",
-                treasurerNip: document.getElementById('treasurerNip').value || ""
-            };
+        function getDaftarHadirHtml(uraian, schoolData, schoolKop) {
+            const attendanceRows = document.querySelectorAll('.attendance-row');
+            let listHtml = '';
+            attendanceRows.forEach((row, i) => {
+                const inputs = row.querySelectorAll('input');
+                const isEven = (i + 1) % 2 === 0;
+                listHtml += `
+                    <tr style="height: 50px;">
+                        <td style="border: 1px solid #000; text-align: center;">${i + 1}</td>
+                        <td style="border: 1px solid #000; padding-left: 8px;">${inputs[0].value || ""}</td>
+                        <td style="border: 1px solid #000; padding-left: 8px;">${inputs[1].value || ""}</td>
+                        <td style="border: 1px solid #000;">
+                            <div style="display: flex; padding-left: 10px; font-size: 11px;">
+                                <span>${i + 1}.</span>
+                                <div style="width: 100%; border-bottom: 1px dotted #000; margin-top: 15px; margin-left: ${isEven ? '80' : '0'}px;"></div>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+            return `
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                    ${schoolKop}
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h2 style="margin: 0;">DAFTAR HADIR</h2>
+                        <h3 style="margin: 0; font-size: 16px;">${uraian}</h3>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 40px; font-size: 13px;">
+                        <thead><tr style="background: #f0f0f0;"><th style="border: 1px solid #000; padding: 10px; width: 40px;">NO</th>
+                        <th style="border: 1px solid #000; padding: 10px;">NAMA</th><th style="border: 1px solid #000; padding: 10px; width: 180px;">JABATAN</th>
+                        <th style="border: 1px solid #000; padding: 10px; width: 180px;">TANDA TANGAN</th></tr></thead>
+                        <tbody>${listHtml || '<tr><td colspan="4" style="text-align:center; padding:20px;">Belum ada data hadir</td></tr>'}</tbody>
+                    </table>
+                    <div style="display: flex; justify-content: flex-end;"><div style="text-align: center; width: 250px;">
+                    <p style="margin-bottom: 5px;">Mengetahui,</p><p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p>
+                    <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p><p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                    </div></div>
+                </div>`;
+        }
 
-            // Logika Uraian: Jika Surat Pesanan/Undangan, buang awalan "Konsumsi..."
-            let uraianForTemplate = uraian;
-            if (docType === 'pesanan' || docType === 'undangan') {
-                uraianForTemplate = uraian.replace(/^(Belanja )?Konsumsi \(Makan & Snack\) /i, "");
+        function getDokumentasiHtml(uraian, dateInfo, schoolData, schoolKop) {
+            return `
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                    ${schoolKop}
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h2 style="text-decoration: underline; margin-bottom: 10px;">LEMBAR DOKUMENTASI</h2>
+                        <h3 style="margin: 0; font-size: 16px;">${uraian}</h3>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 50px;">
+                        ${docPhotoBase64 ? `<div style="border: 1px solid #000; padding: 20px;"><img src="${docPhotoBase64}" style="max-width: 500px; max-height: 400px; object-fit: contain;"></div>` :
+                    `<div style="border: 2px dashed #ccc; width: 500px; height: 300px; display: flex; align-items: center; justify-content: center; color: #999;">Foto Kegiatan Belum Diupload</div>`}
+                    </div>
+                    <div style="margin-top: 100px; display: flex; justify-content: flex-end;"><div style="text-align: center;">
+                        <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${dateInfo.fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p><p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                    </div></div>
+                </div>`;
+        }
+
+
+
+        // --- Toast Notification System ---
+        function showToast(message, type = 'success', duration = 3000) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.classList.add('toast', type);
+
+            let iconHtml = '';
+            if (type === 'success') {
+                iconHtml = '<i data-lucide="check-circle" size="20"></i>';
+            } else if (type === 'error') {
+                iconHtml = '<i data-lucide="x-circle" size="20"></i>';
+            } else {
+                iconHtml = '<i data-lucide="info" size="20"></i>';
             }
 
-            // Replace Placeholders
-            let filledHtml = htmlContent;
-            filledHtml = filledHtml.replace(/{{NO_BUKTI}}/g, "AUTO"); // Bisa diambil dari tx.noBukti jika ada
-            filledHtml = filledHtml.replace(/{{TANGGAL}}/g, tanggal);
-            filledHtml = filledHtml.replace(/{{TANGGAL_PESAN}}/g, tanggalPesan);
-            filledHtml = filledHtml.replace(/{{TANGGAL_KEGIATAN}}/g, tanggalKegiatan);
-            filledHtml = filledHtml.replace(/{{NOMOR_SURAT}}/g, nomorSurat);
-            filledHtml = filledHtml.replace(/{{URAIAN}}/g, uraianForTemplate);
-            filledHtml = filledHtml.replace(/{{JUMLAH}}/g, "Rp " + jumlah.toLocaleString('id-ID'));
-            filledHtml = filledHtml.replace(/{{TERBILANG}}/g, terbilangText);
-            filledHtml = filledHtml.replace(/{{PENERIMA}}/g, vendorName);
-            filledHtml = filledHtml.replace(/{{ALAMAT_TOKO}}/g, vendorAddress);
-            filledHtml = filledHtml.replace(/{{NAMA_SEKOLAH}}/g, schoolData.name);
-            filledHtml = filledHtml.replace(/{{KEPALA_SEKOLAH}}/g, schoolData.principal);
-            filledHtml = filledHtml.replace(/{{NIP_KEPALA}}/g, schoolData.principalNip);
-            filledHtml = filledHtml.replace(/{{KECAMATAN}}/g, schoolData.kecamatan);
-            filledHtml = filledHtml.replace(/{{BENDAHARA}}/g, schoolData.treasurer);
-            filledHtml = filledHtml.replace(/{{NIP_BENDAHARA}}/g, schoolData.treasurerNip);
+            toast.innerHTML = `
+                <div class="toast-icon">${iconHtml}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${message}</div>
+                </div>
+            `;
+            toastContainer.appendChild(toast);
+            lucide.createIcons(); // Re-render lucide icons for the new toast
 
-            document.getElementById('paperContent').innerHTML = filledHtml;
+            setTimeout(() => {
+                toast.classList.add('toast-out');
+                toast.addEventListener('animationend', () => {
+                    toast.remove();
+                });
+            }, duration);
         }
+
+        // --- Custom Confirm Modal System ---
+        let confirmCallback = null;
+
+        function showConfirm(message, onConfirm, title = "Konfirmasi") {
+            const confirmOverlay = document.getElementById('confirmOverlay');
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmMessage').innerText = message;
+            confirmCallback = onConfirm;
+            confirmOverlay.style.display = 'flex';
+            lucide.createIcons();
+        }
+
+        function closeConfirm(confirmed) {
+            const confirmOverlay = document.getElementById('confirmOverlay');
+            confirmOverlay.style.display = 'none';
+            if (confirmed && confirmCallback) {
+                confirmCallback();
+            }
+            confirmCallback = null; // Reset callback
+        }
+
 
         // Action: Save School Data
         function saveData() {
@@ -1652,29 +2356,25 @@
             };
 
             const btn = document.querySelector('.btn-submit');
-            const originalContent = btn.innerHTML;
+            const originalText = btn.innerHTML;
 
             // Visual feedback
-            btn.innerHTML = '<i data-lucide="loader-2" class="spin" size="18"></i> Menyiapkan...';
+            btn.innerHTML = '<i data-lucide="loader-2" class="spin" size="18"></i> Menyimpan...';
             lucide.createIcons();
             btn.disabled = true;
 
             google.script.run
                 .withSuccessHandler((response) => {
-                    alert(response);
-                    btn.innerHTML = '<i data-lucide="check" size="18"></i> Berhasil!';
+                    showToast("Data Berhasil Disimpan!");
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
                     lucide.createIcons();
-                    setTimeout(() => {
-                        btn.innerHTML = originalContent;
-                        lucide.createIcons();
-                        btn.disabled = false;
-                    }, 2000);
                 })
                 .withFailureHandler((err) => {
-                    alert("Error: " + err);
-                    btn.innerHTML = originalContent;
-                    lucide.createIcons();
+                    showToast("Gagal menyimpan: " + err, "error");
+                    btn.innerHTML = originalText;
                     btn.disabled = false;
+                    lucide.createIcons();
                 })
                 .saveSchoolData(formData);
         }
@@ -1741,7 +2441,7 @@
             const jumlah = parseFloat(document.getElementById('addJumlah').value);
 
             if (!dateVal || !noBukti || !uraian || !jumlah) {
-                alert("Mohon lengkapi Tanggal, No Bukti, Uraian, dan Jumlah.");
+                showToast("Mohon lengkapi Tanggal, No Bukti, Uraian, dan Jumlah.", "error");
                 return;
             }
 
@@ -1749,7 +2449,7 @@
             const d = new Date(dateVal);
             const formattedDate = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 
-            // Determine type automatically based on keywords (simple logic)
+            // Determine type automatically based on keywords
             let type = 'nota';
             let vendorStyle = 'standard';
             const uLow = uraian.toLowerCase();
@@ -1776,18 +2476,20 @@
         }
 
         function removeTransaction(id) {
-            if (confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) {
+            showConfirm("Apakah Anda yakin ingin menghapus transaksi ini?", () => {
                 allTransactions = allTransactions.filter(tx => tx.id !== id);
                 renderTransactions(allTransactions);
                 document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
-            }
+                showToast("Transaksi berhasil dihapus");
+            });
         }
 
         function generateSpj(txId) {
             const tx = allTransactions.find(t => t.id === txId);
             if (!tx) return;
 
-            // Pre-fill the customizer
+            // Pre-fill the customizer - (Redundant school fields removed from UI)
+
             document.getElementById('custVendorName').value = tx.penerima;
             document.getElementById('custVendorAddress').value = "Alamat " + tx.penerima;
             document.getElementById('custUraian').value = tx.uraian;
@@ -1796,7 +2498,11 @@
             document.getElementById('custTanggalPesan').value = tx.tanggal;
             document.getElementById('custTanggalKegiatan').value = tx.tanggal;
             document.getElementById('custNomorSurat').value = "020/SD-BOS/" + new Date().getFullYear();
-            // document.getElementById('driveTemplateSelect').value = ""; // Don't reset if user wants to keep using template
+
+            document.getElementById('custPerihal').value = (tx.type === 'konsumsi' ? "Belanja Konsumsi" : "Pesanan Barang/Jasa");
+            document.getElementById('custTempatKegiatan').value = document.getElementById('schoolName').value || "Sekolah";
+            document.getElementById('custWaktuKegiatan').value = "08.00 sd Selesai";
+            document.getElementById('custTembusan').value = "1. Pengawas Pembina\n2. K3S Kecamatan " + (document.getElementById('kecamatan').value || "");
 
             const docTypeSelect = document.getElementById('docType');
             if (tx.type === 'konsumsi') {
@@ -1817,11 +2523,11 @@
         function openDrivePicker() {
             document.getElementById('driveModal').style.display = 'flex';
             document.getElementById('driveFileList').innerHTML = `
-                <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-                    <i data-lucide="loader-2" class="spin" size="32" style="margin-bottom: 10px;"></i>
-                    <p>Mencari file di Drive Anda...</p>
-                </div>
-            `;
+                                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                        <i data-lucide="loader-2" class="spin" size="32" style="margin-bottom: 10px;"></i>
+                                        <p>Mencari file di Drive Anda...</p>
+                                    </div>
+                                    `;
             lucide.createIcons();
 
             google.script.run
@@ -1865,12 +2571,12 @@
             const driveCard = document.querySelector('.upload-card');
             const originalContent = driveCard.innerHTML;
             driveCard.innerHTML = `
-                <div class="upload-icon-wrapper" style="background: #22c55e; color: white; width: 80px; height: 80px;">
-                    <i data-lucide="loader-2" class="spin" size="40"></i>
-                </div>
-                <h3 style="color: #166534;">Membaca File dari Drive...</h3>
-                <p style="color: #166534;">${fileName}</p>
-            `;
+                                    <div class="upload-icon-wrapper" style="background: #22c55e; color: white; width: 80px; height: 80px;">
+                                        <i data-lucide="loader-2" class="spin" size="40"></i>
+                                    </div>
+                                    <h3 style="color: #166534;">Membaca File dari Drive...</h3>
+                                    <p style="color: #166534;">${fileName}</p>
+                                    `;
             lucide.createIcons();
 
             google.script.run
@@ -1883,7 +2589,7 @@
                         document.getElementById('extractionInfo').innerText = `Ditemukan ${response.data.length} transaksi dari Excel: ${fileName}`;
                         showView('manage-view', document.querySelector('.nav-item[onclick*="manage-view"]'));
                     } else {
-                        alert("Gagal memproses file Excel: " + response.error);
+                        showToast("Gagal memproses file Excel: " + response.error, "error");
                     }
                 })
                 .processExcelByFileId(fileId);
