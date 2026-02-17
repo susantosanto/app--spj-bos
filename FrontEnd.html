@@ -977,22 +977,24 @@
                             <option value="notulen">Notulen Kegiatan</option>
                             <option value="daftar_hadir">Daftar Hadir</option>
                             <option value="dokumentasi">Lembar Dokumentasi</option>
+                            <option value="rencana">Dokumen Perencanaan</option>
+                            <option value="spk">Surat Perintah Kerja (SPK)</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label>Nomor Surat / Berita Acara</label>
+                    <div class="form-group" id="fg-nomor">
+                        <label>Nomor Surat / Berita Acara / SPK</label>
                         <input type="text" id="custNomorSurat" oninput="updatePreview()"
                             placeholder="Contoh: 001/SD/2025">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="fg-perihal">
                         <label>Perihal / Subject</label>
                         <input type="text" id="custPerihal" oninput="updatePreview()"
                             placeholder="Contoh: Undangan Lomba">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="fg-vendor-style">
                         <label>Template Vendor</label>
                         <select id="vendorStyle" onchange="updatePreview()"
                             style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
@@ -1005,20 +1007,74 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label>Nama Vendor / Toko</label>
+                    <div class="form-group" id="fg-vendor-name">
+                        <label>Nama Vendor / Toko / Penerima</label>
                         <input type="text" id="custVendorName" oninput="updatePreview()" placeholder="NAMA TOKO">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="fg-uraian">
                         <label>Uraian Belanja / Kegiatan</label>
                         <textarea id="custUraian" oninput="updatePreview()" rows="3"
                             style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label>Nominal (Rp)</label>
+                    <div class="form-group" id="fg-jumlah">
+                        <label>Nominal / Anggaran / Total (Rp)</label>
                         <input type="number" id="custJumlah" oninput="updatePreview()">
+                    </div>
+
+                    <!-- Extra Fields for Rencana -->
+                    <div id="rencanaExtraSection"
+                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Detail
+                            Perencanaan</label>
+                        <div class="form-group">
+                            <label>Kategori Barang/Jasa</label>
+                            <input type="text" id="custKategori" oninput="updatePreview()"
+                                placeholder="Contoh: Pemeliharaan Laptop Sekolah">
+                        </div>
+                        <div class="form-group">
+                            <label>Jumlah Barang/Jasa (Teks)</label>
+                            <input type="text" id="custJumlahBarang" oninput="updatePreview()"
+                                placeholder="Contoh: 1 (Satu) Paket">
+                        </div>
+                        <div class="form-group">
+                            <label>Spesifikasi / Ruang Lingkup</label>
+                            <textarea id="custSpesifikasi" oninput="updatePreview()" rows="2"
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"
+                                placeholder="Contoh: Belanja Jasa Service Laptop"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Persyaratan Penyedia</label>
+                            <textarea id="custPersyaratan" oninput="updatePreview()" rows="3"
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Perorangan/Badan Usaha Memenuhi syarat sebagai berikut:\na. Identitas Penyedia;</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Extra Fields for SPK -->
+                    <div id="spkExtraSection"
+                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Detail
+                            SPK</label>
+                        <div class="form-group">
+                            <label>Tanggal Negosiasi</label>
+                            <input type="text" id="custTglNegosiasi" oninput="updatePreview()" placeholder="dd/mm/yyyy">
+                        </div>
+                        <div class="form-group">
+                            <label>Waktu Pelaksanaan</label>
+                            <input type="text" id="custWaktuPelaksanaan" oninput="updatePreview()"
+                                placeholder="dd/mm/yyyy (Default: Tanggal Transaksi)">
+                        </div>
+                        <div class="form-group">
+                            <label>Waktu Penyelesaian</label>
+                            <input type="text" id="custWaktuPenyelesaian" oninput="updatePreview()"
+                                placeholder="Contoh: 06 Juni 2025">
+                        </div>
+                        <div class="form-group">
+                            <label>Instruksi ke Penyedia</label>
+                            <textarea id="custInstruksi" oninput="updatePreview()" rows="3"
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Penagihan hanya dapat dilakukan setelah penyelesaian pekerjaan yang diperintahkan dalam SPK ini dan dibuktikan dengan Berita Acara Serah Terima.</textarea>
+                        </div>
                     </div>
 
                     <!-- Dynamic Items for Nota -->
@@ -1088,53 +1144,53 @@
 
 
 
-                    <div class="form-group">
-                        <label>Tanggal Transaksi / BAST</label>
+                    <div class="form-group" id="fg-tanggal">
+                        <label>Tanggal Transaksi / BAST / SPK / Serah Terima</label>
                         <input type="text" id="custTanggal" oninput="updatePreview()" placeholder="dd/mm/yyyy">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="fg-tanggal-pesan">
                         <label>Tanggal Surat / Pesan</label>
                         <input type="text" id="custTanggalPesan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="fg-tanggal-kegiatan">
                         <label>Tanggal Kegiatan</label>
                         <input type="text" id="custTanggalKegiatan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
                     </div>
 
-                    <div class="form-group">
-                        <label>Tempat Kegiatan</label>
+                    <div class="form-group" id="fg-tempat">
+                        <label>Tempat Kegiatan / Lokasi</label>
                         <input type="text" id="custTempatKegiatan" oninput="updatePreview()"
                             placeholder="Contoh: SD Negeri 1 ...">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="fg-waktu-kegiatan">
                         <label>Waktu Kegiatan</label>
                         <input type="text" id="custWaktuKegiatan" oninput="updatePreview()"
                             placeholder="Contoh: 08.00 sd Selesai">
                     </div>
 
-                    <div class="form-group">
-                        <label>Alamat Vendor</label>
+                    <div class="form-group" id="fg-vendor-address">
+                        <label>Alamat Vendor / Toko</label>
                         <input type="text" id="custVendorAddress" oninput="updatePreview()" placeholder="Alamat Toko">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="fg-tembusan">
                         <label>Tembusan (Opsional)</label>
                         <textarea id="custTembusan" oninput="updatePreview()" rows="2"
                             style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"
                             placeholder="1. Pengawas...&#10;2. K3S..."></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label>Logo Toko (Upload)</label>
-                        <input type="file" accept="image/*" onchange="handleLogoUpload(this)" style="font-size: 11px;">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Stempel Toko</label>
-                        <input type="file" accept="image/*" onchange="handleStampUpload(this)" style="font-size: 11px;">
+                    <div class="form-group" id="fg-uploads">
+                        <label>Logo & Stempel Toko (Nota Only)</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="file" accept="image/*" onchange="handleLogoUpload(this)"
+                                style="font-size: 11px;">
+                            <input type="file" accept="image/*" onchange="handleStampUpload(this)"
+                                style="font-size: 11px;">
+                        </div>
                     </div>
 
                     <div style="margin-top: auto;">
@@ -1440,27 +1496,60 @@
             const notulenSection = document.getElementById('notulenSection');
             const attendanceSection = document.getElementById('attendanceSection');
             const documentationSection = document.getElementById('documentationSection');
+            const rencanaSection = document.getElementById('rencanaExtraSection');
+            const spkSection = document.getElementById('spkExtraSection');
 
             // Hide all special sections
             notaSection.style.display = 'none';
             notulenSection.style.display = 'none';
             attendanceSection.style.display = 'none';
             documentationSection.style.display = 'none';
+            rencanaSection.style.display = 'none';
+            spkSection.style.display = 'none';
 
-            if (docType === 'nota') {
+            // Reset visibility of all grouped fields first
+            ['fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
+                'fg-tanggal', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan',
+                'fg-vendor-address', 'fg-tembusan', 'fg-uploads'].forEach(id => {
+                    document.getElementById(id).style.display = 'none';
+                });
+
+            // Helper to show specific fields
+            const showFields = (ids) => ids.forEach(id => document.getElementById(id).style.display = 'block');
+
+            if (docType === 'kwitansi') {
+                showFields(['fg-nomor', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-name']); // Vendor Name used as Penerima
+            } else if (docType === 'nota') {
+                showFields(['fg-vendor-style', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-uploads']);
                 notaSection.style.display = 'block';
                 if (document.getElementById('notaItemsList').children.length === 0) {
                     addNotaItem();
                 }
+            } else if (docType === 'pesanan') {
+                showFields(['fg-nomor', 'fg-perihal', 'fg-vendor-name', 'fg-uraian', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan']);
+            } else if (docType === 'berita_acara') {
+                showFields(['fg-nomor', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address']);
+            } else if (docType === 'undangan') {
+                showFields(['fg-nomor', 'fg-perihal', 'fg-uraian', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan', 'fg-tembusan']);
             } else if (docType === 'notulen') {
+                showFields(['fg-uraian', 'fg-tanggal']);
                 notulenSection.style.display = 'block';
             } else if (docType === 'daftar_hadir') {
+                showFields(['fg-uraian']);
                 attendanceSection.style.display = 'block';
                 if (document.getElementById('attendanceList').children.length === 0) {
                     loadDefaultAttendance();
                 }
             } else if (docType === 'dokumentasi') {
+                showFields(['fg-uraian', 'fg-tanggal']);
                 documentationSection.style.display = 'block';
+            } else if (docType === 'rencana') {
+                showFields(['fg-uraian', 'fg-tanggal', 'fg-tempat', 'fg-jumlah']); // Uraian (Base), Tanggal (Serah), Tempat (Lokasi), Jumlah (Anggaran)
+                rencanaSection.style.display = 'block';
+            } else if (docType === 'spk') {
+                showFields(['fg-nomor', 'fg-tanggal', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah']);
+                spkSection.style.display = 'block';
+                notaSection.style.display = 'block'; // SPK uses the items table
             }
             updatePreview();
         }
@@ -1618,7 +1707,7 @@
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div style="text-align: center; width: 350px;">
                                     <h2 style="margin:0; font-size: 18px; font-weight: bold; letter-spacing: 1px;">RUMAH MAKAN</h2>
-                                    <h1 style="margin:0; font-size: 42px; font-family: 'Arial Black', sans-serif; line-height: 1;">"${vendorName}"</h1>
+                                    <h1 style="margin:0; font-size: 42px; font-family: 'Arial Black', sans-serif; line-height: 1;">"RM. FAMILY"</h1>
                                     <p style="margin:5px 0 0 0; font-size: 11px; font-weight: bold;">${vendorAddress}</p>
                                 </div>
                                 <div style="width: 250px; font-size: 13px;">
@@ -1681,7 +1770,7 @@
                                 <div style="display: flex; align-items: center; gap: 15px;">
                                     <div style="width: 60px; height: 60px; border: 3px solid #1e40af; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px;">CC</div>
                                     <div style="text-align: center;">
-                                        <h1 style="margin:0; font-size: 24px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase;">${vendorName}</h1>
+                                        <h1 style="margin:0; font-size: 24px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase;">CAHYA CELLULAR</h1>
                                     </div>
                                 </div>
                                 <div style="text-align: left; font-size: 12px; font-weight: 600;">
@@ -1836,7 +1925,7 @@
                                 <div style="display: flex; gap: 20px;">
                                     <div style="width: 65px; height: 65px; background: #ef4444; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 30px; border: 3px solid #1e3a8a;">SA</div>
                                     <div>
-                                        <h1 style="margin:0; font-size: 32px; font-weight: 900; color: #ef4444; font-family: 'Arial Black', sans-serif;">TB. ${vendorName}</h1>
+                                        <h1 style="margin:0; font-size: 32px; font-weight: 900; color: #ef4444; font-family: 'Arial Black', sans-serif;">TB. SINAR ABADI</h1>
                                         <p style="margin:0; font-size: 11px; font-weight: bold;">${vendorAddress}</p>
                                         <p style="margin:0; font-size: 11px; font-weight: bold;">Menjual: Bahan Bangunan Kayu Dll</p>
                                         <p style="margin:0; font-size: 11px;">Melayani Eceran dan Grosir</p>
@@ -2128,8 +2217,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
             } else if (docType === 'undangan') {
                 // --- TEMPLATE UNDANGAN (SESUAI TEKS) ---
                 html = `
@@ -2187,6 +2275,10 @@
                 html = getDaftarHadirHtml(uraian, schoolData, schoolKop);
             } else if (docType === 'dokumentasi') {
                 html = getDokumentasiHtml(uraian, dateInfo, schoolData, schoolKop);
+            } else if (docType === 'rencana') {
+                html = getRencanaHtml(uraian, schoolData, schoolKop);
+            } else if (docType === 'spk') {
+                html = getSpkHtml(uraian, schoolData, schoolKop);
             }
 
             document.getElementById('paperContent').innerHTML = html;
@@ -2284,6 +2376,248 @@
                         <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p><p style="margin:0;">NIP. ${schoolData.principalNip}</p>
                     </div></div>
                 </div>`;
+        }
+
+        function getRencanaHtml(uraian, schoolData, schoolKop) {
+            const kategori = document.getElementById('custKategori').value || "-";
+            const jumlahBarang = document.getElementById('custJumlahBarang').value || "1";
+            const spesifikasi = document.getElementById('custSpesifikasi').value || uraian;
+            const waktuSerah = document.getElementById('custTanggal').value || "-";
+            const lokasi = document.getElementById('custTempatKegiatan').value || schoolData.name;
+            const anggaran = document.getElementById('custJumlah').value || "0";
+            const persyaratan = (document.getElementById('custPersyaratan').value || "").replace(/\n/g, '<br>');
+            const tanggal = document.getElementById('custTanggal').value || "";
+
+            // Format anggaran
+            let anggaranFmt = "0";
+            try {
+                anggaranFmt = parseInt(anggaran).toLocaleString('id-ID');
+            } catch (e) { }
+
+
+            return `
+                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px;">
+                    ${schoolKop}
+                    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">DOKUMEN PERENCANAAN</div>
+                    
+                    <table style="width: 100%; font-weight: bold; margin-bottom: 20px;">
+                        <tr><td style="width: 200px;">Nama Satuan Pendidikan</td><td>: ${schoolData.name}</td></tr>
+                        <tr><td>Alamat Satuan Pendidikan</td><td>: ${schoolData.address}</td></tr>
+                        <tr><td>Kategori Barang/Jasa</td><td>: ${kategori}</td></tr>
+                    </table>
+
+                     <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 20px;">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid #000; padding: 5px; text-align: center; width: 40px;">NO.</th>
+                                <th style="border: 1px solid #000; padding: 5px; text-align: center;">JENIS</th>
+                                <th style="border: 1px solid #000; padding: 5px; text-align: center;">KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <tr>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">1</td>
+                                <td style="border: 1px solid #000; padding: 5px;">Jumlah barang/jasa</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">${jumlahBarang}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">2</td>
+                                <td style="border: 1px solid #000; padding: 5px;">Spesifikasi/ruang lingkup barang/jasa</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">${spesifikasi}</td>
+                            </tr>
+                             <tr>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">3</td>
+                                <td style="border: 1px solid #000; padding: 5px;">Waktu serah terima</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">${waktuSerah}</td>
+                            </tr>
+                             <tr>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">4</td>
+                                <td style="border: 1px solid #000; padding: 5px;">Lokasi serah terima</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">${lokasi}</td>
+                            </tr>
+                             <tr>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center;">5</td>
+                                <td style="border: 1px solid #000; padding: 5px;">Alokasi anggaran</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: right;">Rp <span style="float:right;">${anggaranFmt}</span></td>
+                            </tr>
+                             <tr>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: center; vertical-align: top;">6</td>
+                                <td style="border: 1px solid #000; padding: 5px; vertical-align: top;">Persyaratan Penyedia</td>
+                                <td style="border: 1px solid #000; padding: 5px;">${persyaratan}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                     <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
+                        <div style="text-align: center;">
+                            <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${getDateText(tanggal).fullDate}</p>
+                            <p style="font-weight: bold; margin-bottom: 80px;">Pelaksana</p>
+                            <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p>
+                            <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                        </div>
+                    </div>
+                     <div style="margin-top: 20px; font-size: 11px;">
+                        (*) Misalnya Buku Teks Utama/Buku Teks Pendamping/Buku Nonteks/Kebutuhan dan Perlengkapan Satuan Pendidikan/Alat Peraga Pendidikan/Komputer dan Aksesoris/Elektronik/Jasa lainnya.
+                    </div>
+                </div>
+            `;
+        }
+
+        function getSpkHtml(uraian, schoolData, schoolKop) {
+            const nomorSpk = document.getElementById('custNomorSurat').value || "";
+            const tglSpk = document.getElementById('custTanggal').value || "";
+            const tglNegosiasi = document.getElementById('custTglNegosiasi').value || "";
+            const waktuPelaksanaan = document.getElementById('custWaktuPelaksanaan').value || document.getElementById('custTanggal').value || "";
+            const waktuPenyelesaian = document.getElementById('custWaktuPenyelesaian').value || "";
+            const instruksi = (document.getElementById('custInstruksi').value || "").replace(/\n/g, '<br>');
+            const jumlahTotal = parseInt(document.getElementById('custJumlah').value || "0");
+
+            // Get Items from Nota List logic
+            const items = [];
+            document.querySelectorAll('.nota-item-row').forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                items.push({
+                    name: inputs[0].value,
+                    qty: parseInt(inputs[1].value) || 0,
+                    price: parseInt(inputs[2].value) || 0,
+                    total: (parseInt(inputs[1].value) || 0) * (parseInt(inputs[2].value) || 0)
+                });
+            });
+
+            // Fallback if no items
+            if (items.length === 0) {
+                items.push({
+                    name: document.getElementById('custUraian').value || "",
+                    qty: 1,
+                    price: jumlahTotal,
+                    total: jumlahTotal
+                });
+            }
+
+            const itemsHtml = items.map((item, i) => `
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px; text-align: center;">${i + 1}</td>
+                    <td style="border: 1px solid #000; padding: 5px;">${item.name}</td>
+                    <td style="border: 1px solid #000; padding: 5px; text-align: center;">${item.qty}</td>
+                    <td style="border: 1px solid #000; padding: 5px; text-align: center;">unit</td>
+                    <td style="border: 1px solid #000; padding: 5px; text-align: right;">Rp ${item.price.toLocaleString('id-ID')}</td>
+                    <td style="border: 1px solid #000; padding: 5px; text-align: right;">Rp ${item.total.toLocaleString('id-ID')}</td>
+                </tr>
+             `).join('');
+
+            // Fill empty rows to make it look like the example
+            const emptyRows = Array(Math.max(0, 5 - items.length)).fill(`
+                <tr>
+                     <td style="border: 1px solid #000; padding: 5px;">&nbsp;</td>
+                     <td style="border: 1px solid #000; padding: 5px;"></td>
+                     <td style="border: 1px solid #000; padding: 5px;"></td>
+                     <td style="border: 1px solid #000; padding: 5px;"></td>
+                     <td style="border: 1px solid #000; padding: 5px;">Rp -</td>
+                     <td style="border: 1px solid #000; padding: 5px;">Rp -</td>
+                </tr>
+             `).join('');
+
+            const terbilangText = terbilang(jumlahTotal) + " Rupiah";
+
+            return `
+                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px;">
+                    ${schoolKop}
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 5px;">
+                        <tr>
+                            <td rowspan="3" style="border: 1px solid #000; padding: 10px; width: 40%; vertical-align: top; text-align: center; font-weight: bold;">
+                                <br><br>SURAT PERINTAH KERJA (SPK)
+                            </td>
+                            <td style="border: 1px solid #000; padding: 5px;">Nama Satuan Pendidikan : ${schoolData.name}</td>
+                        </tr>
+                        <tr>
+                             <td style="border: 1px solid #000; padding: 5px;">Nomor SPK : ${nomorSpk}</td>
+                        </tr>
+                        <tr>
+                             <td style="border: 1px solid #000; padding: 5px;">Tanggal SPK : ${getDateText(tglSpk).fullDate}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 5px;">Paket Pekerjaan : ${uraian}</td>
+                            <td style="border: 1px solid #000; padding: 5px;">
+                                Tanggal Negosiasi : ${getDateText(tglNegosiasi).fullDate}<br>
+                                <span style="font-size: 11px;">SPK ini mulai berlaku efektif terhitung sejak tanggal ditetapkan dan penyelesaian keseluruhan pekerjaan sebagaimana dimaksud dalam SPK ini.</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 5px;">
+                         <tr>
+                            <td style="border: 1px solid #000; padding: 5px; width: 50%;">WAKTU PELAKSANAAN PEKERJAAN : ${getDateText(waktuPelaksanaan).fullDate}</td>
+                            <td style="border: 1px solid #000; padding: 5px;"></td>
+                        </tr>
+                         <tr>
+                            <td style="border: 1px solid #000; padding: 5px;">WAKTU PENYELESAIAN PEKERJAAN : ${waktuPenyelesaian ? getDateText(waktuPenyelesaian).fullDate : '-'}</td>
+                             <td style="border: 1px solid #000; padding: 5px;"></td>
+                        </tr>
+                    </table>
+
+                    <div style="text-align: center; font-weight: bold; border: 1px solid #000; padding: 5px; border-bottom: none;">RINCIAN PEKERJAAN</div>
+                     <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 20px;">
+                        <thead>
+                            <tr style="text-align: center; font-weight: bold;">
+                                <th style="border: 1px solid #000; padding: 5px; width: 30px;">No</th>
+                                <th style="border: 1px solid #000; padding: 5px;">Uraian Barang/Jasa</th>
+                                <th style="border: 1px solid #000; padding: 5px; width: 80px;">Jumlah (QTY)</th>
+                                <th style="border: 1px solid #000; padding: 5px; width: 80px;">Satuan Ukuran</th>
+                                <th style="border: 1px solid #000; padding: 5px; width: 120px;">Harga Satuan</th>
+                                <th style="border: 1px solid #000; padding: 5px; width: 120px;">Total Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsHtml}
+                            ${emptyRows}
+                            <tr>
+                                <td colspan="5" style="border: 1px solid #000; padding: 5px; text-align: right;">PPN</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Rp -</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="border: 1px solid #000; padding: 5px; text-align: right;">Biaya Pengiriman</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Rp -</td>
+                            </tr>
+                             <tr>
+                                <td colspan="5" style="border: 1px solid #000; padding: 5px; text-align: right;">Asuransi</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Rp -</td>
+                            </tr>
+                             <tr style="background: #fbbf24;">
+                                <td colspan="5" style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Total Pembayaran</td>
+                                <td style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Rp ${jumlahTotal.toLocaleString('id-ID')}</td>
+                            </tr>
+                              <tr>
+                                <td colspan="6" style="border: 1px solid #000; padding: 5px; font-weight: bold; background: #f3f4f6;">
+                                    Terbilang : ${terbilangText}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                     <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px;">
+                        <span style="text-decoration: underline;">INSTRUKSI KE PENYEDIA :</span><br>
+                        ${instruksi}
+                     </div>
+
+                      <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 20px; width: 50%; text-align: center; vertical-align: top;">
+                                <br>
+                                <strong>Penyedia,</strong>
+                                <br><br><br><br><br>
+                                ..........................
+                            </td>
+                            <td style="border: 1px solid #000; padding: 10px; width: 50%; text-align: center; vertical-align: top;">
+                                ${schoolData.kecamatan}, ${getDateText(tglSpk).fullDate}<br>
+                                <strong>Pelaksana,</strong>
+                                <br><br><br><br><br>
+                                <strong>${schoolData.principal}</strong><br>
+                                NIP. ${schoolData.principalNip}
+                            </td>
+                        </tr>
+                      </table>
+                </div>
+             `;
         }
 
 
