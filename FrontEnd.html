@@ -55,77 +55,98 @@
 
         /* --- Sidebar Styles --- */
         .sidebar {
-            width: 260px;
-            background: linear-gradient(180deg, var(--sidebar-bg) 0%, #172554 100%);
+            width: 280px;
+            background: #020617;
+            background-image: radial-gradient(circle at top left, #1e3a8a20, transparent 40%), radial-gradient(circle at bottom right, #1e40af10, transparent 40%);
             color: var(--white);
             display: flex;
             flex-direction: column;
-            padding: 24px 16px;
+            padding: 30px 20px;
             flex-shrink: 0;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 0 40px rgba(0, 0, 0, 0.3);
+            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            z-index: 50;
         }
 
         .logo-container {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 0 12px 32px 12px;
+            padding: 0 10px 40px 10px;
+            position: relative;
+        }
+
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
         }
 
         .logo-icon {
-            background: var(--white);
-            color: var(--sidebar-bg);
-            padding: 8px;
-            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 10px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
         }
 
         .logo-text h1 {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 22px;
+            font-weight: 800;
             letter-spacing: 0.5px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .logo-text p {
             font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.7;
+            letter-spacing: 2px;
+            color: #64748b;
+            font-weight: 600;
         }
 
         .nav-menu {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             flex-grow: 1;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 10px;
+            gap: 14px;
+            padding: 14px 18px;
+            border-radius: 16px;
             cursor: pointer;
             transition: var(--transition);
             text-decoration: none;
-            color: var(--white);
-            opacity: 0.8;
+            color: #94a3b8;
             font-weight: 500;
             font-size: 14px;
+            border: 1px solid transparent;
         }
 
         .nav-item:hover {
-            background: var(--sidebar-hover);
-            opacity: 1;
+            background: rgba(255, 255, 255, 0.03);
+            color: #f1f5f9;
+            transform: translateX(5px);
         }
 
         .nav-item.active {
-            background: var(--primary);
-            opacity: 1;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.15), rgba(37, 99, 235, 0.05));
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.1);
         }
 
         .btn-danger:hover {
@@ -347,18 +368,15 @@
         }
 
         .clock-time {
-            font-size: 32px;
             font-size: 42px;
             font-weight: 800;
             font-variant-numeric: tabular-nums;
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-            background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 50%, #ef4444 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1.1;
-            letter-spacing: -1px;
             letter-spacing: 6px;
-            filter: drop-shadow(0 4px 10px rgba(220, 38, 38, 0.3));
+            filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.4));
         }
 
         .clock-date {
@@ -464,60 +482,79 @@
 
         .qa-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 24px;
-            height: 100%;
-            align-content: center;
+            align-content: start;
         }
 
         .qa-card {
-            background: #f8fafc;
-            border-radius: 20px;
+            background: #ffffff;
+            border-radius: 16px;
             padding: 24px;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            justify-content: center;
-            text-align: center;
+            justify-content: flex-start;
+            gap: 20px;
+            text-align: left;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
-            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qa-card::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transition: 0.5s ease;
         }
 
         .qa-card:hover {
-            background: white;
-            border-color: var(--primary);
-            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.1);
-            transform: translateY(-5px) scale(1.02);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
         }
 
         .qa-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 18px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 16px;
+            margin-bottom: 0;
             transition: 0.3s;
+            position: relative;
+            z-index: 1;
         }
 
         .qa-card:hover .qa-icon {
-            transform: scale(1.1) rotate(-5deg);
+            transform: scale(1.1);
         }
 
         .qa-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text-main);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
         }
 
         .qa-desc {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             line-height: 1.4;
+            position: relative;
+            z-index: 1;
         }
 
         /* Modern Footer */
@@ -633,6 +670,24 @@
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 2px;
+        }
+
+        /* Saved Templates List */
+        .saved-template-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .saved-template-item:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
         }
 
         #fileInput {
@@ -1023,7 +1078,7 @@
         </div>
 
         <div class="sidebar-footer">
-            &copy; 2026 - Developed By <b>Santo X/Code</b>
+            &copy; 2026 Si-BOS<br>Developed By <b>Santo X/Code</b>
         </div>
     </div>
 
@@ -1036,7 +1091,7 @@
                 <!-- Header Compact -->
                 <div class="dashboard-hero">
                     <div class="hero-text">
-                        <h1>Selamat Datang, Admin!</h1>
+                        <h1>Panel Administrasi Utama</h1>
                         <p>Sistem Administrasi SPJ Bantuan Operasional Sekolah Terpadu.</p>
                     </div>
                     <div class="clock-widget">
@@ -1097,24 +1152,40 @@
                                 <div class="qa-icon" style="background: #eff6ff; color: #3b82f6;">
                                     <i data-lucide="upload-cloud" size="28"></i>
                                 </div>
-                                <div class="qa-title">Unggah BKU</div>
-                                <div class="qa-desc">Import data Excel</div>
+                                <div>
+                                    <div class="qa-title">Unggah BKU</div>
+                                    <div class="qa-desc">Import data Excel</div>
+                                </div>
                             </div>
                             <div class="qa-card"
                                 onclick="document.querySelector('.nav-item[onclick*=\'manage-view\']').click()">
                                 <div class="qa-icon" style="background: #f0fdf4; color: #22c55e;">
                                     <i data-lucide="layout-grid" size="28"></i>
                                 </div>
-                                <div class="qa-title">Kelola Transaksi</div>
-                                <div class="qa-desc">Edit & Cetak SPJ</div>
+                                <div>
+                                    <div class="qa-title">Kelola Transaksi</div>
+                                    <div class="qa-desc">Edit & Cetak SPJ</div>
+                                </div>
                             </div>
                             <div class="qa-card"
                                 onclick="document.querySelector('.nav-item[onclick*=\'settings-view\']').click()">
                                 <div class="qa-icon" style="background: #fefce8; color: #eab308;">
                                     <i data-lucide="school" size="28"></i>
                                 </div>
-                                <div class="qa-title">Data Sekolah</div>
-                                <div class="qa-desc">Konfigurasi Kop</div>
+                                <div>
+                                    <div class="qa-title">Data Sekolah</div>
+                                    <div class="qa-desc">Konfigurasi Kop</div>
+                                </div>
+                            </div>
+                            <div class="qa-card"
+                                onclick="document.querySelector('.nav-item[onclick*=\'designer-view\']').click()">
+                                <div class="qa-icon" style="background: #fdf2f8; color: #db2777;">
+                                    <i data-lucide="pen-tool" size="28"></i>
+                                </div>
+                                <div>
+                                    <div class="qa-title">Desain Nota</div>
+                                    <div class="qa-desc">Buat Template</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1268,6 +1339,15 @@
                         Simpan & Buat Template
                     </button>
                 </div>
+
+                <!-- Saved Templates List -->
+                <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 30px;">
+                    <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #1e293b;">Template
+                        Tersimpan</h4>
+                    <div id="savedTemplatesList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1364,7 +1444,7 @@
                 <div class="preview-sidebar">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                        <h3 style="font-size: 18px; font-weight: 700;">Customizer</h3>
+                        <h3 style="font-size: 16px; font-weight: 900;">Dokumen Kelengkapan</h3>
                         <button onclick="closePreview()"
                             style="background:none; border:none; cursor:pointer; color: var(--text-muted);">
                             <i data-lucide="x" size="20"></i>
@@ -1838,6 +1918,7 @@
             }
 
             loadCustomTemplates(); // Load saved custom templates
+            renderSavedTemplatesList(); // Render list in designer view
             startRealtimeClock();
 
         });
@@ -2008,6 +2089,7 @@
 
                     showToast("Template Nota berhasil dibuat & disimpan!");
                     loadCustomTemplates();
+                    renderSavedTemplatesList();
                     // Reset form
                     document.getElementById('customTplName').value = '';
                     document.getElementById('customStoreName').value = '';
@@ -2038,6 +2120,40 @@
             Object.keys(templates).forEach(key => {
                 const opt = new Option("★ " + templates[key].name + " (Custom)", key);
                 select.add(opt);
+            });
+        }
+
+        function renderSavedTemplatesList() {
+            const listContainer = document.getElementById('savedTemplatesList');
+            if (!listContainer) return;
+
+            const templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
+            const keys = Object.keys(templates);
+
+            if (keys.length === 0) {
+                listContainer.innerHTML = '<p style="color: #64748b; font-size: 13px; font-style: italic;">Belum ada template kustom yang disimpan.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = keys.map(key => `
+                <div class="saved-template-item">
+                    <div style="font-weight: 600; font-size: 14px; color: #334155;">${templates[key].name}</div>
+                    <button onclick="deleteCustomTemplate('${key}')" class="btn-danger" style="padding: 6px 10px; font-size: 11px;">
+                        <i data-lucide="trash-2" size="14"></i> Hapus
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function deleteCustomTemplate(key) {
+            showConfirm("Hapus template nota ini?", () => {
+                let templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
+                delete templates[key];
+                localStorage.setItem('spj_custom_templates', JSON.stringify(templates));
+                showToast("Template berhasil dihapus");
+                loadCustomTemplates();
+                renderSavedTemplatesList();
             });
         }
 
