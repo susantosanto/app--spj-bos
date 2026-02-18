@@ -35,7 +35,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
         }
 
         body {
@@ -44,6 +43,14 @@
             display: flex;
             height: 100vh;
             overflow: hidden;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        input,
+        button,
+        select,
+        textarea {
+            font-family: 'Outfit', sans-serif;
         }
 
         /* --- Sidebar Styles --- */
@@ -1339,6 +1346,14 @@
                         </select>
                     </div>
 
+                    <div class="form-group" id="fg-font-size">
+                        <label>Ukuran Tulisan (px)</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="range" id="fontSize" min="12" max="36" value="16" oninput="updatePreview()" style="flex-grow: 1;">
+                            <span id="fontSizeDisplay" style="font-size: 12px; width: 30px;">16px</span>
+                        </div>
+                    </div>
+
                     <div class="form-group" id="fg-vendor-name">
                         <label>Nama Vendor / Toko / Penerima</label>
                         <input type="text" id="custVendorName" oninput="updatePreview()" placeholder="NAMA TOKO">
@@ -1937,7 +1952,7 @@
             spkSection.style.display = 'none';
 
             // Reset visibility of all grouped fields first
-            ['fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
+            ['fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
                 'fg-tanggal', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan',
                 'fg-vendor-address', 'fg-tembusan', 'fg-logo-upload', 'fg-stamp-upload'].forEach(id => {
                     document.getElementById(id).style.display = 'none';
@@ -1949,7 +1964,7 @@
             if (docType === 'kwitansi') {
                 showFields(['fg-nomor', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-name', 'fg-stamp-upload']); // Added stamp
             } else if (docType === 'nota') {
-                showFields(['fg-vendor-style', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-stamp-upload']); // Removed logo, kept stamp
+                showFields(['fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-stamp-upload']); // Removed logo, kept stamp
                 notaSection.style.display = 'block';
                 if (document.getElementById('notaItemsList').children.length === 0) {
                     addNotaItem();
@@ -2045,6 +2060,9 @@
             const tanggalPesan = document.getElementById('custTanggalPesan').value || tanggal;
             const tanggalKegiatan = document.getElementById('custTanggalKegiatan').value || tanggal;
             const fontStyle = document.getElementById('fontStyle').value; // Get font preference
+            const fontSize = document.getElementById('fontSize').value || "16";
+            const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+            if(fontSizeDisplay) fontSizeDisplay.innerText = fontSize + "px";
 
             let terbilangText = terbilang(jumlah) + " Rupiah";
             const dateInfo = getDateText(tanggal);
@@ -2090,6 +2108,10 @@
             `;
 
             if (docType === 'nota') {
+                // Handwriting font helper — defined OUTSIDE template literals to avoid nested backtick issues
+                const hwStyle = fontStyle || '';
+                const hwAttr = (fontStyle ? 'font-family:' + fontStyle + ';' : '') + 'font-size:' + fontSize + 'px;';
+
                 // Get manual items if any
                 const itemRows = document.querySelectorAll('.nota-item-row');
                 let itemsHtml = '';
@@ -2131,19 +2153,19 @@
                             // Standard Line
                             itemsHtml += `
                                     <tr style="height: 25px; border-bottom: 1px solid #000;">
-                                        <td style="border-right: 2px solid #000; padding: 0 8px;">${name}</td>
-                                        <td style="border-right: 2px solid #000; text-align: center; width: 60px;">${qty || ""}</td>
-                                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${price ? price.toLocaleString('id-ID') : ""}</td>
-                                        <td style="text-align: right; padding-right: 8px; width: 120px;">${price ? sub.toLocaleString('id-ID') : ""}</td>
+                                        <td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${name}</td>
+                                        <td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">${qty || ""}</td>
+                                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${price ? price.toLocaleString('id-ID') : ""}</td>
+                                        <td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${price ? sub.toLocaleString('id-ID') : ""}</td>
                                     </tr>
                                 `;
                             // Swapped Line (Qty First)
                             itemsHtmlSwapped += `
                                     <tr style="height: 25px; border-bottom: 1px solid #000;">
-                                        <td style="border-right: 2px solid #000; text-align: center; width: 60px;">${qty || ""}</td>
-                                        <td style="border-right: 2px solid #000; padding: 0 8px;">${name}</td>
-                                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${price ? price.toLocaleString('id-ID') : ""}</td>
-                                        <td style="text-align: right; padding-right: 8px; width: 120px;">${price ? sub.toLocaleString('id-ID') : ""}</td>
+                                        <td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">${qty || ""}</td>
+                                        <td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${name}</td>
+                                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${price ? price.toLocaleString('id-ID') : ""}</td>
+                                        <td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${price ? sub.toLocaleString('id-ID') : ""}</td>
                                     </tr>
                                 `;
                         }
@@ -2172,19 +2194,19 @@
                     // Default fallback
                     itemsHtml = `
                         <tr style="height: 25px; border-bottom: 1px solid #000;">
-                            <td style="border-right: 2px solid #000; padding: 0 8px;">${uraian}</td>
-                            <td style="border-right: 2px solid #000; text-align: center; width: 60px;">1</td>
-                            <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${jumlah.toLocaleString('id-ID')}</td>
-                            <td style="text-align: right; padding-right: 8px; width: 120px;">${jumlah.toLocaleString('id-ID')}</td>
+                            <td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${uraian}</td>
+                            <td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">1</td>
+                            <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
+                            <td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
                         </tr>
                     ` + Array(11).fill('<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>').join('');
 
                     itemsHtmlSwapped = `
                         <tr style="height: 25px; border-bottom: 1px solid #000;">
-                            <td style="border-right: 2px solid #000; text-align: center; width: 60px;">1</td>
-                            <td style="border-right: 2px solid #000; padding: 0 8px;">${uraian}</td>
-                            <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${jumlah.toLocaleString('id-ID')}</td>
-                            <td style="text-align: right; padding-right: 8px; width: 120px;">${jumlah.toLocaleString('id-ID')}</td>
+                            <td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">1</td>
+                            <td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${uraian}</td>
+                            <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
+                            <td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
                         </tr>
                     ` + Array(11).fill('<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>').join('');
                 }
@@ -2192,7 +2214,7 @@
                 if (vendorStyle === 'rm-family') {
                     // --- LAYOUT NOTA RM FAMILY (Landscape / Classic) ---
                     html = `
-                        <div style="font-family: ${fontStyle || "'Arial Narrow', Arial, sans-serif"}; color: #000; border: 2px solid #000; padding: 20px; background: #fff; width: 100%;">
+                        <div style="font-family: 'Arial Narrow', Arial, sans-serif; color: #000; border: 2px solid #000; padding: 20px; background: #fff; width: 100%;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div style="text-align: center; width: 350px;">
                                     <h2 style="margin:0; font-size: 18px; font-weight: bold; letter-spacing: 1px;">RUMAH MAKAN</h2>
@@ -2201,11 +2223,11 @@
                                 </div>
                                 <div style="width: 250px; font-size: 13px;">
                                     <table style="width: 100%;">
-                                        <tr><td style="width: 60px;">Bapak/Ibu</td><td style="border-bottom: 2px solid #000;">: ${schoolData.name.substring(0, 25)}</td></tr>
+                                        <tr><td style="width: 60px;">Bapak/Ibu</td><td style="border-bottom: 2px solid #000; ${hwAttr}">: ${schoolData.name.substring(0, 25)}</td></tr>
                                         <tr><td colspan="2" style="border-bottom: 2px solid #000; height: 15px;"></td></tr>
                                         <tr><td colspan="2" style="border-bottom: 2px solid #000; height: 15px;"></td></tr>
-                                        <tr><td>Tgl.</td><td style="border-bottom: 2px solid #000; text-align: center;">${tanggal.split('/')[0]} / ${tanggal.split('/')[1]} / ${tanggal.split('/')[2]}</td></tr>
-                                        <tr><td>No.</td><td style="border-bottom: 2px solid #000;">: ${nomorSurat}</td></tr>
+                                        <tr><td>Tgl.</td><td style="border-bottom: 2px solid #000; text-align: center; ${hwAttr}">${tanggal.split('/')[0]} / ${tanggal.split('/')[1]} / ${tanggal.split('/')[2]}</td></tr>
+                                        <tr><td>No.</td><td style="border-bottom: 2px solid #000; ${hwAttr}">: ${nomorSurat}</td></tr>
                                     </table>
                                 </div>
                             </div>
@@ -2221,7 +2243,7 @@
                                         <th style="padding: 5px; width: 110px; text-align: center;">SUB TOTAL</th>
                                     </tr>
                                 </thead>
-                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                <tbody>
                                     ${itemsHtml}
                                 </tbody>
                             </table>
@@ -2235,7 +2257,7 @@
                                     <table style="width: 100%; border-collapse: collapse; font-size: 14px; font-weight: bold;">
                                         <tr style="border-bottom: 1px solid #000;">
                                             <td style="padding: 5px;">Total</td>
-                                            <td style="padding: 5px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
+                                            <td style="padding: 5px; text-align: right; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
                                         </tr>
                                         <tr style="border-bottom: 1px solid #000;">
                                             <td style="padding: 5px;">DP</td>
@@ -2243,7 +2265,7 @@
                                         </tr>
                                         <tr>
                                             <td style="padding: 5px;">Sisa</td>
-                                            <td style="padding: 5px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
+                                            <td style="padding: 5px; text-align: right; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -2254,7 +2276,7 @@
                 } else if (vendorStyle === 'cahya-cellular') {
                     // --- LAYOUT NOTA CAHYA CELLULAR (Blue Theme) ---
                     html = `
-                        <div style="font-family: Arial, sans-serif; color: #1e40af; border: 2px solid #1e40af; padding: 20px; background: #fff; width: 100%; border-radius: 5px;">
+                        <div style="font-family: 'Arial', sans-serif; color: #1e40af; border: 2px solid #1e40af; padding: 20px; background: #fff; width: 100%; border-radius: 5px;">
                             <div style="display: flex; justify-content: space-between; position: relative;">
                                 <div style="display: flex; align-items: center; gap: 15px;">
                                     <div style="width: 60px; height: 60px; border: 3px solid #1e40af; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px;">CC</div>
@@ -2263,8 +2285,8 @@
                                     </div>
                                 </div>
                                 <div style="text-align: left; font-size: 12px; font-weight: 600;">
-                                    Cikalongwetan, ........................<br>
-                                    Kepada Yth. <br><br>
+                                    Cikalongwetan, <span style="${hwAttr}">${tanggal}</span><br>
+                                    Kepada Yth. <span style="${hwAttr}">${schoolData.name}</span><br><br>
                                     <div style="height: 2px; background: #ef4444; width: 180px; margin: 5px 0;"></div>
                                     <div style="height: 2px; background: #ef4444; width: 180px;"></div>
                                 </div>
@@ -2277,7 +2299,7 @@
                             <div style="height: 3px; background: #1e40af; margin-bottom: 2px;"></div>
                             <div style="text-align: right; font-weight: bold; font-size: 14px; margin-bottom: 5px;">Nota No : _________</div>
 
-                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #1e40af;">
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #1e40af; font-family: inherit;">
                                 <thead>
                                     <tr style="background: #3b82f6; color: #fff;">
                                         <th style="border: 2px solid #1e40af; padding: 5px; width: 80px;">BANYAKNYA</th>
@@ -2286,7 +2308,7 @@
                                         <th style="border: 2px solid #1e40af; padding: 5px; width: 120px;">JUMLAH RP.</th>
                                     </tr>
                                 </thead>
-                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                <tbody>
                                     ${itemsHtmlSwapped.replaceAll('border-right: 2px solid #000', 'border: 2px solid #1e40af').replaceAll('border-bottom: 1px solid #000', 'border: 2px solid #1e40af')}
                                 </tbody>
                             </table>
@@ -2302,9 +2324,9 @@
                                 </div>
                                 <div style="width: 180px;">
                                     <table style="width: 100%; border-collapse: collapse; font-weight: bold; font-size: 12px; color: #fff;">
-                                        <tr><td style="background: #3b82f6; padding: 4px; border: 1px solid #1e40af; text-align: right;">Jumlah</td><td style="border: 1px solid #1e40af; color: #000; width: 100px; text-align: center;">${jumlah.toLocaleString('id-ID')}</td></tr>
+                                        <tr><td style="background: #3b82f6; padding: 4px; border: 1px solid #1e40af; text-align: right;">Jumlah</td><td style="border: 1px solid #1e40af; color: #000; width: 100px; text-align: center; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td></tr>
                                         <tr><td style="background: #3b82f6; padding: 4px; border: 1px solid #1e40af; text-align: right;">Uang Muka</td><td style="border: 1px solid #1e40af; color: #000; text-align: center;">-</td></tr>
-                                        <tr><td style="background: #3b82f6; padding: 4px; border: 1px solid #1e40af; text-align: right;">Sisa</td><td style="border: 1px solid #1e40af; color: #000; text-align: center;">${jumlah.toLocaleString('id-ID')}</td></tr>
+                                        <tr><td style="background: #3b82f6; padding: 4px; border: 1px solid #1e40af; text-align: right;">Sisa</td><td style="border: 1px solid #1e40af; color: #000; text-align: center; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td></tr>
                                     </table>
                                 </div>
                             </div>
@@ -2313,7 +2335,7 @@
                 } else if (vendorStyle === 'media-komputer') {
                     // --- LAYOUT MEDIA KOMPUTER (Black Theme) ---
                     html = `
-                        <div style="font-family: Arial, sans-serif; color: #000; border: 1px solid #666; padding: 30px; background: #fff; width: 100%;">
+                        <div style="font-family: 'Arial', sans-serif; color: #000; border: 1px solid #666; padding: 30px; background: #fff; width: 100%;">
                             <div style="display: flex; justify-content: space-between;">
                                 <div style="display: flex; align-items: flex-start; gap: 15px;">
                                     <div style="width: 60px; height: 60px; background: #0ea5e9; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">BS</div>
@@ -2324,8 +2346,8 @@
                                     </div>
                                 </div>
                                 <div style="text-align: left; font-size: 12px;">
-                                    Cikalongwetan, ........................<br>
-                                    Tuan/Toko : _______________________<br><br>
+                                    Cikalongwetan, <span style="${hwAttr}">${tanggal}</span><br>
+                                    Tuan/Toko : <span style="${hwAttr}">${schoolData.name}</span><br><br>
                                     <div style="border-bottom: 2px dashed #000; width: 150px;"></div>
                                 </div>
                             </div>
@@ -2333,7 +2355,7 @@
                             <div style="height: 3px; background: #000; margin: 15px 0 2px 0;"></div>
                             <div style="height: 1px; background: #000; margin-bottom: 15px;"></div>
 
-                            <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; font-size: 13px;">
+                            <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; font-size: 13px; font-family: inherit;">
                                 <thead>
                                     <tr style="border-bottom: 2px solid #000; font-weight: bold;">
                                         <th style="border-right: 1px solid #000; padding: 8px; width: 40px; text-align: center;">NO</th>
@@ -2342,7 +2364,7 @@
                                         <th style="padding: 8px; width: 120px; text-align: center;">JUMLAH</th>
                                     </tr>
                                 </thead>
-                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                <tbody>
                                     ${itemsHtmlSwapped.replaceAll('border-right: 2px solid #000', 'border: 1px solid #000').replaceAll('border-bottom: 1px solid #000', 'border: 1px solid #000')}
                                 </tbody>
                             </table>
@@ -2356,7 +2378,7 @@
                                     <p style="margin-top: 15px; font-size: 11px; font-weight: bold; font-style: italic;">Barang yang sudah dibeli tidak dapat dikembalikan</p>
                                 </div>
                                 <div style="width: 250px; text-align: right; font-weight: bold; font-size: 16px; padding-top: 10px;">
-                                    JUMLAH Rp. <span style="display: inline-block; width: 120px; border-bottom: 2px solid #000; text-align: right; padding-bottom: 5px;">${jumlah.toLocaleString('id-ID')}</span>
+                                    JUMLAH Rp. <span style="display: inline-block; width: 120px; border-bottom: 2px solid #000; text-align: right; padding-bottom: 5px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</span>
                                 </div>
                             </div>
                         </div>
@@ -2364,7 +2386,7 @@
                 } else if (vendorStyle === 'mitra-photocopy') {
                     // --- LAYOUT MITRA PHOTOCOPY (Simple) ---
                     html = `
-                        <div style="font-family: Arial, sans-serif; color: #000; border: 1px solid #ddd; padding: 15px; background: #fff; width: 100%;">
+                        <div style="font-family: 'Arial', sans-serif; color: #000; border: 1px solid #ddd; padding: 15px; background: #fff; width: 100%;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
                                     <h1 style="margin:0; font-size: 28px; font-weight: normal; letter-spacing: 2px;">MITRA PHOTO COPY</h1>
@@ -2372,13 +2394,13 @@
                                     <p style="margin:0; font-size: 10px; font-weight: bold; text-transform: uppercase;">Melayani: Penjilidan Hard Cover, Soft Cover, Laminating, Alat Tulis Kantor Dll.</p>
                                 </div>
                                 <div style="text-align: left; font-size: 12px;">
-                                    Cikalongwetan, ........................ 201 .....<br>
-                                    _________________________________________<br>
+                                    Cikalongwetan, <span style="${hwAttr}">${tanggal}</span><br>
+                                    <span style="${hwAttr}">${schoolData.name}</span><br>
                                     NPWP: 24.251.003.0 - 045.00
                                 </div>
                             </div>
                             
-                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; margin-top: 15px; font-size: 13px;">
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; margin-top: 15px; font-size: 13px; font-family: inherit;">
                                 <thead>
                                     <tr style="border-bottom: 2px solid #000; font-weight: bold;">
                                         <th style="border-right: 2px solid #000; padding: 5px; width: 80px;">Banyaknya</th>
@@ -2387,7 +2409,7 @@
                                         <th style="padding: 5px; width: 120px;">Jumlah (Rp)</th>
                                     </tr>
                                 </thead>
-                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                <tbody>
                                     ${itemsHtmlSwapped}
                                 </tbody>
                             </table>
@@ -2398,9 +2420,9 @@
                                 </div>
                                 <div style="width: 180px; font-size: 12px; font-weight: bold;">
                                     <table style="width: 100%; border-collapse: collapse;">
-                                        <tr><td style="padding: 5px; text-align: right;">Jumlah Rp.</td><td style="border: 1px solid #000; padding: 5px; text-align: center; width: 100px;">${jumlah.toLocaleString('id-ID')}</td></tr>
+                                        <tr><td style="padding: 5px; text-align: right;">Jumlah Rp.</td><td style="border: 1px solid #000; padding: 5px; text-align: center; width: 100px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td></tr>
                                         <tr><td style="padding: 5px; text-align: right;">Uang Muka Rp.</td><td style="border: 1px solid #000; padding: 5px; text-align: center;">-</td></tr>
-                                        <tr><td style="padding: 5px; text-align: right;">Sisa Rp.</td><td style="border: 1px solid #000; padding: 5px; text-align: center;">${jumlah.toLocaleString('id-ID')}</td></tr>
+                                        <tr><td style="padding: 5px; text-align: right;">Sisa Rp.</td><td style="border: 1px solid #000; padding: 5px; text-align: center; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td></tr>
                                     </table>
                                 </div>
                             </div>
@@ -2421,14 +2443,14 @@
                                     </div>
                                 </div>
                                 <div style="text-align: left; font-size: 12px; color: #1e3a8a;">
-                                    Cikalongwetan, ........................<br>
-                                    Tuan : _______________________<br>
+                                    Cikalongwetan, <span style="${hwAttr}">${tanggal}</span><br>
+                                    Tuan : <span style="${hwAttr}">${schoolData.name}</span><br>
                                     Toko : _______________________<br><br>
                                     <div style="border-bottom: 2px solid #1e3a8a; width: 180px;"></div>
                                 </div>
                             </div>
                             
-                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #1e3a8a; margin-top: 20px; font-size: 14px; position: relative; z-index: 1;">
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #1e3a8a; margin-top: 20px; font-size: 14px; position: relative; z-index: 1; font-family: inherit;">
                                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 120px; font-weight: bold; color: rgba(239, 68, 68, 0.1); z-index: -1;">SA</div>
                                 <thead>
                                     <tr style="border-bottom: 2px solid #1e3a8a; font-weight: bold; text-align: center;">
@@ -2438,7 +2460,7 @@
                                         <th style="padding: 8px; width: 130px;">JUMLAH</th>
                                     </tr>
                                 </thead>
-                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                <tbody>
                                     ${itemsHtmlSwapped.replaceAll('border-right: 2px solid #000', 'border-right: 2px solid #1e3a8a').replaceAll('border-bottom: 1px solid #000', 'border-bottom: 1px solid #1e3a8a')}
                                 </tbody>
                             </table>
@@ -2454,7 +2476,7 @@
                                     </div>
                                 </div>
                                 <div style="width: 250px; text-align: right; font-size: 18px; color: #1e3a8a; padding-top: 10px;">
-                                    JUMLAH Rp. <span style="display: inline-block; width: 120px; border-bottom: 2px solid #1e3a8a; text-align: right;">${jumlah.toLocaleString('id-ID')}</span>
+                                    JUMLAH Rp. <span style="display: inline-block; width: 120px; border-bottom: 2px solid #1e3a8a; text-align: right; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</span>
                                 </div>
                             </div>
                         </div>
@@ -2462,7 +2484,7 @@
                 } else if (vendorStyle === 'standard') {
                     // --- LAYOUT MODERN STANDARD (Clean Invoice) ---
                     html = `
-                        <div style="font-family: ${fontStyle || "Arial, sans-serif"}; color: #000; border: 1px solid #ccc; padding: 40px; background: #fff; max-width: 100%;">
+                        <div style="font-family: 'Arial', sans-serif; color: #000; border: 1px solid #ccc; padding: 40px; background: #fff; max-width: 100%;">
                             <!-- Header Info -->
                             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px;">
                                 <div>
@@ -2471,13 +2493,13 @@
                                 </div>
                                 <div style="text-align: right;">
                                     <h2 style="margin: 0; font-size: 24px; color: #555;">NOTA</h2>
-                                    <p style="margin: 5px 0 0 0; font-size: 13px;">Tanggal: <strong>${tanggal}</strong></p>
-                                    <p style="margin: 2px 0 0 0; font-size: 13px;">Kepada: <strong>${schoolData.name}</strong></p>
+                                    <p style="margin: 5px 0 0 0; font-size: 13px;">Tanggal: <strong style="${hwAttr}">${tanggal}</strong></p>
+                                    <p style="margin: 2px 0 0 0; font-size: 13px;">Kepada: <strong style="${hwAttr}">${schoolData.name}</strong></p>
                                 </div>
                             </div>
 
                             <!-- Table -->
-                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 13px;">
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 13px; font-family: inherit;">
                                 <thead style="background: #f8f9fa;">
                                     <tr>
                                         <th style="border: 1px solid #ddd; padding: 12px; text-align: left; width: 50%;">URAIAN</th>
@@ -2486,7 +2508,7 @@
                                         <th style="border: 1px solid #ddd; padding: 12px; text-align: right; width: 20%;">TOTAL</th>
                                     </tr>
                                 </thead>
-                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                <tbody>
                                     ${(document.getElementById('notaItemsList').children.length > 0) ?
                             Array.from(document.querySelectorAll('.nota-item-row')).map(row => {
                                 const ins = row.querySelectorAll('input');
@@ -2495,26 +2517,26 @@
                                 const p = parseInt(ins[2].value) || 0;
                                 return `
                                                 <tr>
-                                                    <td style="border: 1px solid #ddd; padding: 10px;">${n}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${q}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${p.toLocaleString('id-ID')}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${(q * p).toLocaleString('id-ID')}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 10px; ${hwAttr}">${n}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center; ${hwAttr}">${q}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: right; ${hwAttr}">${p.toLocaleString('id-ID')}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: right; ${hwAttr}">${(q * p).toLocaleString('id-ID')}</td>
                                                 </tr>
                                             `;
                             }).join('')
                             :
                             `<tr>
-                                            <td style="border: 1px solid #ddd; padding: 10px;">${uraian}</td>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; ${hwAttr}">${uraian}</td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; ${hwAttr}">1</td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: right; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: right; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
                                         </tr>`
                         }
                                 </tbody>
                                 <tfoot>
                                     <tr style="font-weight: bold; background: #f8f9fa;">
                                         <td colspan="3" style="border: 1px solid #ddd; padding: 12px; text-align: right;">TOTAL TAGIHAN</td>
-                                        <td style="border: 1px solid #ddd; padding: 12px; text-align: right;">Rp ${jumlah.toLocaleString('id-ID')}</td>
+                                        <td style="border: 1px solid #ddd; padding: 12px; text-align: right; ${hwAttr}">Rp ${jumlah.toLocaleString('id-ID')}</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -2535,8 +2557,6 @@
                     `;
                 } else if (vendorStyle === 'plain') {
                     // --- LAYOUT GROSIR / POLOS (Authentic Handwritten Store Note) ---
-                    // Use selected handwriting font or fallback to Kalam
-                    const hwFont = fontStyle && fontStyle !== 'inherit' ? fontStyle : "'Kalam', cursive";
 
                     // Build rows using itemsHtmlSwapped (Qty first) with vertical lines
                     const itemRows2 = document.querySelectorAll('.nota-item-row');
@@ -2554,10 +2574,10 @@
                             const isLast = idx === itemRows2.length - 1;
                             plainRows += `
                                 <tr style="height:32px;">
-                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:center; width:60px;">${q || ''}</td>
-                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px;">${nm}</td>
-                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:110px;">${p ? p.toLocaleString('id-ID') : ''}</td>
-                                    <td style="border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:120px;">${sub ? sub.toLocaleString('id-ID') : ''}</td>
+                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:center; width:60px; ${hwAttr}">${q || ''}</td>
+                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; ${hwAttr}">${nm}</td>
+                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:110px; ${hwAttr}">${p ? p.toLocaleString('id-ID') : ''}</td>
+                                    <td style="border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:120px; ${hwAttr}">${sub ? sub.toLocaleString('id-ID') : ''}</td>
                                 </tr>`;
                         });
                         // Fill empty rows up to 12
@@ -2567,24 +2587,24 @@
                         }
                     } else {
                         // Default single row
-                        plainRows = `<tr style="height:32px;"><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:center; width:60px;">1</td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px;">${uraian}</td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:110px;">${jumlah.toLocaleString('id-ID')}</td><td style="border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:120px;">${jumlah.toLocaleString('id-ID')}</td></tr>`;
+                        plainRows = `<tr style="height:32px;"><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:center; width:60px; ${hwAttr}">1</td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; ${hwAttr}">${uraian}</td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:110px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td><td style="border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:120px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td></tr>`;
                         for (let i = 0; i < 11; i++) {
                             plainRows += `<tr style="height:32px;"><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-bottom:1px solid #ddd;"></td></tr>`;
                         }
                     }
 
                     html = `
-                        <div style="font-family: ${hwFont}; color: #1a1a1a; padding: 22px 26px; background: #fffef5; width: 100%; border: 1.5px solid #c8b89a; border-radius: 3px; box-shadow: inset 0 0 40px rgba(180,150,80,0.06);">
+                        <div style="font-family: 'Arial', sans-serif; color: #1a1a1a; padding: 22px 26px; background: #fffef5; width: 100%; border: 1.5px solid #c8b89a; border-radius: 3px; box-shadow: inset 0 0 40px rgba(180,150,80,0.06);">
                             
                             <!-- Header: tanggal & kepada -->
                             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
                                 <div style="font-size:13px; line-height:2;">
-                                    <div>Kepada Yth. <span style="border-bottom:1px solid #888; display:inline-block; min-width:180px; padding-bottom:1px;">${schoolData.name}</span></div>
+                                    <div>Kepada Yth. <span style="border-bottom:1px solid #888; display:inline-block; min-width:180px; padding-bottom:1px; ${hwAttr}">${schoolData.name}</span></div>
                                     <div>di &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tempat</div>
                                 </div>
                                 <div style="text-align:right; font-size:13px; line-height:2;">
-                                    <div>${schoolData.kecamatan}, <span style="border-bottom:1px solid #888; display:inline-block; min-width:120px; padding-bottom:1px;">${dateInfo.fullDate}</span></div>
-                                    <div>No. &nbsp;<span style="border-bottom:1px solid #888; display:inline-block; min-width:80px; padding-bottom:1px;">-</span></div>
+                                    <div>${schoolData.kecamatan}, <span style="border-bottom:1px solid #888; display:inline-block; min-width:120px; padding-bottom:1px; ${hwAttr}">${dateInfo.fullDate}</span></div>
+                                    <div>No. &nbsp;<span style="border-bottom:1px solid #888; display:inline-block; min-width:80px; padding-bottom:1px; ${hwAttr}">-</span></div>
                                 </div>
                             </div>
 
@@ -2592,7 +2612,7 @@
                             <div style="border-top:1.5px solid #888; margin-bottom:0;"></div>
 
                             <!-- Table with vertical lines -->
-                            <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                            <table style="width:100%; border-collapse:collapse; font-size:13px; font-family: inherit;">
                                 <thead>
                                     <tr style="border-bottom:1.5px solid #888;">
                                         <th style="border-right:1.5px solid #888; padding:6px 8px; text-align:center; width:60px; font-weight:600;">Banyak</th>
@@ -2610,12 +2630,12 @@
                             <div style="display:flex; justify-content:flex-end; border-top:1.5px solid #888; padding-top:8px; margin-top:0;">
                                 <div style="font-size:14px; font-weight:700; display:flex; gap:20px; align-items:center;">
                                     <span>Jumlah</span>
-                                    <span style="border-bottom:1.5px solid #333; min-width:140px; text-align:right; display:inline-block; padding-bottom:2px;">Rp ${jumlah.toLocaleString('id-ID')}</span>
+                                    <span style="border-bottom:1.5px solid #333; min-width:140px; text-align:right; display:inline-block; padding-bottom:2px; ${hwAttr}">Rp ${jumlah.toLocaleString('id-ID')}</span>
                                 </div>
                             </div>
 
                             <!-- Terbilang -->
-                            <div style="font-size:11px; color:#555; margin-top:4px; font-style:italic; text-align:right;">Terbilang: ${terbilangText}</div>
+                            <div style="font-size:11px; color:#555; margin-top:4px; font-style:italic; text-align:right; ${hwAttr}">Terbilang: ${terbilangText}</div>
 
                             <!-- Signatures -->
                             <div style="display:flex; justify-content:space-between; margin-top:30px; font-size:13px;">
@@ -3531,6 +3551,12 @@
                 document.getElementById('vendorStyle').value = 'toko-prima';
             } else {
                 docTypeSelect.value = 'kwitansi';
+            }
+
+            // Populate Nota Items if needed to preserve total
+            if (docTypeSelect.value === 'nota') {
+                document.getElementById('notaItemsList').innerHTML = '';
+                addNotaItem(tx.uraian.replace(/"/g, '&quot;'), 1, tx.pengeluaran);
             }
 
             handleDocTypeChange(); // This will trigger openPreview and auto-select template
