@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Handwriting Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Kalam:wght@300;400;700&family=Nothing+You+Could+Do&family=Reenie+Beanie&family=Shadows+Into+Light&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Kalam:wght@300;400;700&family=Nothing+You+Could+Do&family=Reenie+Beanie&family=Shadows+Into+Light&family=Patrick+Hand&family=Indie+Flower&display=swap"
         rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -1330,9 +1330,11 @@
                             <option value="">Default (Arial/System)</option>
                             <option value="'Caveat', cursive">Tulisan Tangan 1 (Caveat)</option>
                             <option value="'Kalam', cursive">Tulisan Tangan 2 (Kalam)</option>
-                            <option value="'Reenie Beanie', cursive">Tulisan Tangan 3 (Kasar/Reenie)</option>
-                            <option value="'Shadows Into Light', cursive">Tulisan Tangan 4 (Rapi/Shadows)</option>
-                            <option value="'Nothing You Could Do', cursive">Tulisan Tangan 5 (Realistis/Nothing)
+                            <option value="'Patrick Hand', cursive">Tulisan Tangan 3 (Patrick Hand - Natural)</option>
+                            <option value="'Indie Flower', cursive">Tulisan Tangan 4 (Indie Flower - Santai)</option>
+                            <option value="'Reenie Beanie', cursive">Tulisan Tangan 5 (Kasar/Reenie)</option>
+                            <option value="'Shadows Into Light', cursive">Tulisan Tangan 6 (Rapi/Shadows)</option>
+                            <option value="'Nothing You Could Do', cursive">Tulisan Tangan 7 (Realistis/Nothing)
                             </option>
                         </select>
                     </div>
@@ -1349,7 +1351,12 @@
                     </div>
 
                     <div class="form-group" id="fg-jumlah">
-                        <label>Nominal / Anggaran / Total (Rp)</label>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <label>Nominal / Anggaran / Total (Rp)</label>
+                            <label style="font-size: 11px; display: flex; align-items: center; gap: 4px;">
+                                <input type="checkbox" id="manualTotal" onchange="updatePreview()"> Manual
+                            </label>
+                        </div>
                         <input type="number" id="custJumlah" oninput="updatePreview()">
                     </div>
 
@@ -1447,10 +1454,47 @@
                         style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
                         <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Foto
                             Kegiatan</label>
-                        <input type="file" onchange="handleDocPhotoUpload(this)" accept="image/*"
-                            style="font-size: 12px;">
-                        <div style="margin-top: 10px; font-size: 11px; color: #666;">Silakan upload foto dokumentasi
-                            kegiatan.</div>
+
+                        <div class="form-group">
+                            <label>Jumlah Foto</label>
+                            <select id="docPhotoCount" onchange="updatePhotoInputs()"
+                                style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+                                <option value="1">1 Foto</option>
+                                <option value="2">2 Foto</option>
+                                <option value="3">3 Foto</option>
+                                <option value="4">4 Foto</option>
+                                <option value="5">5 Foto</option>
+                            </select>
+                        </div>
+
+                        <div id="docPhotoInputsContainer">
+                            <!-- Inputs will be handled dynamically or just pre-rendered -->
+                            <div class="form-group" id="ph-1">
+                                <label style="font-size:11px;">Foto 1</label>
+                                <input type="file" onchange="handleDocPhotoUpload(this, 1)" accept="image/*"
+                                    style="font-size: 11px; width: 100%;">
+                            </div>
+                            <div class="form-group" id="ph-2" style="display:none;">
+                                <label style="font-size:11px;">Foto 2</label>
+                                <input type="file" onchange="handleDocPhotoUpload(this, 2)" accept="image/*"
+                                    style="font-size: 11px; width: 100%;">
+                            </div>
+                            <div class="form-group" id="ph-3" style="display:none;">
+                                <label style="font-size:11px;">Foto 3</label>
+                                <input type="file" onchange="handleDocPhotoUpload(this, 3)" accept="image/*"
+                                    style="font-size: 11px; width: 100%;">
+                            </div>
+                            <div class="form-group" id="ph-4" style="display:none;">
+                                <label style="font-size:11px;">Foto 4</label>
+                                <input type="file" onchange="handleDocPhotoUpload(this, 4)" accept="image/*"
+                                    style="font-size: 11px; width: 100%;">
+                            </div>
+                            <div class="form-group" id="ph-5" style="display:none;">
+                                <label style="font-size:11px;">Foto 5</label>
+                                <input type="file" onchange="handleDocPhotoUpload(this, 5)" accept="image/*"
+                                    style="font-size: 11px; width: 100%;">
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Notulen Section -->
@@ -1740,7 +1784,7 @@
         // let cachedTemplateHtml = ""; // Removed
         // let currentTemplateId = ""; // Removed
         let logoKBBBase64 = null;
-        let docPhotoBase64 = null;
+        let docPhotos = {}; // Replaced single docPhotoBase64
 
         // Load KBB Logo on start
         window.addEventListener('load', () => {
@@ -1856,14 +1900,22 @@
             }
         }
 
-        function handleDocPhotoUpload(input) {
+        function handleDocPhotoUpload(input, index = 1) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    docPhotoBase64 = e.target.result;
+                    docPhotos[index] = e.target.result;
                     updatePreview();
                 };
                 reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function updatePhotoInputs() {
+            const count = parseInt(document.getElementById('docPhotoCount').value);
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById('ph-' + i);
+                if (el) el.style.display = (i <= count) ? 'block' : 'none';
             }
         }
 
@@ -1987,14 +2039,14 @@
             const vendorName = document.getElementById('custVendorName').value || ""; // Default empty
             const vendorAddress = document.getElementById('custVendorAddress').value || "Jl. Raya KM 10, Kota Pendidikan";
             const uraian = document.getElementById('custUraian').value || "Belanja Barang Jasa";
-            const jumlah = parseFloat(document.getElementById('custJumlah').value) || 0;
+            let jumlah = parseFloat(document.getElementById('custJumlah').value) || 0;
             const tanggal = document.getElementById('custTanggal').value || "01/01/2025";
             const nomorSurat = document.getElementById('custNomorSurat').value || "020/SD-BOS/2025";
             const tanggalPesan = document.getElementById('custTanggalPesan').value || tanggal;
             const tanggalKegiatan = document.getElementById('custTanggalKegiatan').value || tanggal;
             const fontStyle = document.getElementById('fontStyle').value; // Get font preference
 
-            const terbilangText = terbilang(jumlah) + " Rupiah";
+            let terbilangText = terbilang(jumlah) + " Rupiah";
             const dateInfo = getDateText(tanggal);
             const datePesanInfo = getDateText(tanggalPesan);
             const dateKegiatanInfo = getDateText(tanggalKegiatan);
@@ -2041,6 +2093,7 @@
                 // Get manual items if any
                 const itemRows = document.querySelectorAll('.nota-item-row');
                 let itemsHtml = '';
+                let itemsHtmlSwapped = ''; // For templates with [Qty, Name] order
                 let totalManual = 0;
 
 
@@ -2057,11 +2110,19 @@
                         totalManual += sub;
 
                         if (vendorStyle === 'rm-family' && (!rawQty || qty === 0) && (!rawPrice || price === 0)) {
-                            // Special Menu Line for RM Family
+                            // Special Menu Line for RM Family & Standard
                             itemsHtml += `
                                     <tr style="height: 25px; border-bottom: 1px solid #000;">
                                         <td style="border-right: 2px solid #000; padding: 0 8px 0 30px; font-style: italic;">${name}</td>
                                         <td style="border-right: 2px solid #000; text-align: center; width: 60px;"></td>
+                                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;"></td>
+                                        <td style="text-align: right; padding-right: 8px; width: 120px;"></td>
+                                    </tr>
+                                `;
+                            itemsHtmlSwapped += `
+                                    <tr style="height: 25px; border-bottom: 1px solid #000;">
+                                        <td style="border-right: 2px solid #000; text-align: center; width: 60px;"></td>
+                                        <td style="border-right: 2px solid #000; padding: 0 8px 0 30px; font-style: italic;">${name}</td>
                                         <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;"></td>
                                         <td style="text-align: right; padding-right: 8px; width: 120px;"></td>
                                     </tr>
@@ -2076,6 +2137,15 @@
                                         <td style="text-align: right; padding-right: 8px; width: 120px;">${price ? sub.toLocaleString('id-ID') : ""}</td>
                                     </tr>
                                 `;
+                            // Swapped Line (Qty First)
+                            itemsHtmlSwapped += `
+                                    <tr style="height: 25px; border-bottom: 1px solid #000;">
+                                        <td style="border-right: 2px solid #000; text-align: center; width: 60px;">${qty || ""}</td>
+                                        <td style="border-right: 2px solid #000; padding: 0 8px;">${name}</td>
+                                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${price ? price.toLocaleString('id-ID') : ""}</td>
+                                        <td style="text-align: right; padding-right: 8px; width: 120px;">${price ? sub.toLocaleString('id-ID') : ""}</td>
+                                    </tr>
+                                `;
                         }
                     });
 
@@ -2083,13 +2153,36 @@
                     const remaining = 12 - itemRows.length;
                     for (let i = 0; i < remaining; i++) {
                         itemsHtml += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>`;
+                        itemsHtmlSwapped += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>`;
                     }
                 } else {
+                    // Default fallback
+                    itemsHtml = ``;
+                    itemsHtmlSwapped = ``;
+                }
+
+                // AUTO CALC LOGIC
+                if (itemRows.length > 0 && !document.getElementById('manualTotal').checked) {
+                    jumlah = totalManual;
+                    document.getElementById('custJumlah').value = jumlah;
+                    terbilangText = terbilang(jumlah) + " Rupiah";
+                }
+
+                if (itemRows.length === 0) { // Fallback if no items
                     // Default fallback
                     itemsHtml = `
                         <tr style="height: 25px; border-bottom: 1px solid #000;">
                             <td style="border-right: 2px solid #000; padding: 0 8px;">${uraian}</td>
                             <td style="border-right: 2px solid #000; text-align: center; width: 60px;">1</td>
+                            <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${jumlah.toLocaleString('id-ID')}</td>
+                            <td style="text-align: right; padding-right: 8px; width: 120px;">${jumlah.toLocaleString('id-ID')}</td>
+                        </tr>
+                    ` + Array(11).fill('<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>').join('');
+
+                    itemsHtmlSwapped = `
+                        <tr style="height: 25px; border-bottom: 1px solid #000;">
+                            <td style="border-right: 2px solid #000; text-align: center; width: 60px;">1</td>
+                            <td style="border-right: 2px solid #000; padding: 0 8px;">${uraian}</td>
                             <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${jumlah.toLocaleString('id-ID')}</td>
                             <td style="text-align: right; padding-right: 8px; width: 120px;">${jumlah.toLocaleString('id-ID')}</td>
                         </tr>
@@ -2128,7 +2221,7 @@
                                         <th style="padding: 5px; width: 110px; text-align: center;">SUB TOTAL</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
                                     ${itemsHtml}
                                 </tbody>
                             </table>
@@ -2193,8 +2286,8 @@
                                         <th style="border: 2px solid #1e40af; padding: 5px; width: 120px;">JUMLAH RP.</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    ${itemsHtml.replaceAll('border-right: 2px solid #000', 'border: 2px solid #1e40af').replaceAll('border-bottom: 1px solid #000', 'border: 2px solid #1e40af')}
+                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                    ${itemsHtmlSwapped.replaceAll('border-right: 2px solid #000', 'border: 2px solid #1e40af').replaceAll('border-bottom: 1px solid #000', 'border: 2px solid #1e40af')}
                                 </tbody>
                             </table>
                             
@@ -2249,8 +2342,8 @@
                                         <th style="padding: 8px; width: 120px; text-align: center;">JUMLAH</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    ${itemsHtml.replaceAll('border-right: 2px solid #000', 'border: 1px solid #000').replaceAll('border-bottom: 1px solid #000', 'border: 1px solid #000')}
+                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                    ${itemsHtmlSwapped.replaceAll('border-right: 2px solid #000', 'border: 1px solid #000').replaceAll('border-bottom: 1px solid #000', 'border: 1px solid #000')}
                                 </tbody>
                             </table>
                             
@@ -2294,8 +2387,8 @@
                                         <th style="padding: 5px; width: 120px;">Jumlah (Rp)</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    ${itemsHtml}
+                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                    ${itemsHtmlSwapped}
                                 </tbody>
                             </table>
                             
@@ -2345,8 +2438,8 @@
                                         <th style="padding: 8px; width: 130px;">JUMLAH</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    ${itemsHtml.replaceAll('border-right: 2px solid #000', 'border-right: 2px solid #1e3a8a').replaceAll('border-bottom: 1px solid #000', 'border-bottom: 1px solid #1e3a8a')}
+                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
+                                    ${itemsHtmlSwapped.replaceAll('border-right: 2px solid #000', 'border-right: 2px solid #1e3a8a').replaceAll('border-bottom: 1px solid #000', 'border-bottom: 1px solid #1e3a8a')}
                                 </tbody>
                             </table>
                             
@@ -2393,7 +2486,7 @@
                                         <th style="border: 1px solid #ddd; padding: 12px; text-align: right; width: 20%;">TOTAL</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody style="${fontStyle ? `font-family:${fontStyle};` : ''}">
                                     ${(document.getElementById('notaItemsList').children.length > 0) ?
                             Array.from(document.querySelectorAll('.nota-item-row')).map(row => {
                                 const ins = row.querySelectorAll('input');
@@ -2441,48 +2534,99 @@
                         </div>
                     `;
                 } else if (vendorStyle === 'plain') {
-                    // --- LAYOUT GROSIR / POLOS (Simple Store Note) ---
+                    // --- LAYOUT GROSIR / POLOS (Authentic Handwritten Store Note) ---
+                    // Use selected handwriting font or fallback to Kalam
+                    const hwFont = fontStyle && fontStyle !== 'inherit' ? fontStyle : "'Kalam', cursive";
+
+                    // Build rows using itemsHtmlSwapped (Qty first) with vertical lines
+                    const itemRows2 = document.querySelectorAll('.nota-item-row');
+                    let plainRows = '';
+
+                    if (itemRows2.length > 0) {
+                        itemRows2.forEach((row, idx) => {
+                            const ins = row.querySelectorAll('input');
+                            const nm = ins[0].value || '';
+                            const rawQ = ins[1].value;
+                            const rawP = ins[2].value;
+                            const q = parseFloat(rawQ) || 0;
+                            const p = parseFloat(rawP) || 0;
+                            const sub = q * p;
+                            const isLast = idx === itemRows2.length - 1;
+                            plainRows += `
+                                <tr style="height:32px;">
+                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:center; width:60px;">${q || ''}</td>
+                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px;">${nm}</td>
+                                    <td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:110px;">${p ? p.toLocaleString('id-ID') : ''}</td>
+                                    <td style="border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:120px;">${sub ? sub.toLocaleString('id-ID') : ''}</td>
+                                </tr>`;
+                        });
+                        // Fill empty rows up to 12
+                        const rem = Math.max(0, 12 - itemRows2.length);
+                        for (let i = 0; i < rem; i++) {
+                            plainRows += `<tr style="height:32px;"><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-bottom:1px solid #ddd;"></td></tr>`;
+                        }
+                    } else {
+                        // Default single row
+                        plainRows = `<tr style="height:32px;"><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:center; width:60px;">1</td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px;">${uraian}</td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:110px;">${jumlah.toLocaleString('id-ID')}</td><td style="border-bottom:1px solid #ddd; padding:2px 8px; text-align:right; width:120px;">${jumlah.toLocaleString('id-ID')}</td></tr>`;
+                        for (let i = 0; i < 11; i++) {
+                            plainRows += `<tr style="height:32px;"><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-right:1.5px solid #888; border-bottom:1px solid #ddd;"></td><td style="border-bottom:1px solid #ddd;"></td></tr>`;
+                        }
+                    }
+
                     html = `
-                        <div style="font-family: ${fontStyle || "'Courier New', Courier, monospace"}; color: #000; border: 1px solid #ccc; padding: 20px; background: #fffcf5; width: 100%; max-width: 100%;">
-                            <div style="text-align: center; margin-bottom: 20px; border-bottom: 1px dashed #000; padding-bottom: 15px;">
-                                <h2 style="margin: 0; font-size: 20px; text-transform: uppercase;">NOTA KONTA</h2>
-                                <p style="margin: 5px 0 0 0; font-size: 12px;">${getDateText(tanggal).fullDate}</p>
+                        <div style="font-family: ${hwFont}; color: #1a1a1a; padding: 22px 26px; background: #fffef5; width: 100%; border: 1.5px solid #c8b89a; border-radius: 3px; box-shadow: inset 0 0 40px rgba(180,150,80,0.06);">
+                            
+                            <!-- Header: tanggal & kepada -->
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+                                <div style="font-size:13px; line-height:2;">
+                                    <div>Kepada Yth. <span style="border-bottom:1px solid #888; display:inline-block; min-width:180px; padding-bottom:1px;">${schoolData.name}</span></div>
+                                    <div>di &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tempat</div>
+                                </div>
+                                <div style="text-align:right; font-size:13px; line-height:2;">
+                                    <div>${schoolData.kecamatan}, <span style="border-bottom:1px solid #888; display:inline-block; min-width:120px; padding-bottom:1px;">${dateInfo.fullDate}</span></div>
+                                    <div>No. &nbsp;<span style="border-bottom:1px solid #888; display:inline-block; min-width:80px; padding-bottom:1px;">-</span></div>
+                                </div>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 15px;">
-                                <div>Kpd Yth: ${schoolData.name}</div>
-                                <div>No: -</div>
-                            </div>
+                            <!-- Divider -->
+                            <div style="border-top:1.5px solid #888; margin-bottom:0;"></div>
 
-                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
+                            <!-- Table with vertical lines -->
+                            <table style="width:100%; border-collapse:collapse; font-size:13px;">
                                 <thead>
-                                    <tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
-                                        <th style="padding: 8px 5px; text-align: left;">BANYAKNYA</th>
-                                        <th style="padding: 8px 5px; text-align: left; width: 40%;">NAMA BARANG</th>
-                                        <th style="padding: 8px 5px; text-align: right;">HARGA</th>
-                                        <th style="padding: 8px 5px; text-align: right;">JUMLAH</th>
+                                    <tr style="border-bottom:1.5px solid #888;">
+                                        <th style="border-right:1.5px solid #888; padding:6px 8px; text-align:center; width:60px; font-weight:600;">Banyak</th>
+                                        <th style="border-right:1.5px solid #888; padding:6px 8px; text-align:left; font-weight:600;">Nama Barang</th>
+                                        <th style="border-right:1.5px solid #888; padding:6px 8px; text-align:right; width:110px; font-weight:600;">Harga Satuan</th>
+                                        <th style="padding:6px 8px; text-align:right; width:120px; font-weight:600;">Jumlah</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${itemsHtml.replace(/border-right: 2px solid #000;/g, 'border-bottom: 1px dashed #ccc;').replace(/padding: 0 8px;/g, 'padding: 8px 5px;').replace(/border-bottom: 1px solid #000;/g, 'border-bottom: 1px dashed #ccc;')}
+                                    ${plainRows}
                                 </tbody>
-                                <tfoot>
-                                    <tr style="border-top: 1px solid #000; font-weight: bold;">
-                                        <td colspan="3" style="padding: 10px 5px; text-align: right;">TOTAL</td>
-                                        <td style="padding: 10px 5px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
-                                    </tr>
-                                </tfoot>
                             </table>
 
-                            <div style="display: flex; justify-content: space-between; margin-top: 30px; font-size: 12px;">
-                                <div style="text-align: center; width: 120px;">
-                                    <p style="margin-bottom: 50px;">Tanda Terima,</p>
-                                    <p>( .................... )</p>
+                            <!-- Total row -->
+                            <div style="display:flex; justify-content:flex-end; border-top:1.5px solid #888; padding-top:8px; margin-top:0;">
+                                <div style="font-size:14px; font-weight:700; display:flex; gap:20px; align-items:center;">
+                                    <span>Jumlah</span>
+                                    <span style="border-bottom:1.5px solid #333; min-width:140px; text-align:right; display:inline-block; padding-bottom:2px;">Rp ${jumlah.toLocaleString('id-ID')}</span>
                                 </div>
-                                <div style="text-align: center; width: 120px; position: relative;">
-                                    <p style="margin-bottom: 50px;">Hormat Kami,</p>
-                                    ${stampBase64 ? `<img src="${stampBase64}" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60px; opacity: 0.6;">` : ''}
-                                    <p>( .................... )</p>
+                            </div>
+
+                            <!-- Terbilang -->
+                            <div style="font-size:11px; color:#555; margin-top:4px; font-style:italic; text-align:right;">Terbilang: ${terbilangText}</div>
+
+                            <!-- Signatures -->
+                            <div style="display:flex; justify-content:space-between; margin-top:30px; font-size:13px;">
+                                <div style="text-align:center;">
+                                    <div style="margin-bottom:50px;">Yang Menerima,</div>
+                                    <div style="border-top:1px solid #555; width:130px; padding-top:4px;">( ..................... )</div>
+                                </div>
+                                <div style="text-align:center; position:relative;">
+                                    <div style="margin-bottom:50px;">Hormat Kami,</div>
+                                    ${stampBase64 ? `<img src="${stampBase64}" style="position:absolute; top:0; left:50%; transform:translateX(-50%); width:65px; opacity:0.65;">` : ''}
+                                    <div style="border-top:1px solid #555; width:130px; padding-top:4px;">( ..................... )</div>
                                 </div>
                             </div>
                         </div>
@@ -2830,25 +2974,97 @@
         }
 
         function getDokumentasiHtml(uraian, dateInfo, schoolData, schoolKop) {
-            // Clean Uraian for Dokumentasi
             const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "")
                 .replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
 
+            // Collect uploaded photos in order (index 1-5)
+            const photos = [];
+            for (let i = 1; i <= 5; i++) {
+                if (docPhotos[i]) photos.push(docPhotos[i]);
+            }
+            const count = photos.length;
+
+            let photoHtml = '';
+            const imgStyle = (maxH) => `max-width:100%; max-height:${maxH}px; object-fit:contain; display:block; margin:auto;`;
+            const box = (src, maxH) => `<div style="border:1px solid #555; padding:6px; background:#fafafa;"><img src="${src}" style="${imgStyle(maxH)}"></div>`;
+            const caption = (n) => `<div style="text-align:center; font-size:10px; color:#555; margin-top:3px;">Foto ${n}</div>`;
+            const cell = (src, n, maxH) => `<div>${box(src, maxH)}${caption(n)}</div>`;
+
+            if (count === 0) {
+                // Placeholder
+                photoHtml = `<div style="border:2px dashed #ccc; width:100%; height:280px; display:flex; align-items:center; justify-content:center; color:#aaa; font-size:14px; border-radius:4px;">📷 Foto Kegiatan Belum Diupload</div>`;
+
+            } else if (count === 1) {
+                // 1 foto — full width, tall
+                photoHtml = `
+                    <div style="width:100%;">
+                        ${box(photos[0], 480)}
+                        ${caption(1)}
+                    </div>`;
+
+            } else if (count === 2) {
+                // 2 foto — side by side
+                photoHtml = `
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%;">
+                        ${cell(photos[0], 1, 320)}
+                        ${cell(photos[1], 2, 320)}
+                    </div>`;
+
+            } else if (count === 3) {
+                // 3 foto — 1 besar di atas, 2 kecil di bawah
+                photoHtml = `
+                    <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+                        <div>${box(photos[0], 320)}${caption(1)}</div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                            ${cell(photos[1], 2, 220)}
+                            ${cell(photos[2], 3, 220)}
+                        </div>
+                    </div>`;
+
+            } else if (count === 4) {
+                // 4 foto — grid 2x2
+                photoHtml = `
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%;">
+                        ${cell(photos[0], 1, 240)}
+                        ${cell(photos[1], 2, 240)}
+                        ${cell(photos[2], 3, 240)}
+                        ${cell(photos[3], 4, 240)}
+                    </div>`;
+
+            } else if (count === 5) {
+                // 5 foto — 2 di atas, 3 di bawah
+                photoHtml = `
+                    <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                            ${cell(photos[0], 1, 210)}
+                            ${cell(photos[1], 2, 210)}
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                            ${cell(photos[2], 3, 180)}
+                            ${cell(photos[3], 4, 180)}
+                            ${cell(photos[4], 5, 180)}
+                        </div>
+                    </div>`;
+            }
+
             return `
-                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                <div style="font-family:'Times New Roman',Times,serif; color:#000; padding:10px 40px;">
                     ${schoolKop}
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h2 style="text-decoration: underline; margin-bottom: 10px;">LEMBAR DOKUMENTASI</h2>
-                        <h3 style="margin: 0; font-size: 16px;">${cleanUraian}</h3>
+                    <div style="text-align:center; margin-bottom:16px;">
+                        <h2 style="text-decoration:underline; margin-bottom:6px; font-size:18px;">LEMBAR DOKUMENTASI</h2>
+                        <h3 style="margin:0; font-size:15px; font-weight:normal;">${cleanUraian}</h3>
                     </div>
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 50px;">
-                        ${docPhotoBase64 ? `<div style="border: 1px solid #000; padding: 20px;"><img src="${docPhotoBase64}" style="max-width: 500px; max-height: 400px; object-fit: contain;"></div>` :
-                    `<div style="border: 2px dashed #ccc; width: 500px; height: 300px; display: flex; align-items: center; justify-content: center; color: #999;">Foto Kegiatan Belum Diupload</div>`}
+                    <div style="width:100%; margin-top:12px;">
+                        ${photoHtml}
                     </div>
-                    <div style="margin-top: 100px; display: flex; justify-content: flex-end;"><div style="text-align: center;">
-                        <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${dateInfo.fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p>
-                        <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p><p style="margin:0;">NIP. ${schoolData.principalNip}</p>
-                    </div></div>
+                    <div style="margin-top:30px; display:flex; justify-content:flex-end;">
+                        <div style="text-align:center;">
+                            <p style="margin-bottom:4px;">${schoolData.kecamatan}, ${dateInfo.fullDate}</p>
+                            <p style="font-weight:bold; margin-bottom:70px;">Kepala Sekolah,</p>
+                            <p style="font-weight:bold; text-decoration:underline; margin:0;">${schoolData.principal}</p>
+                            <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                        </div>
+                    </div>
                 </div>`;
         }
 
