@@ -1,9 +1,18 @@
 function doGet() {
+    return HtmlService.createTemplateFromFile('login')
+        .evaluate()
+        .setTitle('Si-BOS | Login Portal')
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+        .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+function getMainPageHtml() {
     return HtmlService.createTemplateFromFile('FrontEnd')
         .evaluate()
         .setTitle('Si-BOS | Sistem Administrasi SPJ')
         .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
-        .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+        .addMetaTag('viewport', 'width=device-width, initial-scale=1')
+        .getContent();
 }
 
 function MINTA_IZIN_AKSES() {
@@ -188,4 +197,12 @@ function saveSchoolData(data) {
 
 function getSchoolData() {
     return PropertiesService.getScriptProperties().getProperties();
+}
+
+function getAppUrl() {
+    try {
+        return ScriptApp.getService().getUrl();
+    } catch (e) {
+        return null; // Fallback jika belum dideploy sebagai Web App
+    }
 }
