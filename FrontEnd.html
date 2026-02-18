@@ -9,6 +9,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Handwriting Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Kalam:wght@300;400;700&family=Nothing+You+Could+Do&family=Reenie+Beanie&family=Shadows+Into+Light&display=swap"
+        rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -313,6 +317,213 @@
             opacity: 0.5;
             text-align: center;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- Clock Widget Styles --- */
+        .clock-widget {
+            background: var(--white);
+            padding: 12px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .clock-widget:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .clock-time {
+            font-size: 32px;
+            font-size: 42px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 50%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            letter-spacing: 6px;
+            filter: drop-shadow(0 4px 10px rgba(220, 38, 38, 0.3));
+        }
+
+        .clock-date {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* --- Dashboard Styles --- */
+        /* Layout Fix for Single Page */
+        #dashboard-view.active {
+            height: calc(100vh - 80px);
+            /* Full height minus main-content padding */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .dashboard-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .hero-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .hero-text p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .dashboard-content-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* Stats Column */
+        .stats-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .stat-card-modern {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary);
+        }
+
+        .stat-icon-modern {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Quick Access Section */
+        .quick-access-section {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03);
+        }
+
+        .qa-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            height: 100%;
+            align-content: center;
+        }
+
+        .qa-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            height: 100%;
+        }
+
+        .qa-card:hover {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.1);
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .qa-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            transition: 0.3s;
+        }
+
+        .qa-card:hover .qa-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .qa-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .qa-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Modern Footer */
+        .modern-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            font-size: 12px;
+            color: var(--text-muted);
         }
 
         /* --- Main Content Styles --- */
@@ -778,7 +989,11 @@
         </div>
 
         <div class="nav-menu">
-            <a href="#" class="nav-item active" onclick="showView('upload-view', this)">
+            <a href="#" class="nav-item active" onclick="showView('dashboard-view', this)">
+                <i data-lucide="home" size="18"></i>
+                Dashboard
+            </a>
+            <a href="#" class="nav-item" onclick="showView('upload-view', this)">
                 <i data-lucide="upload-cloud" size="18"></i>
                 Unggah BKU
             </a>
@@ -800,8 +1015,108 @@
     <!-- Main Content -->
     <div class="main-content">
 
+        <!-- View 0: Dashboard -->
+        <section id="dashboard-view" class="view-section active">
+            <div class="dashboard-container">
+                <!-- Header Compact -->
+                <div class="dashboard-hero">
+                    <div class="hero-text">
+                        <h1>Selamat Datang, Admin!</h1>
+                        <p>Sistem Administrasi SPJ Bantuan Operasional Sekolah Terpadu.</p>
+                    </div>
+                    <div class="clock-widget">
+                        <div class="clock-time" id="clock">00:00:00</div>
+                        <div class="clock-date">
+                            <i data-lucide="calendar" size="14"></i>
+                            <span id="date">...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="dashboard-content-grid">
+                    <!-- Left: Stats -->
+                    <div class="stats-column">
+                        <div class="stat-card-modern">
+                            <div class="stat-icon-modern" style="background: #eff6ff; color: #3b82f6;">
+                                <i data-lucide="calendar" size="20"></i>
+                            </div>
+                            <div>
+                                <div style="font-size: 11px; color: #64748b; font-weight: 600;">TAHUN ANGGARAN</div>
+                                <div style="font-size: 18px; font-weight: 700; color: #0f172a;">2026</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern">
+                            <div class="stat-icon-modern" style="background: #f0fdf4; color: #22c55e;">
+                                <i data-lucide="check-circle-2" size="20"></i>
+                            </div>
+                            <div>
+                                <div style="font-size: 11px; color: #64748b; font-weight: 600;">STATUS SISTEM</div>
+                                <div style="font-size: 18px; font-weight: 700; color: #22c55e;">Online</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern"
+                            style="flex-grow: 1; align-items: flex-start; flex-direction: column;">
+                            <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                <div class="stat-icon-modern" style="background: #fefce8; color: #eab308;">
+                                    <i data-lucide="info" size="20"></i>
+                                </div>
+                                <div style="font-size: 11px; color: #64748b; font-weight: 600;">INFO TERBARU</div>
+                            </div>
+                            <div style="font-size: 12px; color: #475569; line-height: 1.5; margin-top: 5px;">
+                                Versi 1.0.0 Stable.<br>
+                                Fitur upload BKU dan cetak kwitansi otomatis telah aktif.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Quick Access -->
+                    <div class="quick-access-section">
+                        <div
+                            style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="zap" size="18" style="color: #eab308; fill: #eab308;"></i> Akses Cepat
+                        </div>
+                        <div class="qa-grid">
+                            <div class="qa-card"
+                                onclick="document.querySelector('.nav-item[onclick*=\'upload-view\']').click()">
+                                <div class="qa-icon" style="background: #eff6ff; color: #3b82f6;">
+                                    <i data-lucide="upload-cloud" size="28"></i>
+                                </div>
+                                <div class="qa-title">Unggah BKU</div>
+                                <div class="qa-desc">Import data Excel</div>
+                            </div>
+                            <div class="qa-card"
+                                onclick="document.querySelector('.nav-item[onclick*=\'manage-view\']').click()">
+                                <div class="qa-icon" style="background: #f0fdf4; color: #22c55e;">
+                                    <i data-lucide="layout-grid" size="28"></i>
+                                </div>
+                                <div class="qa-title">Kelola Transaksi</div>
+                                <div class="qa-desc">Edit & Cetak SPJ</div>
+                            </div>
+                            <div class="qa-card"
+                                onclick="document.querySelector('.nav-item[onclick*=\'settings-view\']').click()">
+                                <div class="qa-icon" style="background: #fefce8; color: #eab308;">
+                                    <i data-lucide="school" size="28"></i>
+                                </div>
+                                <div class="qa-title">Data Sekolah</div>
+                                <div class="qa-desc">Konfigurasi Kop</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modern Footer -->
+                <div class="modern-footer">
+                    <div>&copy; 2026 Si-BOS Administration System</div>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        Architect by <span style="font-weight: 700; color: #2563eb;">SANTO X/CODE</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- View 1: Unggah BKU -->
-        <section id="upload-view" class="view-section active">
+        <section id="upload-view" class="view-section">
             <div class="header-center">
                 <h2>Mulai Dokumentasi SPJ</h2>
                 <p>Unggah file Buku Kas Umum (BKU) Anda. AI kami akan mengekstrak setiap transaksi belanja untuk
@@ -999,11 +1314,26 @@
                         <select id="vendorStyle" onchange="updatePreview()"
                             style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
                             <option value="standard">Standard / Modern</option>
+                            <option value="plain">Grosir / Polos</option>
                             <option value="rm-family">RM Family (Landscape)</option>
                             <option value="cahya-cellular">Cahya Cellular (Blue)</option>
                             <option value="media-komputer">Media Komputer (Media)</option>
                             <option value="mitra-photocopy">Mitra Photocopy (Service)</option>
                             <option value="sinar-abadi">Sinar Abadi (Classic Red)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="fg-font-style">
+                        <label>Jenis Font (Tulisan Tangan)</label>
+                        <select id="fontStyle" onchange="updatePreview()"
+                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                            <option value="">Default (Arial/System)</option>
+                            <option value="'Caveat', cursive">Tulisan Tangan 1 (Caveat)</option>
+                            <option value="'Kalam', cursive">Tulisan Tangan 2 (Kalam)</option>
+                            <option value="'Reenie Beanie', cursive">Tulisan Tangan 3 (Kasar/Reenie)</option>
+                            <option value="'Shadows Into Light', cursive">Tulisan Tangan 4 (Rapi/Shadows)</option>
+                            <option value="'Nothing You Could Do', cursive">Tulisan Tangan 5 (Realistis/Nothing)
+                            </option>
                         </select>
                     </div>
 
@@ -1049,6 +1379,14 @@
                             <textarea id="custPersyaratan" oninput="updatePreview()" rows="3"
                                 style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Perorangan/Badan Usaha Memenuhi syarat sebagai berikut:\na. Identitas Penyedia;</textarea>
                         </div>
+                        <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                            <label style="font-size: 12px; font-weight: bold;">Pelaksana (Opsional - Default: Kepala
+                                Sekolah)</label>
+                            <input type="text" id="custPelaksanaNameRencana" oninput="updatePreview()"
+                                placeholder="Nama Pelaksana" style="margin-bottom: 5px;">
+                            <input type="text" id="custPelaksanaNipRencana" oninput="updatePreview()"
+                                placeholder="NIP Pelaksana">
+                        </div>
                     </div>
 
                     <!-- Extra Fields for SPK -->
@@ -1056,6 +1394,11 @@
                         style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
                         <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Detail
                             SPK</label>
+                        <div class="form-group">
+                            <label>Nama Penyedia (CV / Toko)</label>
+                            <input type="text" id="custSpkProvider" oninput="updatePreview()"
+                                placeholder="Contoh: CV. Berkah Abadi">
+                        </div>
                         <div class="form-group">
                             <label>Tanggal Negosiasi</label>
                             <input type="text" id="custTglNegosiasi" oninput="updatePreview()" placeholder="dd/mm/yyyy">
@@ -1074,6 +1417,14 @@
                             <label>Instruksi ke Penyedia</label>
                             <textarea id="custInstruksi" oninput="updatePreview()" rows="3"
                                 style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Penagihan hanya dapat dilakukan setelah penyelesaian pekerjaan yang diperintahkan dalam SPK ini dan dibuktikan dengan Berita Acara Serah Terima.</textarea>
+                        </div>
+                        <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                            <label style="font-size: 12px; font-weight: bold;">Pelaksana (Opsional - Default: Kepala
+                                Sekolah)</label>
+                            <input type="text" id="custPelaksanaNameSpk" oninput="updatePreview()"
+                                placeholder="Nama Pelaksana" style="margin-bottom: 5px;">
+                            <input type="text" id="custPelaksanaNipSpk" oninput="updatePreview()"
+                                placeholder="NIP Pelaksana">
                         </div>
                     </div>
 
@@ -1183,14 +1534,16 @@
                             placeholder="1. Pengawas...&#10;2. K3S..."></textarea>
                     </div>
 
-                    <div class="form-group" id="fg-uploads">
-                        <label>Logo & Stempel Toko (Nota Only)</label>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="file" accept="image/*" onchange="handleLogoUpload(this)"
-                                style="font-size: 11px;">
-                            <input type="file" accept="image/*" onchange="handleStampUpload(this)"
-                                style="font-size: 11px;">
-                        </div>
+                    <div class="form-group" id="fg-logo-upload">
+                        <label>Logo Toko</label>
+                        <input type="file" accept="image/*" onchange="handleLogoUpload(this)"
+                            style="font-size: 11px; width: 100%;">
+                    </div>
+
+                    <div class="form-group" id="fg-stamp-upload">
+                        <label>Stempel Toko / Penyedia</label>
+                        <input type="file" accept="image/*" onchange="handleStampUpload(this)"
+                            style="font-size: 11px; width: 100%;">
                     </div>
 
                     <div style="margin-top: auto;">
@@ -1333,6 +1686,7 @@
                 })
                 .getSchoolData();
 
+            startRealtimeClock();
 
         });
 
@@ -1352,6 +1706,29 @@
 
             // Refresh icons in case any were hidden
             lucide.createIcons();
+        }
+
+        // --- Realtime Clock Logic ---
+        function startRealtimeClock() {
+            function update() {
+                const now = new Date();
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+                const dayName = days[now.getDay()];
+                const day = now.getDate();
+                const month = months[now.getMonth()];
+                const year = now.getFullYear();
+
+                const h = String(now.getHours()).padStart(2, '0');
+                const m = String(now.getMinutes()).padStart(2, '0');
+                const s = String(now.getSeconds()).padStart(2, '0');
+
+                document.getElementById('clock').innerText = `${h}:${m}:${s}`;
+                document.getElementById('date').innerText = `${dayName}, ${day} ${month} ${year}`;
+            }
+            setInterval(update, 1000);
+            update();
         }
 
         // --- Document Generation Logic ---
@@ -1510,7 +1887,7 @@
             // Reset visibility of all grouped fields first
             ['fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
                 'fg-tanggal', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan',
-                'fg-vendor-address', 'fg-tembusan', 'fg-uploads'].forEach(id => {
+                'fg-vendor-address', 'fg-tembusan', 'fg-logo-upload', 'fg-stamp-upload'].forEach(id => {
                     document.getElementById(id).style.display = 'none';
                 });
 
@@ -1518,9 +1895,9 @@
             const showFields = (ids) => ids.forEach(id => document.getElementById(id).style.display = 'block');
 
             if (docType === 'kwitansi') {
-                showFields(['fg-nomor', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-name']); // Vendor Name used as Penerima
+                showFields(['fg-nomor', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-name', 'fg-stamp-upload']); // Added stamp
             } else if (docType === 'nota') {
-                showFields(['fg-vendor-style', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-uploads']);
+                showFields(['fg-vendor-style', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-stamp-upload']); // Removed logo, kept stamp
                 notaSection.style.display = 'block';
                 if (document.getElementById('notaItemsList').children.length === 0) {
                     addNotaItem();
@@ -1544,12 +1921,12 @@
                 showFields(['fg-uraian', 'fg-tanggal']);
                 documentationSection.style.display = 'block';
             } else if (docType === 'rencana') {
-                showFields(['fg-uraian', 'fg-tanggal', 'fg-tempat', 'fg-jumlah']); // Uraian (Base), Tanggal (Serah), Tempat (Lokasi), Jumlah (Anggaran)
+                showFields(['fg-uraian', 'fg-tanggal', 'fg-tempat', 'fg-jumlah']);
                 rencanaSection.style.display = 'block';
             } else if (docType === 'spk') {
-                showFields(['fg-nomor', 'fg-tanggal', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah']);
+                showFields(['fg-nomor', 'fg-tanggal', 'fg-uraian', 'fg-jumlah']); // Removed fg-vendor-name
                 spkSection.style.display = 'block';
-                notaSection.style.display = 'block'; // SPK uses the items table
+                notaSection.style.display = 'block';
             }
             updatePreview();
         }
@@ -1604,9 +1981,10 @@
 
         function updatePreview() {
 
+
             const docType = document.getElementById('docType').value;
             const vendorStyle = document.getElementById('vendorStyle').value;
-            const vendorName = document.getElementById('custVendorName').value || "TOKO SUMBER JAYA";
+            const vendorName = document.getElementById('custVendorName').value || ""; // Default empty
             const vendorAddress = document.getElementById('custVendorAddress').value || "Jl. Raya KM 10, Kota Pendidikan";
             const uraian = document.getElementById('custUraian').value || "Belanja Barang Jasa";
             const jumlah = parseFloat(document.getElementById('custJumlah').value) || 0;
@@ -1614,6 +1992,7 @@
             const nomorSurat = document.getElementById('custNomorSurat').value || "020/SD-BOS/2025";
             const tanggalPesan = document.getElementById('custTanggalPesan').value || tanggal;
             const tanggalKegiatan = document.getElementById('custTanggalKegiatan').value || tanggal;
+            const fontStyle = document.getElementById('fontStyle').value; // Get font preference
 
             const terbilangText = terbilang(jumlah) + " Rupiah";
             const dateInfo = getDateText(tanggal);
@@ -1664,23 +2043,40 @@
                 let itemsHtml = '';
                 let totalManual = 0;
 
+
                 if (itemRows.length > 0) {
                     itemRows.forEach((row, index) => {
                         const inputs = row.querySelectorAll('input');
                         const name = inputs[0].value || "-";
-                        const qty = parseFloat(inputs[1].value) || 0;
-                        const price = parseFloat(inputs[2].value) || 0;
+                        const rawQty = inputs[1].value;
+                        const rawPrice = inputs[2].value;
+
+                        const qty = parseFloat(rawQty) || 0;
+                        const price = parseFloat(rawPrice) || 0;
                         const sub = qty * price;
                         totalManual += sub;
 
-                        itemsHtml += `
-                            <tr style="height: 25px; border-bottom: 1px solid #000;">
-                                <td style="border-right: 2px solid #000; padding: 0 8px;">${name}</td>
-                                <td style="border-right: 2px solid #000; text-align: center; width: 60px;">${qty}</td>
-                                <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${price.toLocaleString('id-ID')}</td>
-                                <td style="text-align: right; padding-right: 8px; width: 120px;">${sub.toLocaleString('id-ID')}</td>
-                            </tr>
-                        `;
+                        if (vendorStyle === 'rm-family' && (!rawQty || qty === 0) && (!rawPrice || price === 0)) {
+                            // Special Menu Line for RM Family
+                            itemsHtml += `
+                                    <tr style="height: 25px; border-bottom: 1px solid #000;">
+                                        <td style="border-right: 2px solid #000; padding: 0 8px 0 30px; font-style: italic;">${name}</td>
+                                        <td style="border-right: 2px solid #000; text-align: center; width: 60px;"></td>
+                                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;"></td>
+                                        <td style="text-align: right; padding-right: 8px; width: 120px;"></td>
+                                    </tr>
+                                `;
+                        } else {
+                            // Standard Line
+                            itemsHtml += `
+                                    <tr style="height: 25px; border-bottom: 1px solid #000;">
+                                        <td style="border-right: 2px solid #000; padding: 0 8px;">${name}</td>
+                                        <td style="border-right: 2px solid #000; text-align: center; width: 60px;">${qty || ""}</td>
+                                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;">${price ? price.toLocaleString('id-ID') : ""}</td>
+                                        <td style="text-align: right; padding-right: 8px; width: 120px;">${price ? sub.toLocaleString('id-ID') : ""}</td>
+                                    </tr>
+                                `;
+                        }
                     });
 
                     // Fill remaining empty rows (up to 12)
@@ -1703,7 +2099,7 @@
                 if (vendorStyle === 'rm-family') {
                     // --- LAYOUT NOTA RM FAMILY (Landscape / Classic) ---
                     html = `
-                        <div style="font-family: 'Arial Narrow', Arial, sans-serif; color: #000; border: 2px solid #000; padding: 20px; background: #fff; width: 100%;">
+                        <div style="font-family: ${fontStyle || "'Arial Narrow', Arial, sans-serif"}; color: #000; border: 2px solid #000; padding: 20px; background: #fff; width: 100%;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div style="text-align: center; width: 350px;">
                                     <h2 style="margin:0; font-size: 18px; font-weight: bold; letter-spacing: 1px;">RUMAH MAKAN</h2>
@@ -1723,7 +2119,7 @@
 
                             <div style="background: #000; color: #fff; text-align: center; padding: 4px; margin: 10px 0; font-weight: bold; font-size: 13px;">MENERIMA PESANAN</div>
 
-                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; font-size: 13px;">
+                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; font-size: 13px; font-family: inherit;">
                                 <thead>
                                     <tr style="border-bottom: 2px solid #000; font-weight: bold;">
                                         <th style="border-right: 2px solid #000; padding: 5px; text-align: center;">MAKANAN / MINUMAN</th>
@@ -1971,60 +2367,122 @@
                         </div>
                     `;
                 } else if (vendorStyle === 'standard') {
-                    // --- LAYOUT MODERN STANDARD --- (Formerly Toko Prima)
+                    // --- LAYOUT MODERN STANDARD (Clean Invoice) ---
                     html = `
-                        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #000; border: 2px solid #000; padding: 25px; background: #fff;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
-                                <div style="display: flex; gap: 20px; align-items: flex-start;">
-                                    ${logoBase64 ? `<img src="${logoBase64}" style="height: 70px; border-radius: 8px;">` : `<div style="padding: 10px 15px; background: #000; color: #fff; font-weight: bold; border-radius: 8px; font-size: 20px;">${vendorName.substring(0, 5).toUpperCase()}</div>`}
-                                    <div>
-                                        <h1 style="margin:0; font-size: 24px; font-weight: 800; color: #000; text-transform: uppercase;">${vendorName}</h1>
-                                        <p style="margin:4px 0 0 0; font-size: 11px; white-space: pre-line; line-height: 1.3;">${vendorAddress}</p>
-                                    </div>
+                        <div style="font-family: ${fontStyle || "Arial, sans-serif"}; color: #000; border: 1px solid #ccc; padding: 40px; background: #fff; max-width: 100%;">
+                            <!-- Header Info -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px;">
+                                <div>
+                                    <h1 style="margin: 0; font-size: 28px; font-weight: bold; text-transform: uppercase;">${vendorName || "NAMA TOKO"}</h1>
+                                    <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">${vendorAddress}</p>
                                 </div>
                                 <div style="text-align: right;">
-                                    <div style="display: inline-block; border: 2px solid #000; padding: 10px 15px; text-align: left; min-width: 200px; border-radius: 4px;">
-                                        <p style="margin:0; font-size: 11px; color: #666;">Kepada Yth:</p>
-                                        <p style="margin:4px 0 0 0; font-size: 13px; font-weight: bold;">${schoolData.name}</p>
-                                        <p style="margin:2px 0 0 0; font-size: 11px;">Kecamatan ${schoolData.kecamatan}</p>
-                                    </div>
-                                    <p style="margin:10px 0 0 0; font-size: 12px; font-weight: bold;">TANGGAL: ${tanggal}</p>
+                                    <h2 style="margin: 0; font-size: 24px; color: #555;">NOTA</h2>
+                                    <p style="margin: 5px 0 0 0; font-size: 13px;">Tanggal: <strong>${tanggal}</strong></p>
+                                    <p style="margin: 2px 0 0 0; font-size: 13px;">Kepada: <strong>${schoolData.name}</strong></p>
                                 </div>
                             </div>
 
-                            <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; margin-bottom: 20px;">
-                                <thead>
-                                    <tr style="border-bottom: 2px solid #000; background: #000; color: #fff;">
-                                        <th style="padding: 10px; text-align: left; border-right: 1px solid #fff;">BANYAKNYA</th>
-                                        <th style="padding: 10px; text-align: left; border-right: 1px solid #fff;">NAMA BARANG / JASA</th>
-                                        <th style="padding: 10px; text-align: right; border-right: 1px solid #fff; width: 110px;">HARGA</th>
-                                        <th style="padding: 10px; text-align: right; width: 130px;">JUMLAH</th>
+                            <!-- Table -->
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 13px;">
+                                <thead style="background: #f8f9fa;">
+                                    <tr>
+                                        <th style="border: 1px solid #ddd; padding: 12px; text-align: left; width: 50%;">URAIAN</th>
+                                        <th style="border: 1px solid #ddd; padding: 12px; text-align: center; width: 10%;">QTY</th>
+                                        <th style="border: 1px solid #ddd; padding: 12px; text-align: right; width: 20%;">HARGA</th>
+                                        <th style="border: 1px solid #ddd; padding: 12px; text-align: right; width: 20%;">TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${itemsHtml}
+                                    ${(document.getElementById('notaItemsList').children.length > 0) ?
+                            Array.from(document.querySelectorAll('.nota-item-row')).map(row => {
+                                const ins = row.querySelectorAll('input');
+                                const n = ins[0].value || "-";
+                                const q = parseInt(ins[1].value) || 0;
+                                const p = parseInt(ins[2].value) || 0;
+                                return `
+                                                <tr>
+                                                    <td style="border: 1px solid #ddd; padding: 10px;">${n}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${q}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${p.toLocaleString('id-ID')}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${(q * p).toLocaleString('id-ID')}</td>
+                                                </tr>
+                                            `;
+                            }).join('')
+                            :
+                            `<tr>
+                                            <td style="border: 1px solid #ddd; padding: 10px;">${uraian}</td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
+                                        </tr>`
+                        }
                                 </tbody>
                                 <tfoot>
-                                    <tr style="border-top: 2px solid #000; font-weight: bold; font-size: 14px;">
-                                        <td colspan="3" style="text-align: right; padding: 12px; border-right: 2px solid #000;">TOTAL BAYAR Rp.</td>
-                                        <td style="text-align: right; padding: 12px; background: #f8fafc;">${jumlah.toLocaleString('id-ID')}</td>
+                                    <tr style="font-weight: bold; background: #f8f9fa;">
+                                        <td colspan="3" style="border: 1px solid #ddd; padding: 12px; text-align: right;">TOTAL TAGIHAN</td>
+                                        <td style="border: 1px solid #ddd; padding: 12px; text-align: right;">Rp ${jumlah.toLocaleString('id-ID')}</td>
                                     </tr>
                                 </tfoot>
                             </table>
 
-                            <div style="display: flex; justify-content: space-between; margin-top: 30px;">
-                                <div style="text-align: center; width: 180px;">
-                                    <p style="margin:0; font-size: 13px;">Tanda Terima,</p>
-                                    <br><br><br>
-                                    <p style="margin:0; font-weight: bold; border-bottom: 1px solid #000;">( ......................... )</p>
+                            <!-- Signature -->
+                            <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+                                <div style="text-align: center; width: 200px;">
+                                    <p style="margin-bottom: 60px; font-size: 13px;">Tanda Terima,</p>
+                                    <div style="border-bottom: 1px solid #000; width: 100%;"></div>
                                 </div>
-                                <div style="text-align: center;">
-                                     <p style="font-style: italic; margin-top: 20px; font-size: 14px; color: #444;">Terima Kasih Atas Kepercayaan Anda</p>
+                                <div style="text-align: center; width: 200px; position: relative;">
+                                    <p style="margin-bottom: 60px; font-size: 13px;">Hormat Kami,</p>
+                                    ${stampBase64 ? `<img src="${stampBase64}" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 80px; opacity: 0.8;">` : ''}
+                                    <p style="font-weight: bold; margin: 0;">${vendorName || "Administrator"}</p>
                                 </div>
-                                <div style="text-align: center; width: 180px;">
-                                    <p style="margin:0; font-size: 13px;">Hormat Kami,</p>
-                                    <br><br><br>
-                                    <p style="margin:0; font-weight: bold; border-bottom: 1px solid #000;">${vendorName}</p>
+                            </div>
+                        </div>
+                    `;
+                } else if (vendorStyle === 'plain') {
+                    // --- LAYOUT GROSIR / POLOS (Simple Store Note) ---
+                    html = `
+                        <div style="font-family: ${fontStyle || "'Courier New', Courier, monospace"}; color: #000; border: 1px solid #ccc; padding: 20px; background: #fffcf5; width: 100%; max-width: 100%;">
+                            <div style="text-align: center; margin-bottom: 20px; border-bottom: 1px dashed #000; padding-bottom: 15px;">
+                                <h2 style="margin: 0; font-size: 20px; text-transform: uppercase;">NOTA KONTA</h2>
+                                <p style="margin: 5px 0 0 0; font-size: 12px;">${getDateText(tanggal).fullDate}</p>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 15px;">
+                                <div>Kpd Yth: ${schoolData.name}</div>
+                                <div>No: -</div>
+                            </div>
+
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
+                                <thead>
+                                    <tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
+                                        <th style="padding: 8px 5px; text-align: left;">BANYAKNYA</th>
+                                        <th style="padding: 8px 5px; text-align: left; width: 40%;">NAMA BARANG</th>
+                                        <th style="padding: 8px 5px; text-align: right;">HARGA</th>
+                                        <th style="padding: 8px 5px; text-align: right;">JUMLAH</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${itemsHtml.replace(/border-right: 2px solid #000;/g, 'border-bottom: 1px dashed #ccc;').replace(/padding: 0 8px;/g, 'padding: 8px 5px;').replace(/border-bottom: 1px solid #000;/g, 'border-bottom: 1px dashed #ccc;')}
+                                </tbody>
+                                <tfoot>
+                                    <tr style="border-top: 1px solid #000; font-weight: bold;">
+                                        <td colspan="3" style="padding: 10px 5px; text-align: right;">TOTAL</td>
+                                        <td style="padding: 10px 5px; text-align: right;">${jumlah.toLocaleString('id-ID')}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                            <div style="display: flex; justify-content: space-between; margin-top: 30px; font-size: 12px;">
+                                <div style="text-align: center; width: 120px;">
+                                    <p style="margin-bottom: 50px;">Tanda Terima,</p>
+                                    <p>( .................... )</p>
+                                </div>
+                                <div style="text-align: center; width: 120px; position: relative;">
+                                    <p style="margin-bottom: 50px;">Hormat Kami,</p>
+                                    ${stampBase64 ? `<img src="${stampBase64}" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60px; opacity: 0.6;">` : ''}
+                                    <p>( .................... )</p>
                                 </div>
                             </div>
                         </div>
@@ -2073,7 +2531,7 @@
 
                         <p style="text-indent: 40px; margin-bottom: 40px;">Demikian surat pesanan ini kami sampaikan, Atas perhatiannya dan kerjasamanya kami ucapkan terimakasih.</p>
 
-                        <div style="display: flex; justify-content: flex-end;">
+                        <div style="display: flex; justify-content: flex-end; padding-right: 50px;">
                             <div style="text-align: center;">
                                 <p>Mengetahui,</p>
                                 <p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p>
@@ -2210,14 +2668,16 @@
                                     <p style="font-weight: bold; text-decoration: underline; margin:0; font-size: 12px;">${schoolData.treasurer}</p>
                                     <p style="margin:0; font-size: 11px;">NIP. ${schoolData.treasurerNip}</p>
                                 </div>
-                                <div style="text-align: center;">
+                                <div style="text-align: center; position: relative;">
                                     <p style="margin-bottom: 5px; font-size: 13px;">&nbsp;</p>
+                                    ${stampBase64 ? `<img src="${stampBase64}" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 70px; opacity: 0.8;">` : ''}
                                     <p style="font-weight: bold; margin-bottom: 60px; font-size: 13px;">Penerima</p>
-                                    <p style="font-weight: bold; margin:0; font-size: 14px; white-space: nowrap;">( ................................. )</p>
+                                    <p style="font-weight: bold; margin:0; font-size: 14px; white-space: nowrap;">( ${vendorName || "................................."} )</p>
                                 </div>
                             </div>
                         </div>
-                    `;
+                    </div>
+                `;
             } else if (docType === 'undangan') {
                 // --- TEMPLATE UNDANGAN (SESUAI TEKS) ---
                 html = `
@@ -2255,9 +2715,9 @@
 
                         <p style="text-indent: 40px; margin-bottom: 40px;">Demikian kami sampaikan, Atas perhatiannya dan kehadirannya kami ucapkan terimakasih.</p>
 
-                        <div style="display: flex; justify-content: flex-end;">
+                        <div style="display: flex; justify-content: flex-end; padding-right: 50px;">
                             <div style="text-align: center;">
-                                <p style="font-weight: bold; margin-bottom: 80px;">Ketua Gugus,</p>
+                                <p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah,</p>
                                 <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p>
                                 <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
                             </div>
@@ -2288,39 +2748,49 @@
          * Dynamic Document Templates Helper Functions
          */
         function getNotulenHtml(uraian, dateInfo, schoolData, schoolKop) {
-            const waktu = document.getElementById('custWaktu').value || "11.00 – 12.30 WIB";
-            const hasilLines = (document.getElementById('custHasil').value || "1. Pembahasan satu\n2. Pembahasan dua").split('\n');
-            const kesimpulan = document.getElementById('custKesimpulan').value || "Kesimpulan rapat...";
+            // Clean Uraian for Notulen
+            const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "")
+                .replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
+
+            const hariTanggal = document.getElementById('custTanggalKegiatan').value || getDateText(new Date()).fullDate;
+            const waktu = document.getElementById('custWaktuKegiatan').value || "08.00 s.d Selesai";
+            const tempat = document.getElementById('custTempatKegiatan').value || "Ruang Kelas";
+
             return `
-                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px;">
                     ${schoolKop}
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h2 style="text-decoration: underline; margin-bottom: 20px;">NOTULEN</h2>
-                    </div>
-                    <table style="width: 100%; margin-bottom: 20px; line-height: 1.6;">
-                        <tr><td style="width: 140px;">Nama Rapat</td><td>: ${uraian}</td></tr>
-                        <tr><td>Hari, Tanggal</td><td>: ${dateInfo.dayName}, ${dateInfo.fullDate}</td></tr>
-                        <tr><td>Waktu</td><td>: Pukul ${waktu}</td></tr>
-                        <tr><td>Tempat</td><td>: Ruang Guru ${schoolData.name}</td></tr>
+                    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">NOTULEN KEGIATAN</div>
+                    
+                    <table style="width: 100%; margin-bottom: 20px;">
+                        <tr><td style="width: 150px;">Hari / Tanggal</td><td>: ${hariTanggal}</td></tr>
+                        <tr><td>Waktu</td><td>: ${waktu}</td></tr>
+                        <tr><td>Tempat</td><td>: ${tempat}</td></tr>
+                        <tr><td>Acara</td><td>: ${cleanUraian}</td></tr>
                     </table>
-                    <p style="font-weight: bold; margin-bottom: 10px;">Hasil Pembahasan dan Keputusan:</p>
-                    <ol style="padding-left: 20px; margin-bottom: 20px; line-height: 1.6; text-align: justify;">
-                        ${hasilLines.map(line => `<li>${line.replace(/^\d+\.\s*/, '')}</li>`).join('')}
-                    </ol>
-                    <p style="font-weight: bold; margin-bottom: 10px;">Kesimpulan:</p>
-                    <p style="text-align: justify; line-height: 1.6; margin-bottom: 40px;">${kesimpulan}</p>
-                    <div style="display: flex; justify-content: flex-end;">
+                    
+                    <div style="text-align: justify; margin-bottom: 20px;">
+                        Pada hari ini <strong>${hariTanggal}</strong>, bertempat di <strong>${tempat}</strong>, telah dilaksanakan kegiatan <strong>${cleanUraian}</strong>.
+                        <br><br>
+                        Adapun hasil kegiatan tersebut adalah sebagai berikut:
+                        <br>
+                        <div style="border: 1px solid #000; height: 300px; margin-top: 10px;"></div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
                         <div style="text-align: center;">
-                            <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${dateInfo.fullDate}</p>
-                            <p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p>
-                            <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p>
-                            <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                            <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${hariTanggal}</p>
+                            <p style="font-weight: bold; margin-bottom: 80px;">Ketua Panitia / Notulen,</p>
+                            <p style="font-weight: bold; text-decoration: underline; margin:0;">( .................................... )</p>
                         </div>
                     </div>
                 </div>`;
         }
 
         function getDaftarHadirHtml(uraian, schoolData, schoolKop) {
+            // Clean Uraian for Daftar Hadir
+            const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "")
+                .replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
+
             const attendanceRows = document.querySelectorAll('.attendance-row');
             let listHtml = '';
             attendanceRows.forEach((row, i) => {
@@ -2337,14 +2807,14 @@
                                 <div style="width: 100%; border-bottom: 1px dotted #000; margin-top: 15px; margin-left: ${isEven ? '80' : '0'}px;"></div>
                             </div>
                         </td>
-                    </tr>`;
+                    </tr> `;
             });
             return `
                 <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
                     ${schoolKop}
                     <div style="text-align: center; margin-bottom: 20px;">
                         <h2 style="margin: 0;">DAFTAR HADIR</h2>
-                        <h3 style="margin: 0; font-size: 16px;">${uraian}</h3>
+                        <h3 style="margin: 0; font-size: 16px;">${cleanUraian}</h3>
                     </div>
                     <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 40px; font-size: 13px;">
                         <thead><tr style="background: #f0f0f0;"><th style="border: 1px solid #000; padding: 10px; width: 40px;">NO</th>
@@ -2356,16 +2826,20 @@
                     <p style="margin-bottom: 5px;">Mengetahui,</p><p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p>
                     <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p><p style="margin:0;">NIP. ${schoolData.principalNip}</p>
                     </div></div>
-                </div>`;
+                </div > `;
         }
 
         function getDokumentasiHtml(uraian, dateInfo, schoolData, schoolKop) {
+            // Clean Uraian for Dokumentasi
+            const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "")
+                .replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
+
             return `
                 <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
                     ${schoolKop}
                     <div style="text-align: center; margin-bottom: 30px;">
                         <h2 style="text-decoration: underline; margin-bottom: 10px;">LEMBAR DOKUMENTASI</h2>
-                        <h3 style="margin: 0; font-size: 16px;">${uraian}</h3>
+                        <h3 style="margin: 0; font-size: 16px;">${cleanUraian}</h3>
                     </div>
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 50px;">
                         ${docPhotoBase64 ? `<div style="border: 1px solid #000; padding: 20px;"><img src="${docPhotoBase64}" style="max-width: 500px; max-height: 400px; object-fit: contain;"></div>` :
@@ -2387,6 +2861,10 @@
             const anggaran = document.getElementById('custJumlah').value || "0";
             const persyaratan = (document.getElementById('custPersyaratan').value || "").replace(/\n/g, '<br>');
             const tanggal = document.getElementById('custTanggal').value || "";
+
+            // Pelaksana Logic
+            const pelaksanaName = document.getElementById('custPelaksanaNameRencana').value || schoolData.principal;
+            const pelaksanaNip = document.getElementById('custPelaksanaNipRencana').value || schoolData.principalNip;
 
             // Format anggaran
             let anggaranFmt = "0";
@@ -2452,14 +2930,14 @@
                         <div style="text-align: center;">
                             <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${getDateText(tanggal).fullDate}</p>
                             <p style="font-weight: bold; margin-bottom: 80px;">Pelaksana</p>
-                            <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p>
-                            <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                            <p style="font-weight: bold; text-decoration: underline; margin:0;">${pelaksanaName}</p>
+                            <p style="margin:0;">NIP. ${pelaksanaNip}</p>
                         </div>
                     </div>
                      <div style="margin-top: 20px; font-size: 11px;">
                         (*) Misalnya Buku Teks Utama/Buku Teks Pendamping/Buku Nonteks/Kebutuhan dan Perlengkapan Satuan Pendidikan/Alat Peraga Pendidikan/Komputer dan Aksesoris/Elektronik/Jasa lainnya.
                     </div>
-                </div>
+                </div >
             `;
         }
 
@@ -2471,6 +2949,11 @@
             const waktuPenyelesaian = document.getElementById('custWaktuPenyelesaian').value || "";
             const instruksi = (document.getElementById('custInstruksi').value || "").replace(/\n/g, '<br>');
             const jumlahTotal = parseInt(document.getElementById('custJumlah').value || "0");
+            const penyedia = document.getElementById('custSpkProvider').value || "Penyedia Barang/Jasa"; // SPK Provider Logic
+
+            // Pelaksana Logic
+            const pelaksanaName = document.getElementById('custPelaksanaNameSpk').value || schoolData.principal;
+            const pelaksanaNip = document.getElementById('custPelaksanaNipSpk').value || schoolData.principalNip;
 
             // Get Items from Nota List logic
             const items = [];
@@ -2495,124 +2978,109 @@
             }
 
             const itemsHtml = items.map((item, i) => `
-                <tr>
-                    <td style="border: 1px solid #000; padding: 5px; text-align: center;">${i + 1}</td>
-                    <td style="border: 1px solid #000; padding: 5px;">${item.name}</td>
-                    <td style="border: 1px solid #000; padding: 5px; text-align: center;">${item.qty}</td>
-                    <td style="border: 1px solid #000; padding: 5px; text-align: center;">unit</td>
-                    <td style="border: 1px solid #000; padding: 5px; text-align: right;">Rp ${item.price.toLocaleString('id-ID')}</td>
-                    <td style="border: 1px solid #000; padding: 5px; text-align: right;">Rp ${item.total.toLocaleString('id-ID')}</td>
+                <tr style="height: 25px;">
+                    <td style="border: 1px solid #000; padding: 2px 5px; text-align: center;">${i + 1}</td>
+                    <td style="border: 1px solid #000; padding: 2px 5px;">${item.name}</td>
+                    <td style="border: 1px solid #000; padding: 2px 5px; text-align: center;">${item.qty}</td>
+                    <td style="border: 1px solid #000; padding: 2px 5px; text-align: center;">unit</td>
+                    <td style="border: 1px solid #000; padding: 2px 5px; text-align: right;">Rp ${item.price.toLocaleString('id-ID')}</td>
+                    <td style="border: 1px solid #000; padding: 2px 5px; text-align: right;">Rp ${item.total.toLocaleString('id-ID')}</td>
                 </tr>
-             `).join('');
+            `).join('');
 
-            // Fill empty rows to make it look like the example
-            const emptyRows = Array(Math.max(0, 5 - items.length)).fill(`
-                <tr>
-                     <td style="border: 1px solid #000; padding: 5px;">&nbsp;</td>
-                     <td style="border: 1px solid #000; padding: 5px;"></td>
-                     <td style="border: 1px solid #000; padding: 5px;"></td>
-                     <td style="border: 1px solid #000; padding: 5px;"></td>
-                     <td style="border: 1px solid #000; padding: 5px;">Rp -</td>
-                     <td style="border: 1px solid #000; padding: 5px;">Rp -</td>
+            // Reduced empty rows
+            // Reduced empty rows
+            const emptyRows = Array(Math.max(0, 3 - items.length)).fill(`
+                <tr style="height: 25px;">
+                     <td style="border: 1px solid #000; padding: 2px 5px;">&nbsp;</td>
+                     <td style="border: 1px solid #000; padding: 2px 5px;"></td>
+                     <td style="border: 1px solid #000; padding: 2px 5px;"></td>
+                     <td style="border: 1px solid #000; padding: 2px 5px;"></td>
+                     <td style="border: 1px solid #000; padding: 2px 5px;">Rp -</td>
+                     <td style="border: 1px solid #000; padding: 2px 5px;">Rp -</td>
                 </tr>
-             `).join('');
+            `).join('');
 
             const terbilangText = terbilang(jumlahTotal) + " Rupiah";
 
             return `
-                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px;">
+                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; font-size: 12px;"> 
                     ${schoolKop}
-                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 5px;">
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 5px; border-top:none;">
                         <tr>
-                            <td rowspan="3" style="border: 1px solid #000; padding: 10px; width: 40%; vertical-align: top; text-align: center; font-weight: bold;">
-                                <br><br>SURAT PERINTAH KERJA (SPK)
+                            <td rowspan="3" style="border: 1px solid #000; padding: 5px; width: 40%; vertical-align: middle; text-align: center; font-weight: bold;">
+                                SURAT PERINTAH KERJA (SPK)
                             </td>
-                            <td style="border: 1px solid #000; padding: 5px;">Nama Satuan Pendidikan : ${schoolData.name}</td>
+                            <td style="border: 1px solid #000; padding: 3px 5px;">Nama Satuan Pendidikan : ${schoolData.name}</td>
                         </tr>
                         <tr>
-                             <td style="border: 1px solid #000; padding: 5px;">Nomor SPK : ${nomorSpk}</td>
+                             <td style="border: 1px solid #000; padding: 3px 5px;">Nomor SPK : ${nomorSpk}</td>
                         </tr>
                         <tr>
-                             <td style="border: 1px solid #000; padding: 5px;">Tanggal SPK : ${getDateText(tglSpk).fullDate}</td>
+                             <td style="border: 1px solid #000; padding: 3px 5px;">Tanggal SPK : ${getDateText(tglSpk).fullDate}</td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid #000; padding: 5px;">Paket Pekerjaan : ${uraian}</td>
-                            <td style="border: 1px solid #000; padding: 5px;">
+                            <td style="border: 1px solid #000; padding: 3px 5px;">Paket Pekerjaan : ${uraian}</td>
+                            <td style="border: 1px solid #000; padding: 3px 5px;">
                                 Tanggal Negosiasi : ${getDateText(tglNegosiasi).fullDate}<br>
-                                <span style="font-size: 11px;">SPK ini mulai berlaku efektif terhitung sejak tanggal ditetapkan dan penyelesaian keseluruhan pekerjaan sebagaimana dimaksud dalam SPK ini.</span>
+                                <span style="font-size: 10px;">SPK ini mulai berlaku efektif terhitung sejak tanggal ditetapkan.</span>
                             </td>
                         </tr>
                     </table>
 
                     <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 5px;">
                          <tr>
-                            <td style="border: 1px solid #000; padding: 5px; width: 50%;">WAKTU PELAKSANAAN PEKERJAAN : ${getDateText(waktuPelaksanaan).fullDate}</td>
-                            <td style="border: 1px solid #000; padding: 5px;"></td>
-                        </tr>
-                         <tr>
-                            <td style="border: 1px solid #000; padding: 5px;">WAKTU PENYELESAIAN PEKERJAAN : ${waktuPenyelesaian ? getDateText(waktuPenyelesaian).fullDate : '-'}</td>
-                             <td style="border: 1px solid #000; padding: 5px;"></td>
+                            <td style="border: 1px solid #000; padding: 3px 5px; width: 50%;">WAKTU PELAKSANAAN : ${getDateText(waktuPelaksanaan).fullDate}</td>
+                            <td style="border: 1px solid #000; padding: 3px 5px;">PENYELESAIAN : ${waktuPenyelesaian ? getDateText(waktuPenyelesaian).fullDate : '-'}</td>
                         </tr>
                     </table>
 
-                    <div style="text-align: center; font-weight: bold; border: 1px solid #000; padding: 5px; border-bottom: none;">RINCIAN PEKERJAAN</div>
-                     <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 20px;">
+                    <div style="text-align: center; font-weight: bold; border: 1px solid #000; padding: 3px; border-bottom: none; background: #eee;">RINCIAN PEKERJAAN</div>
+                     <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 10px;">
                         <thead>
-                            <tr style="text-align: center; font-weight: bold;">
-                                <th style="border: 1px solid #000; padding: 5px; width: 30px;">No</th>
-                                <th style="border: 1px solid #000; padding: 5px;">Uraian Barang/Jasa</th>
-                                <th style="border: 1px solid #000; padding: 5px; width: 80px;">Jumlah (QTY)</th>
-                                <th style="border: 1px solid #000; padding: 5px; width: 80px;">Satuan Ukuran</th>
-                                <th style="border: 1px solid #000; padding: 5px; width: 120px;">Harga Satuan</th>
-                                <th style="border: 1px solid #000; padding: 5px; width: 120px;">Total Harga</th>
+                            <tr style="text-align: center; font-weight: bold; background: #eee;">
+                                <th style="border: 1px solid #000; padding: 3px; width: 30px;">No</th>
+                                <th style="border: 1px solid #000; padding: 3px;">Uraian Barang/Jasa</th>
+                                <th style="border: 1px solid #000; padding: 3px; width: 60px;">Qty</th>
+                                <th style="border: 1px solid #000; padding: 3px; width: 60px;">Sat</th>
+                                <th style="border: 1px solid #000; padding: 3px; width: 100px;">Harga</th>
+                                <th style="border: 1px solid #000; padding: 3px; width: 100px;">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${itemsHtml}
                             ${emptyRows}
-                            <tr>
-                                <td colspan="5" style="border: 1px solid #000; padding: 5px; text-align: right;">PPN</td>
-                                <td style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Rp -</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" style="border: 1px solid #000; padding: 5px; text-align: right;">Biaya Pengiriman</td>
-                                <td style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Rp -</td>
-                            </tr>
-                             <tr>
-                                <td colspan="5" style="border: 1px solid #000; padding: 5px; text-align: right;">Asuransi</td>
-                                <td style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Rp -</td>
-                            </tr>
-                             <tr style="background: #fbbf24;">
-                                <td colspan="5" style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Total Pembayaran</td>
-                                <td style="border: 1px solid #000; padding: 5px; text-align: right; font-weight: bold;">Rp ${jumlahTotal.toLocaleString('id-ID')}</td>
+                            <tr style="background: #fbbf24; font-weight: bold;">
+                                <td colspan="5" style="border: 1px solid #000; padding: 3px 5px; text-align: right;">Total Pembayaran</td>
+                                <td style="border: 1px solid #000; padding: 3px 5px; text-align: right;">Rp ${jumlahTotal.toLocaleString('id-ID')}</td>
                             </tr>
                               <tr>
-                                <td colspan="6" style="border: 1px solid #000; padding: 5px; font-weight: bold; background: #f3f4f6;">
+                                <td colspan="6" style="border: 1px solid #000; padding: 3px 5px; font-weight: bold; background: #f3f4f6; font-style: italic;">
                                     Terbilang : ${terbilangText}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
-                     <div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px;">
-                        <span style="text-decoration: underline;">INSTRUKSI KE PENYEDIA :</span><br>
+                     <div style="border: 1px solid #000; padding: 5px; margin-bottom: 20px;">
+                        <span style="text-decoration: underline; font-weight: bold;">INSTRUKSI:</span><br>
                         ${instruksi}
                      </div>
 
                       <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
                         <tr>
-                            <td style="border: 1px solid #000; padding: 20px; width: 50%; text-align: center; vertical-align: top;">
+                            <td style="border: 1px solid #000; padding: 10px; width: 50%; text-align: center; vertical-align: top;">
                                 <br>
                                 <strong>Penyedia,</strong>
-                                <br><br><br><br><br>
-                                ..........................
+                                <br><br><br><br>
+                                <strong>${penyedia}</strong>
                             </td>
                             <td style="border: 1px solid #000; padding: 10px; width: 50%; text-align: center; vertical-align: top;">
                                 ${schoolData.kecamatan}, ${getDateText(tglSpk).fullDate}<br>
                                 <strong>Pelaksana,</strong>
-                                <br><br><br><br><br>
-                                <strong>${schoolData.principal}</strong><br>
-                                NIP. ${schoolData.principalNip}
+                                <br><br><br><br>
+                                <strong>${pelaksanaName}</strong><br>
+                                NIP. ${pelaksanaNip}
                             </td>
                         </tr>
                       </table>
