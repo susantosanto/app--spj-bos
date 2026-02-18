@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Handwriting Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Kalam:wght@300;400;700&family=Nothing+You+Could+Do&family=Reenie+Beanie&family=Shadows+Into+Light&family=Patrick+Hand&family=Indie+Flower&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Kalam:wght@300;400;700&family=Nothing+You+Could+Do&family=Reenie+Beanie&family=Shadows+Into+Light&family=Patrick+Hand&family=Indie+Flower&family=Cedarville+Cursive&family=Zeyada&family=La+Belle+Aurore&family=Homemade+Apple&family=Just+Me+Again+Down+Here&display=swap"
         rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -910,6 +910,8 @@
             transition: var(--transition);
             position: relative;
             transform-origin: top center;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
         .paper.a4 {
@@ -931,6 +933,8 @@
         @media print {
             body * {
                 visibility: hidden;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             .paper,
@@ -1343,13 +1347,19 @@
                             <option value="'Shadows Into Light', cursive">Tulisan Tangan 6 (Rapi/Shadows)</option>
                             <option value="'Nothing You Could Do', cursive">Tulisan Tangan 7 (Realistis/Nothing)
                             </option>
+                            <option value="'Cedarville Cursive', cursive">Tulisan Tangan 8 (Sangat Natural)</option>
+                            <option value="'Zeyada', cursive">Tulisan Tangan 9 (Berantakan)</option>
+                            <option value="'La Belle Aurore', cursive">Tulisan Tangan 10 (Cepat/Kasar)</option>
+                            <option value="'Homemade Apple', cursive">Tulisan Tangan 11 (Miring/Jelek)</option>
+                            <option value="'Just Me Again Down Here', cursive">Tulisan Tangan 12 (Kurus/Tinggi)</option>
                         </select>
                     </div>
 
                     <div class="form-group" id="fg-font-size">
                         <label>Ukuran Tulisan (px)</label>
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="range" id="fontSize" min="12" max="36" value="16" oninput="updatePreview()" style="flex-grow: 1;">
+                            <input type="range" id="fontSize" min="12" max="36" value="16" oninput="updatePreview()"
+                                style="flex-grow: 1;">
                             <span id="fontSizeDisplay" style="font-size: 12px; width: 30px;">16px</span>
                         </div>
                     </div>
@@ -1369,7 +1379,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <label>Nominal / Anggaran / Total (Rp)</label>
                             <label style="font-size: 11px; display: flex; align-items: center; gap: 4px;">
-                                <input type="checkbox" id="manualTotal" onchange="updatePreview()"> Manual
+                                <input type="checkbox" id="manualTotal" onchange="updatePreview()"> Hitung Otomatis
                             </label>
                         </div>
                         <input type="number" id="custJumlah" oninput="updatePreview()">
@@ -2062,7 +2072,7 @@
             const fontStyle = document.getElementById('fontStyle').value; // Get font preference
             const fontSize = document.getElementById('fontSize').value || "16";
             const fontSizeDisplay = document.getElementById('fontSizeDisplay');
-            if(fontSizeDisplay) fontSizeDisplay.innerText = fontSize + "px";
+            if (fontSizeDisplay) fontSizeDisplay.innerText = fontSize + "px";
 
             let terbilangText = terbilang(jumlah) + " Rupiah";
             const dateInfo = getDateText(tanggal);
@@ -2184,7 +2194,7 @@
                 }
 
                 // AUTO CALC LOGIC
-                if (itemRows.length > 0 && !document.getElementById('manualTotal').checked) {
+                if (itemRows.length > 0 && document.getElementById('manualTotal').checked) {
                     jumlah = totalManual;
                     document.getElementById('custJumlah').value = jumlah;
                     terbilangText = terbilang(jumlah) + " Rupiah";
