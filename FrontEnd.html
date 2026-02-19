@@ -1575,9 +1575,6 @@
                         </button>
                     </div>
 
-
-
-
                     <div class="form-group">
                         <label>Jenis Dokumen</label>
                         <select id="docType" onchange="handleDocTypeChange()"
@@ -1592,6 +1589,9 @@
                             <option value="dokumentasi">Lembar Dokumentasi</option>
                             <option value="rencana">Dokumen Perencanaan</option>
                             <option value="spk">Surat Perintah Kerja (SPK)</option>
+                            <option value="spk_guru_honorer">Surat Perjanjian Kerja - Guru Honorer</option>
+                            <option value="spk_tenaga_honorer">Surat Perjanjian Kerja - Tenaga Honorer</option>
+                            <option value="daftar_penerima_honor">Daftar Penerima Honor</option>
                         </select>
                     </div>
 
@@ -1746,6 +1746,126 @@
                             <input type="text" id="custPelaksanaNipSpk" oninput="updatePreview()"
                                 placeholder="NIP Pelaksana">
                         </div>
+                    </div>
+
+                    <!-- Surat Perjanjian Kerja - Guru Honorer -->
+                    <div id="spkGuruHonorerSection"
+                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Isian Surat Perjanjian Kerja Guru Honorer</label>
+                        <div class="form-group">
+                            <label>Pihak Kesatu - Nama Kepala Sekolah</label>
+                            <input type="text" id="custSpkGuruKepalaNama" oninput="updatePreview()" placeholder="Yuniarti, S.Pd">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kesatu - Tempat, Tanggal Lahir</label>
+                            <input type="text" id="custSpkGuruKepalaTtl" oninput="updatePreview()" placeholder="Bandung, 07 Juli 1966">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kesatu - NIP</label>
+                            <input type="text" id="custSpkGuruKepalaNip" oninput="updatePreview()" placeholder="196607071986102005">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kedua - Nama Guru</label>
+                            <input type="text" id="custSpkGuruNama" oninput="updatePreview()" placeholder="Siti Aisah Nur Fitri, S.Pd">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kedua - Tempat, Tanggal Lahir</label>
+                            <input type="text" id="custSpkGuruTtl" oninput="updatePreview()" placeholder="Bandung, 08 September 1999">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kedua - Pendidikan Terakhir</label>
+                            <input type="text" id="custSpkGuruPendidikan" oninput="updatePreview()" placeholder="S1">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kedua - Alamat</label>
+                            <textarea id="custSpkGuruAlamat" oninput="updatePreview()" rows="2" style="width:100%; padding:8px; border-radius:6px; border:1px solid #e2e8f0;" placeholder="Kp. Tanjung Biru RT 02/015 Ds. Mandalamukti&#10;Kecamatan Cikalongwetan Kabupaten Bandung Barat"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Tugas Mengajar (contoh: guru kelas empat)</label>
+                            <input type="text" id="custSpkGuruTugas" oninput="updatePreview()" placeholder="guru kelas empat">
+                        </div>
+                        <div class="form-group">
+                            <label>Imbalan Jasa / Honor (Rp)</label>
+                            <input type="number" id="custSpkGuruHonor" oninput="updatePreview()" placeholder="1000000">
+                        </div>
+                    </div>
+
+                    <!-- Surat Perjanjian Kerja - Tenaga Honorer -->
+                    <div id="spkTenagaHonorerSection"
+                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Isian Surat Perjanjian Kerja Tenaga Honorer</label>
+                        <div class="form-group">
+                            <label>Pihak Kesatu - Nama Kepala Sekolah</label>
+                            <input type="text" id="custSpkTenagaKepalaNama" oninput="updatePreview()" placeholder="Yuniarti, S.Pd">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kesatu - Tempat, Tanggal Lahir</label>
+                            <input type="text" id="custSpkTenagaKepalaTtl" oninput="updatePreview()" placeholder="Bandung, 07 Juli 1966">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kesatu - NIP</label>
+                            <input type="text" id="custSpkTenagaKepalaNip" oninput="updatePreview()" placeholder="196607071986102005">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kedua - Nama Tenaga Honorer</label>
+                            <input type="text" id="custSpkTenagaNama" oninput="updatePreview()" placeholder="Herman">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kedua - Tempat, Tanggal Lahir</label>
+                            <input type="text" id="custSpkTenagaTtl" oninput="updatePreview()" placeholder="Bandung, 06 Agustus 1982">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kedua - Pendidikan Terakhir</label>
+                            <input type="text" id="custSpkTenagaPendidikan" oninput="updatePreview()" placeholder="SD">
+                        </div>
+                        <div class="form-group">
+                            <label>Pihak Kedua - Alamat</label>
+                            <textarea id="custSpkTenagaAlamat" oninput="updatePreview()" rows="2" style="width:100%; padding:8px; border-radius:6px; border:1px solid #e2e8f0;" placeholder="Kp. Pasirhalang RT 03/014 Ds. Mandalamukti&#10;Kecamatan Cikalongwetan Kabupaten Bandung Barat"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Tugas (contoh: penjaga sekolah)</label>
+                            <input type="text" id="custSpkTenagaTugas" oninput="updatePreview()" placeholder="penjaga sekolah">
+                        </div>
+                        <div class="form-group">
+                            <label>Imbalan Jasa / Honor (Rp)</label>
+                            <input type="number" id="custSpkTenagaHonor" oninput="updatePreview()" placeholder="1000000">
+                        </div>
+                    </div>
+
+                    <!-- Daftar Penerima Honor -->
+                    <div id="daftarPenerimaHonorSection"
+                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Daftar Penerima Honor</label>
+                        <div class="form-group">
+                            <label>Judul Daftar (contoh: DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS ...)</label>
+                            <input type="text" id="custDaftarHonorJudul" oninput="updatePreview()" placeholder="DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS AGUSTUS 2025">
+                        </div>
+                        <div class="form-group">
+                            <label>Program</label>
+                            <input type="text" id="custDaftarHonorProgram" oninput="updatePreview()" placeholder="07 Pengembangan Standar Pembiayaan">
+                        </div>
+                        <div class="form-group">
+                            <label>Kegiatan</label>
+                            <input type="text" id="custDaftarHonorKegiatan" oninput="updatePreview()" placeholder="9 Pembayaran Honor Guru">
+                        </div>
+                        <div class="form-group">
+                            <label>Kode Rekening</label>
+                            <input type="text" id="custDaftarHonorKodeRekening" oninput="updatePreview()" placeholder="5.2.1.02.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Kode Penggunaan</label>
+                            <input type="text" id="custDaftarHonorKodePenggunaan" oninput="updatePreview()" placeholder="9">
+                        </div>
+                        <div class="form-group">
+                            <label>Bulan dan Tahun (contoh: Agustus 2025)</label>
+                            <input type="text" id="custDaftarHonorBulan" oninput="updatePreview()" placeholder="Agustus 2025">
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <button type="button" onclick="addHonorRow()" class="btn-primary" style="padding: 6px 12px; font-size: 12px; background: #22c55e;">
+                                <i data-lucide="plus" size="12"></i> Tambah Penerima
+                            </button>
+                        </div>
+                        <div id="honorList" style="display: flex; flex-direction: column; gap: 6px;"></div>
                     </div>
 
                     <!-- Dynamic Items for Nota -->
@@ -2347,14 +2467,22 @@
         function getDateText(dateStr) {
             // Asumsi format dd/mm/yyyy
             const parts = dateStr.split('/');
-            if (parts.length !== 3) return { dayName: '...', fullDate: dateStr };
+            if (parts.length !== 3) return { dayName: '...', fullDate: dateStr, dateTerbilang: dateStr };
 
             const d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
             const dayName = days[d.getDay()];
-            return { dayName: dayName, fullDate: `${parts[0]} ${months[parseInt(parts[1]) - 1]} ${parts[2]}` };
+            const monthName = months[parseInt(parts[1]) - 1];
+            const fullDate = `${parts[0]} ${monthName} ${parts[2]}`;
+            // Untuk SPK: "lima belas bulan Juli tahun dua ribu dua puluh empat"
+            const dayNum = parseInt(parts[0], 10);
+            const yearNum = parseInt(parts[2], 10);
+            const dayWords = (!isNaN(dayNum) && dayNum >= 1 && dayNum <= 31) ? terbilang(dayNum).toLowerCase().replace(/^\s+/, '') : parts[0];
+            const yearWords = (!isNaN(yearNum) && yearNum >= 1000 && yearNum <= 9999) ? terbilang(yearNum).toLowerCase().replace(/^\s+/, '') : parts[2];
+            const dateTerbilang = `${dayWords} bulan ${monthName} tahun ${yearWords}`;
+            return { dayName: dayName, fullDate: fullDate, dateTerbilang: dateTerbilang };
         }
 
         function openPreview() {
@@ -2446,6 +2574,9 @@
             const documentationSection = document.getElementById('documentationSection');
             const rencanaSection = document.getElementById('rencanaExtraSection');
             const spkSection = document.getElementById('spkExtraSection');
+            const spkGuruSection = document.getElementById('spkGuruHonorerSection');
+            const spkTenagaSection = document.getElementById('spkTenagaHonorerSection');
+            const daftarHonorSection = document.getElementById('daftarPenerimaHonorSection');
 
             // Hide all special sections
             notaSection.style.display = 'none';
@@ -2454,6 +2585,9 @@
             documentationSection.style.display = 'none';
             rencanaSection.style.display = 'none';
             spkSection.style.display = 'none';
+            if (spkGuruSection) spkGuruSection.style.display = 'none';
+            if (spkTenagaSection) spkTenagaSection.style.display = 'none';
+            if (daftarHonorSection) daftarHonorSection.style.display = 'none';
 
             // Reset visibility of all grouped fields first
             ['fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
@@ -2498,6 +2632,24 @@
                 showFields(['fg-nomor', 'fg-tanggal', 'fg-uraian', 'fg-jumlah']); // Removed fg-vendor-name
                 spkSection.style.display = 'block';
                 notaSection.style.display = 'block';
+            } else if (docType === 'spk_guru_honorer') {
+                showFields(['fg-nomor', 'fg-tanggal']);
+                if (spkGuruSection) spkGuruSection.style.display = 'block';
+                const p = document.getElementById('principalName'); const pn = document.getElementById('principalNip');
+                const gk = document.getElementById('custSpkGuruKepalaNama'); const gkn = document.getElementById('custSpkGuruKepalaNip');
+                if (p && pn && gk && gkn && !gk.value) { gk.value = p.value || ''; gkn.value = pn.value || ''; }
+            } else if (docType === 'spk_tenaga_honorer') {
+                showFields(['fg-nomor', 'fg-tanggal']);
+                if (spkTenagaSection) spkTenagaSection.style.display = 'block';
+                const p2 = document.getElementById('principalName'); const pn2 = document.getElementById('principalNip');
+                const tk = document.getElementById('custSpkTenagaKepalaNama'); const tkn = document.getElementById('custSpkTenagaKepalaNip');
+                if (p2 && pn2 && tk && tkn && !tk.value) { tk.value = p2.value || ''; tkn.value = pn2.value || ''; }
+            } else if (docType === 'daftar_penerima_honor') {
+                showFields([]);
+                if (daftarHonorSection) daftarHonorSection.style.display = 'block';
+                if (document.getElementById('honorList') && document.getElementById('honorList').children.length === 0) {
+                    addHonorRow();
+                }
             }
             updatePreview();
         }
@@ -2533,6 +2685,29 @@
             ];
             teachers.forEach(t => addAttendanceRow(t.n, t.j));
             updatePreview();
+        }
+
+        function addHonorRow(no, namaPtk, jabatan, golRuang, volume, unitCost, jumlah, pph21, jumlahDiterima) {
+            const list = document.getElementById('honorList');
+            if (!list) return;
+            const n = no != null ? no : (list.children.length + 1);
+            const div = document.createElement('div');
+            div.className = 'honor-row';
+            div.style = 'display: grid; grid-template-columns: 32px 1fr 100px 60px 70px 90px 90px 70px 90px 32px; gap: 4px; align-items: center; font-size: 11px;';
+            div.innerHTML = `
+                <input type="text" placeholder="No" value="${n}" oninput="updatePreview()" style="padding: 4px; width: 28px;">
+                <input type="text" placeholder="Nama PTK" value="${namaPtk || ''}" oninput="updatePreview()" style="padding: 4px;">
+                <input type="text" placeholder="Jabatan" value="${jabatan || ''}" oninput="updatePreview()" style="padding: 4px;">
+                <input type="text" placeholder="GOL" value="${golRuang || 'GTT'}" oninput="updatePreview()" style="padding: 4px;">
+                <input type="text" placeholder="Volume" value="${volume || ''}" oninput="updatePreview()" style="padding: 4px;">
+                <input type="number" placeholder="Unit Cost" value="${unitCost || ''}" oninput="updatePreview()" style="padding: 4px;">
+                <input type="number" placeholder="Jumlah" value="${jumlah || ''}" oninput="updatePreview()" style="padding: 4px;">
+                <input type="text" placeholder="PPh21" value="${pph21 || ''}" oninput="updatePreview()" style="padding: 4px;">
+                <input type="number" placeholder="Diterima" value="${jumlahDiterima || ''}" oninput="updatePreview()" style="padding: 4px;">
+                <button type="button" onclick="this.closest('.honor-row').remove(); updatePreview();" style="border:none; background:none; color:red; cursor:pointer; padding: 2px;"><i data-lucide="trash-2" size="12"></i></button>
+            `;
+            list.appendChild(div);
+            lucide.createIcons();
         }
 
         function addNotaItem(nama = "", qty = 1, harga = 0) {
@@ -3438,6 +3613,12 @@
                 html = getRencanaHtml(uraian, schoolData, schoolKop);
             } else if (docType === 'spk') {
                 html = getSpkHtml(uraian, schoolData, schoolKop);
+            } else if (docType === 'spk_guru_honorer') {
+                html = getSpkGuruHonorerHtml(schoolData, schoolKop);
+            } else if (docType === 'spk_tenaga_honorer') {
+                html = getSpkTenagaHonorerHtml(schoolData, schoolKop);
+            } else if (docType === 'daftar_penerima_honor') {
+                html = getDaftarPenerimaHonorHtml(schoolData, schoolKop);
             }
 
             document.getElementById('paperContent').innerHTML = html;
@@ -3859,7 +4040,285 @@
              `;
         }
 
+        function getSpkGuruHonorerHtml(schoolData, schoolKop) {
+            const nomor = document.getElementById('custNomorSurat').value || "814.1/SD01-VII/2024";
+            const tanggalStr = document.getElementById('custTanggal').value || "15/07/2024";
+            const dt = getDateText(tanggalStr);
+            const dateTerbilang = dt.dateTerbilang || tanggalStr;
+            const dayName = dt.dayName || 'Sabtu';
+            const kepalaNama = document.getElementById('custSpkGuruKepalaNama').value || schoolData.principal;
+            const kepalaTtl = document.getElementById('custSpkGuruKepalaTtl').value || "Bandung, 07 Juli 1966";
+            const kepalaNip = document.getElementById('custSpkGuruKepalaNip').value || schoolData.principalNip;
+            const guruNama = document.getElementById('custSpkGuruNama').value || "Siti Aisah Nur Fitri, S.Pd";
+            const guruTtl = document.getElementById('custSpkGuruTtl').value || "Bandung, 08 September 1999";
+            const guruPendidikan = document.getElementById('custSpkGuruPendidikan').value || "S1";
+            const guruAlamat = (document.getElementById('custSpkGuruAlamat').value || "Kp. Tanjung Biru RT 02/015 Ds. Mandalamukti\nKecamatan Cikalongwetan Kabupaten Bandung Barat").replace(/\n/g, '<br>');
+            const tugas = document.getElementById('custSpkGuruTugas').value || "guru kelas empat";
+            const honorNum = parseInt(document.getElementById('custSpkGuruHonor').value || "1000000", 10);
+            const honorTerbilang = terbilang(honorNum).toLowerCase().replace(/^\s+/, '') + " Rupiah";
+            const sekolahShort = schoolData.name.replace(/SEKOLAH\s+/, '').replace(/NEGERI\s+/, 'SDN ');
+            const tempatDibuat = document.getElementById('custTempatKegiatan')?.value || schoolData.kecamatan || "Bandung Barat";
+            const tglDibuat = dt.fullDate;
 
+            return `
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px;">
+                    ${schoolKop}
+                    <div style="text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 8px;">SURAT PERJANJIAN KERJA</div>
+                    <div style="text-align: center; font-size: 12px; margin-bottom: 20px;">Nomor : ${nomor}</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 6px;">ANTARA</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 6px;">${schoolData.name.toUpperCase()}</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 20px;">DENGAN</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 24px;">GURU HONORER</div>
+
+                    <p style="text-align: justify; line-height: 1.6;">Pada hari ini ${dayName} tanggal ${dateTerbilang}, bertempat di ${sekolahShort} Kabupaten Bandung Barat, yang bertanda tangan di bawah ini :</p>
+
+                    <p style="margin: 12px 0 4px 0;"><strong>1.</strong></p>
+                    <table style="margin-left: 20px; font-size: 12px;"><tr><td style="width: 180px;">Nama</td><td>:</td><td>${kepalaNama}</td></tr>
+                    <tr><td>Tempat, tanggal lahir</td><td>:</td><td>${kepalaTtl}</td></tr>
+                    <tr><td>NIP</td><td>:</td><td>${kepalaNip}</td></tr>
+                    <tr><td>Jabatan</td><td>:</td><td>Kepala Sekolah</td></tr></table>
+                    <p style="margin: 4px 0 16px 20px;">Berbuat dan bertindak secara hukum untuk dan atas nama ${schoolData.name}, untuk selanjutnya disebut <strong>PIHAK KESATU</strong></p>
+
+                    <p style="margin: 12px 0 4px 0;"><strong>2.</strong></p>
+                    <table style="margin-left: 20px; font-size: 12px;"><tr><td style="width: 180px;">Nama</td><td>:</td><td>${guruNama}</td></tr>
+                    <tr><td>Tempat, tanggal lahir</td><td>:</td><td>${guruTtl}</td></tr>
+                    <tr><td>Pendidikan Terakhir</td><td>:</td><td>${guruPendidikan}</td></tr>
+                    <tr><td>Alamat</td><td>:</td><td>${guruAlamat}</td></tr></table>
+                    <p style="margin: 4px 0 20px 20px;">Berbuat dan bertindak secara hukum untuk dan atas nama pribadi untuk selanjutnya disebut <strong>PIHAK KEDUA</strong>.</p>
+
+                    <p style="text-align: justify; line-height: 1.6;">Para pihak masing-masing telah mempelajari, memahami dan sepakat untuk mengikat diri dalam Surat Perjanjian Kerja dengan ketentuan sebagai berikut :</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 1<br>Pertimbangan Perjanjian Kerja</strong></p>
+                    <p style="text-align: justify;">PIHAK KESATU mengangkat PIHAK KEDUA dengan mempertimbangkan, (1) Kebutuhan Sekolah untuk memenuhi Standar Pelayanan Minimal (SPM) PIHAK KESATU; (2) Kompetensi PIHAK KEDUA; (3) Kemampuan anggaran/keuangan sekolah.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 2<br>Hak dan Kewajiban</strong></p>
+                    <p>(1) PIHAK KEDUA mempunyai hak : a. Mengembangkan diri sesuai dengan pekerjaannya; b. Memperoleh imbalan jasa (honor) dan/atau keuangan lain sesuai dengan peraturan yang berlaku dan kemampuan keuangan sekolah; c. Imbalan jasa (honor) yang diterima sebesar Rp ${honorNum.toLocaleString('id-ID')} (${honorTerbilang}); d. Mendapat ijin tidak masuk sekolah dan/atau cuti sesuai dengan Surat Permohonan dan Surat Keterangan pihak lain yang bersangkutan; e. Berbuat dan bertindak secara hukum untuk dan atas nama sekolah sesuai dengan tugas dan/atau ijin Kepala Sekolah.</p>
+                    <p>(2) PIHAK KEDUA mempunyai kewajiban : a. Melaksanakan tugas mengajar sebagai ${tugas}; b. Mematuhi Peraturan Sekolah baik tertulis maupun tidak tertulis; c. Melaksanakan tugas dari Kepala Sekolah; d. Menjaga nama baik Sekolah dan Dinas Pendidikan Kabupaten Bandung Barat.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 3<br>Tupoksi Guru</strong></p>
+                    <p style="text-align: justify;">(1) Menyusun kurikulum pembelajaran pada satuan pendidikan; (2) Menyusun silabus pembelajaran; (3) Menyusun Rencana Pelaksanaan Pembelajaran (RPP); (4) Melaksanakan kegiatan pembelajaran; (5) Menyusun alat ukur/soal sesuai mata pelajaran; (6) Menilai dan mengevaluasi proses dan hasil belajar pada mata pelajaran di kelasnya; (7) Menganalisis hasil penilaian pembelajaran; (8) Melaksanakan pembelajaran/perbaikan dan pengayaan dengan memanfaatkan hasil penilaian dan evaluasi; (9) Melaksanakan bimbingan dan konseling di kelas yang menjadi tanggungjawabnya (khusus guru kelas); (10) Membimbing siswa dalam kegiatan ekstrakurikuler proses pembelajaran; (11) Melaksanakan pengembangan diri; (12) Melaksanakan publikasi ilmiah dan/atau karya inovatif; dan (13) Melakukan presentasi ilmiah.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 4<br>Beban Kerja Guru</strong></p>
+                    <p>Beban kerja Guru untuk melaksanakan pembelajaran paling sedikit 24 (dua puluh empat) jam tatap muka dan paling banyak 40 (empat puluh) jam tatap muka dalam 1 (satu) minggu.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 5<br>Masa Berlaku Surat Perjanjian Kerja</strong></p>
+                    <p>(1) Surat Perjanjian Kerja ini berlaku 1 tahun semenjak ditandatangani oleh PIHAK KESATU dan PIHAK KEDUA pada awal tahun anggaran sampai dengan akhir tahun anggaran; (2) Perpanjangan Perjanjian Kerja dapat dilaksanakan oleh Kepala Sekolah sesuai dengan Pasal 1 (satu) huruf (1) (2) (3).</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 6<br>Perselisihan</strong></p>
+                    <p>(1) Apabila terjadi perselisihan antara PIHAK KESATU dengan PIHAK KEDUA dapat diselesaikan secara musyawarah mufakat di unit kerja, dan; (2) Apabila sebagaimana dimaksud pada ayat 1 (satu) tidak terlaksana, maka penyelesaian tersebut dapat difasilitasi oleh Dinas Pendidikan Kabupaten Bandung Barat.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 7<br>Lain – lain</strong></p>
+                    <p>(1) Surat Perjanjian Kerja : a. Surat Perjanjian Kerja dilampiri oleh Surat Keputusan Pembagian Tugas Pendidik dan Tenaga Kependidikan. (2) Hal–hal yang belum diatur dari/atau terdapat kekeliruan dalam Surat Perjanjian Kerja ini dapat dimusyawarahkan kembali oleh kedua belah pihak.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 8<br>Penutup</strong></p>
+                    <p>Surat Perjanjian Kerja ini dibuat dengan sebenarnya dan bersifat mengikat serta untuk selanjutnya dapat dijadikan kekuatan hukum kembali oleh kedua belah pihak.</p>
+
+                    <div style="margin-top: 28px;">
+                        <table style="width: 100%; font-size: 12px;">
+                            <tr><td style="width: 140px;">Dibuat di</td><td>:</td><td>${tempatDibuat}</td></tr>
+                            <tr><td>Pada tanggal</td><td>:</td><td>${tglDibuat}</td></tr>
+                        </table>
+                        <p style="margin-top: 12px;">Ditandatangani oleh :</p>
+                        <div style="margin-top: 60px;">
+                            <p style="font-weight: bold; margin-bottom: 4px;">Kepala ${sekolahShort},</p>
+                            <p style="font-weight: bold; text-decoration: underline; margin: 0;">${kepalaNama}</p>
+                            <p style="margin: 0;">NIP. ${kepalaNip}</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function getSpkTenagaHonorerHtml(schoolData, schoolKop) {
+            const nomor = document.getElementById('custNomorSurat').value || "814.1/SD01-VII/2024";
+            const tanggalStr = document.getElementById('custTanggal').value || "15/07/2024";
+            const dt = getDateText(tanggalStr);
+            const dateTerbilang = dt.dateTerbilang || tanggalStr;
+            const dayName = dt.dayName || 'Sabtu';
+            const kepalaNama = document.getElementById('custSpkTenagaKepalaNama').value || schoolData.principal;
+            const kepalaTtl = document.getElementById('custSpkTenagaKepalaTtl').value || "Bandung, 07 Juli 1966";
+            const kepalaNip = document.getElementById('custSpkTenagaKepalaNip').value || schoolData.principalNip;
+            const tenagaNama = document.getElementById('custSpkTenagaNama').value || "Herman";
+            const tenagaTtl = document.getElementById('custSpkTenagaTtl').value || "Bandung, 06 Agustus 1982";
+            const tenagaPendidikan = document.getElementById('custSpkTenagaPendidikan').value || "SD";
+            const tenagaAlamat = (document.getElementById('custSpkTenagaAlamat').value || "Kp. Pasirhalang RT 03/014 Ds. Mandalamukti\nKecamatan Cikalongwetan Kabupaten Bandung Barat").replace(/\n/g, '<br>');
+            const tugas = document.getElementById('custSpkTenagaTugas').value || "penjaga sekolah";
+            const honorNum = parseInt(document.getElementById('custSpkTenagaHonor').value || "1000000", 10);
+            const honorTerbilang = terbilang(honorNum).toLowerCase().replace(/^\s+/, '') + " Rupiah";
+            const sekolahShort = schoolData.name.replace(/SEKOLAH\s+/, '').replace(/NEGERI\s+/, 'SDN ');
+            const tempatDibuat = document.getElementById('custTempatKegiatan')?.value || schoolData.kecamatan || "Bandung Barat";
+            const tglDibuat = dt.fullDate;
+
+            return `
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px;">
+                    ${schoolKop}
+                    <div style="text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 8px;">SURAT PERJANJIAN KERJA</div>
+                    <div style="text-align: center; font-size: 12px; margin-bottom: 20px;">Nomor : ${nomor}</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 6px;">ANTARA</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 6px;">${schoolData.name.toUpperCase()}</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 20px;">DENGAN</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 24px;">TENAGA HONORER SEKOLAH</div>
+
+                    <p style="text-align: justify; line-height: 1.6;">Pada hari ini ${dayName} tanggal ${dateTerbilang}, bertempat di ${sekolahShort} Kabupaten Bandung Barat, yang bertanda tangan di bawah ini :</p>
+
+                    <p style="margin: 12px 0 4px 0;"><strong>1.</strong></p>
+                    <table style="margin-left: 20px; font-size: 12px;"><tr><td style="width: 180px;">Nama</td><td>:</td><td>${kepalaNama}</td></tr>
+                    <tr><td>Tempat, tanggal lahir</td><td>:</td><td>${kepalaTtl}</td></tr>
+                    <tr><td>NIP</td><td>:</td><td>${kepalaNip}</td></tr>
+                    <tr><td>Jabatan</td><td>:</td><td>Kepala Sekolah</td></tr></table>
+                    <p style="margin: 4px 0 16px 20px;">Berbuat dan bertindak secara hukum untuk dan atas nama ${schoolData.name}, untuk selanjutnya disebut <strong>PIHAK KESATU</strong></p>
+
+                    <p style="margin: 12px 0 4px 0;"><strong>2.</strong></p>
+                    <table style="margin-left: 20px; font-size: 12px;"><tr><td style="width: 180px;">Nama</td><td>:</td><td>${tenagaNama}</td></tr>
+                    <tr><td>Tempat, tanggal lahir</td><td>:</td><td>${tenagaTtl}</td></tr>
+                    <tr><td>Pendidikan Terakhir</td><td>:</td><td>${tenagaPendidikan}</td></tr>
+                    <tr><td>Alamat</td><td>:</td><td>${tenagaAlamat}</td></tr></table>
+                    <p style="margin: 4px 0 20px 20px;">Berbuat dan bertindak secara hukum untuk dan atas nama pribadi untuk selanjutnya disebut <strong>PIHAK KEDUA</strong>.</p>
+
+                    <p style="text-align: justify; line-height: 1.6;">Para pihak masing-masing telah mempelajari, memahami dan sepakat untuk mengikat diri dalam Surat Perjanjian Kerja dengan ketentuan sebagai berikut :</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 1<br>Pertimbangan Perjanjian Kerja</strong></p>
+                    <p style="text-align: justify;">PIHAK KESATU mengangkat PIHAK KEDUA dengan mempertimbangkan, (1) Kebutuhan Sekolah untuk memenuhi Standar Pelayanan Minimal (SPM) PIHAK KESATU; (2) Kompetensi PIHAK KEDUA; (3) Kemampuan anggaran/keuangan sekolah.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 2<br>Hak dan Kewajiban</strong></p>
+                    <p>(1) PIHAK KEDUA mempunyai hak : a. Mengembangkan diri sesuai dengan pekerjaannya; b. Memperoleh imbalan jasa (honor) dan/atau keuangan lain sesuai dengan peraturan yang berlaku dan kemampuan keuangan sekolah; c. Imbalan jasa (honor) yang diterima sebesar Rp ${honorNum.toLocaleString('id-ID')} (${honorTerbilang}); d. Mendapat ijin tidak masuk sekolah dan/atau cuti sesuai dengan Surat Permohonan dan Surat Keterangan pihak lain yang bersangkutan; e. Berbuat dan bertindak secara hukum untuk dan atas nama sekolah sesuai dengan tugas dan/atau ijin Kepala Sekolah.</p>
+                    <p>(2) PIHAK KEDUA mempunyai kewajiban : a. Melaksanakan tugas sebagai ${tugas}; b. Mematuhi Peraturan Sekolah baik tertulis maupun tidak tertulis; c. Melaksanakan tugas dari Kepala Sekolah; d. Menjaga nama baik Sekolah dan Dinas Pendidikan Kabupaten Bandung Barat.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 3<br>Masa Berlaku Surat Perjanjian Kerja</strong></p>
+                    <p>(1) Surat Perjanjian Kerja ini berlaku 1 tahun semenjak ditandatangani oleh PIHAK KESATU dan PIHAK KEDUA pada awal tahun anggaran sampai dengan akhir tahun anggaran; (2) Perpanjangan Perjanjian Kerja dapat dilaksanakan oleh Kepala Sekolah sesuai dengan Pasal 1 (satu) huruf (1) (2) (3).</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 4<br>Perselisihan</strong></p>
+                    <p>(1) Apabila terjadi perselisihan antara PIHAK KESATU dengan PIHAK KEDUA dapat diselesaikan secara musyawarah mufakat di unit kerja, dan; (2) Apabila sebagaimana dimaksud pada ayat 1 (satu) tidak terlaksana, maka penyelesaian tersebut dapat difasilitasi oleh Dinas Pendidikan Kabupaten Bandung Barat.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 5<br>Lain – lain</strong></p>
+                    <p>(1) Surat Perjanjian Kerja : a. Surat Perjanjian Kerja dilampiri oleh Surat Keputusan Pembagian Tugas Pendidik dan Tenaga Kependidikan. (2) Hal–hal yang belum diatur dari/atau terdapat kekeliruan dalam Surat Perjanjian Kerja ini dapat dimusyawarahkan kembali oleh kedua belah pihak.</p>
+
+                    <p style="margin-top: 14px;"><strong>Pasal 6<br>Penutup</strong></p>
+                    <p>Surat Perjanjian Kerja ini dibuat dengan sebenarnya dan bersifat mengikat serta untuk selanjutnya dapat dijadikan kekuatan hukum kembali oleh kedua belah pihak.</p>
+
+                    <div style="margin-top: 28px;">
+                        <table style="width: 100%; font-size: 12px;">
+                            <tr><td style="width: 140px;">Dibuat di</td><td>:</td><td>${tempatDibuat}</td></tr>
+                            <tr><td>Pada tanggal</td><td>:</td><td>${tglDibuat}</td></tr>
+                        </table>
+                        <p style="margin-top: 12px;">Ditandatangani oleh :</p>
+                        <div style="margin-top: 60px;">
+                            <p style="font-weight: bold; margin-bottom: 4px;">Kepala ${sekolahShort},</p>
+                            <p style="font-weight: bold; text-decoration: underline; margin: 0;">${kepalaNama}</p>
+                            <p style="margin: 0;">NIP. ${kepalaNip}</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function getDaftarPenerimaHonorHtml(schoolData, schoolKop) {
+            const judul = document.getElementById('custDaftarHonorJudul').value || "DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS AGUSTUS 2025";
+            const program = document.getElementById('custDaftarHonorProgram').value || "07 Pengembangan Standar Pembiayaan";
+            const kegiatan = document.getElementById('custDaftarHonorKegiatan').value || "9 Pembayaran Honor Guru";
+            const kodeRekening = document.getElementById('custDaftarHonorKodeRekening').value || "5.2.1.02.01";
+            const kodePenggunaan = document.getElementById('custDaftarHonorKodePenggunaan').value || "9";
+            const bulanTahun = document.getElementById('custDaftarHonorBulan').value || "Agustus 2025";
+
+            const rows = [];
+            let totalJumlah = 0, totalDiterima = 0;
+            document.querySelectorAll('.honor-row').forEach((row, i) => {
+                const inputs = row.querySelectorAll('input');
+                const no = inputs[0].value || (i + 1);
+                const namaPtk = inputs[1].value || "";
+                const jabatan = inputs[2].value || "";
+                const golRuang = inputs[3].value || "";
+                const volume = inputs[4].value || "";
+                const unitCost = parseInt(inputs[5].value || "0", 10);
+                const jumlah = parseInt(inputs[6].value || "0", 10);
+                const pph21 = inputs[7].value || "-";
+                const jumlahDiterima = parseInt(inputs[8].value || "0", 10);
+                totalJumlah += jumlah;
+                totalDiterima += jumlahDiterima;
+                rows.push({ no, namaPtk, jabatan, golRuang, volume, unitCost, jumlah, pph21, jumlahDiterima });
+            });
+
+            const rowsHtml = rows.length ? rows.map(r => `
+                <tr>
+                    <td style="border: 1px solid #000; padding: 4px 6px; text-align: center;">${r.no}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px;">${r.namaPtk}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px;">${r.jabatan}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px; text-align: center;">${r.golRuang}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px;">${r.volume}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px; text-align: right;">${r.unitCost ? r.unitCost.toLocaleString('id-ID') : ''}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px; text-align: right;">${r.jumlah ? r.jumlah.toLocaleString('id-ID') : ''}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px;">${r.pph21}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px; text-align: right;">${r.jumlahDiterima ? r.jumlahDiterima.toLocaleString('id-ID') : ''}</td>
+                    <td style="border: 1px solid #000; padding: 4px 6px; text-align: center; width: 50px;">${rows.indexOf(r) + 1}</td>
+                </tr>
+            `).join('') : '<tr><td colspan="10" style="text-align:center; padding:16px;">Belum ada data penerima</td></tr>';
+
+            const emptyRows = Array(Math.max(0, 4 - rows.length)).fill(`
+                <tr><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+            `).join('');
+
+            return `
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 24px; font-size: 11px;">
+                    ${schoolKop}
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 8px;">
+                        <div>
+                            <table style="font-size: 11px;">
+                                <tr><td>Nomor</td><td></td><td></td></tr>
+                                <tr><td>Nama Sekolah</td><td></td><td><strong>${schoolData.name}</strong></td></tr>
+                                <tr><td>Kecamatan</td><td></td><td>${schoolData.kecamatan}</td></tr>
+                                <tr><td>Kabupaten</td><td></td><td>Bandung Barat</td></tr>
+                            </table>
+                        </div>
+                        <div style="text-align: right;">
+                            <table style="font-size: 11px;">
+                                <tr><td>Program</td><td></td><td>${program}</td></tr>
+                                <tr><td>Kegiatan</td><td></td><td>${kegiatan}</td></tr>
+                                <tr><td>Kode Rekening</td><td></td><td>${kodeRekening}</td></tr>
+                                <tr><td>Kode Penggunaan</td><td></td><td>${kodePenggunaan}</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 12px;">${judul}</div>
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 16px;">
+                        <thead>
+                            <tr style="background: #f0f0f0; font-weight: bold;">
+                                <th style="border: 1px solid #000; padding: 6px; width: 28px;">NO</th>
+                                <th style="border: 1px solid #000; padding: 6px;">NAMA PTK</th>
+                                <th style="border: 1px solid #000; padding: 6px; width: 90px;">JABATAN</th>
+                                <th style="border: 1px solid #000; padding: 6px; width: 50px;">GOL./Ruang</th>
+                                <th style="border: 1px solid #000; padding: 6px; width: 70px;">VOLUME</th>
+                                <th style="border: 1px solid #000; padding: 6px; width: 85px;">UNIT COST (Rp)</th>
+                                <th style="border: 1px solid #000; padding: 6px; width: 85px;">JUMLAH (Rp)</th>
+                                <th style="border: 1px solid #000; padding: 6px; font-size: 9px;">PPh 21 (non pegawai)</th>
+                                <th style="border: 1px solid #000; padding: 6px; width: 90px;">JUMLAH YANG DITERIMA (Rp)</th>
+                                <th style="border: 1px solid #000; padding: 6px; width: 50px;">TANDA TANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}${emptyRows}
+                            <tr style="font-weight: bold;">
+                                <td colspan="6" style="border: 1px solid #000; padding: 6px; text-align: right;">JUMLAH</td>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: right;">${totalJumlah.toLocaleString('id-ID')}</td>
+                                <td style="border: 1px solid #000; padding: 6px;"></td>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: right;">${totalDiterima.toLocaleString('id-ID')}</td>
+                                <td style="border: 1px solid #000; padding: 6px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+                        <div style="text-align: center;">
+                            <p style="font-weight: bold; margin-bottom: 4px;">Mengetahui/Menyetujui</p>
+                            <p style="font-weight: bold; margin-bottom: 60px;">Kepala Sekolah,</p>
+                            <p style="font-weight: bold; text-decoration: underline; margin: 0;">${schoolData.principal}</p>
+                            <p style="margin: 0;">NIP. ${schoolData.principalNip}</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="margin-bottom: 4px;">${schoolData.kecamatan}, ${bulanTahun}</p>
+                            <p style="margin-bottom: 4px;">Dibayar Lunas Tgl. ___________</p>
+                            <p style="font-weight: bold; margin-bottom: 60px;">Bendahara BOS,</p>
+                            <p style="font-weight: bold; text-decoration: underline; margin: 0;">${schoolData.treasurer}</p>
+                            <p style="margin: 0;">NIP. ${schoolData.treasurerNip}</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
 
         // --- Toast Notification System ---
         function showToast(message, type = 'success', duration = 3000) {
