@@ -47,55 +47,245 @@
             padding: 0 5%;
         }
 
+        /* --- Branding Section with Advanced Animations --- */
+        .branding-section {
+            position: relative;
+            z-index: 1;
+            padding-right: 40px;
+        }
+
         .branding-section h1 {
             font-size: 52px;
             font-weight: 800;
             color: #fff;
             line-height: 1.2;
             margin-bottom: 16px;
-            text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+            background: linear-gradient(135deg, #ffffff 0%, #60a5fa 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+            animation: titleGlow 4s ease-in-out infinite;
         }
+
         .branding-section p {
             font-size: 18px;
             color: #94a3b8;
             max-width: 450px;
+            line-height: 1.6;
+            position: relative;
         }
 
-        /* --- Ambient Background Animation --- */
-        .ambient-light {
+        /* --- Animated Background Container --- */
+        .animated-bg {
             position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        /* --- Gradient Mesh Orbs --- */
+        .orb {
+            position: absolute;
             border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.6;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             top: -10%;
             left: -10%;
-            animation: float 10s ease-in-out infinite;
-            z-index: 0;
+            animation-delay: 0s;
+            animation-duration: 25s;
         }
 
-        .ambient-light-2 {
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            bottom: -5%;
+            right: -5%;
+            animation-delay: -5s;
+            animation-duration: 30s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            top: 50%;
+            left: 50%;
+            animation-delay: -10s;
+            animation-duration: 28s;
+        }
+
+        /* --- Grid Pattern Overlay --- */
+        .grid-pattern {
             position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.5;
+        }
+
+        /* --- Floating Particles --- */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.6);
             border-radius: 50%;
-            bottom: -10%;
-            right: -10%;
-            animation: float 12s ease-in-out infinite reverse;
-            z-index: 0;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+            animation: particleFloat 15s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 20s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: -2s; animation-duration: 25s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: -4s; animation-duration: 18s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: -6s; animation-duration: 22s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: -8s; animation-duration: 19s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: -10s; animation-duration: 24s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: -12s; animation-duration: 21s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: -14s; animation-duration: 23s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: -16s; animation-duration: 17s; }
+        .particle:nth-child(10) { left: 95%; animation-delay: -18s; animation-duration: 26s; }
+
+        /* --- Wave Lines --- */
+        .wave-line {
+            position: absolute;
+            width: 200%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+            animation: waveSlide 8s ease-in-out infinite;
+        }
+
+        .wave-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .wave-line:nth-child(2) { top: 40%; animation-delay: -2s; }
+        .wave-line:nth-child(3) { top: 60%; animation-delay: -4s; }
+        .wave-line:nth-child(4) { top: 80%; animation-delay: -6s; }
+
+        /* --- Pulse Rings --- */
+        .pulse-ring {
+            position: absolute;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            animation: pulseExpand 6s ease-out infinite;
+        }
+
+        .pulse-ring-1 {
+            width: 200px;
+            height: 200px;
+            top: 30%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .pulse-ring-2 {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 60%;
+            animation-delay: -2s;
+        }
+
+        .pulse-ring-3 {
+            width: 250px;
+            height: 250px;
+            top: 70%;
+            left: 40%;
+            animation-delay: -4s;
+        }
+
+        /* --- Shimmer Effect --- */
+        .shimmer-overlay {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: shimmerSlide 5s ease-in-out infinite;
+        }
+
+        /* --- Keyframe Animations --- */
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -30px) scale(1.1); }
+            50% { transform: translate(-20px, 50px) scale(0.95); }
+            75% { transform: translate(-40px, -20px) scale(1.05); }
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        @keyframes particleFloat {
+            0% { 
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(10vh) scale(1);
+            }
+            100% { 
+                transform: translateY(-10vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes waveSlide {
+            0%, 100% { transform: translateX(0) scaleX(1); opacity: 0.3; }
+            50% { transform: translateX(-25%) scaleX(1.2); opacity: 0.6; }
+        }
+
+        @keyframes pulseExpand {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @keyframes shimmerSlide {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
         }
 
         @keyframes float {
-
-            0%,
-            100% {
-                transform: translate(0, 0);
-            }
-
-            50% {
-                transform: translate(30px, 50px);
-            }
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 50px); }
         }
 
         /* --- Login Card --- */
@@ -323,8 +513,44 @@
 </head>
 
 <body>
-    <div class="ambient-light"></div>
-    <div class="ambient-light-2"></div>
+    <!-- Animated Background Container -->
+    <div class="animated-bg">
+        <!-- Gradient Mesh Orbs -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        
+        <!-- Grid Pattern -->
+        <div class="grid-pattern"></div>
+        
+        <!-- Floating Particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        
+        <!-- Wave Lines -->
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        
+        <!-- Pulse Rings -->
+        <div class="pulse-ring pulse-ring-1"></div>
+        <div class="pulse-ring pulse-ring-2"></div>
+        <div class="pulse-ring pulse-ring-3"></div>
+        
+        <!-- Shimmer Overlay -->
+        <div class="shimmer-overlay"></div>
+    </div>
 
     <div class="page-container">
         <div class="branding-section">
