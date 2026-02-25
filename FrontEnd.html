@@ -1019,23 +1019,127 @@
         }
 
         .modal-container {
-            background: #e2e8f0;
-            width: 95%;
-            height: 90vh;
-            border-radius: 20px;
-            display: flex;
+            background: #f1f5f9;
+            width: 98%;
+            height: 95vh;
+            border-radius: 12px;
+            display: flex !important;
+            flex-direction: row !important;
             overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         .preview-sidebar {
-            width: 350px;
+            width: 380px !important;
+            min-width: 380px !important;
+            flex-shrink: 0 !important;
             background: var(--white);
             border-right: 1px solid var(--border);
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-sidebar-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-tabs {
             display: flex;
-            flex-direction: column;
-            padding: 24px;
+            background: #f1f5f9;
+            padding: 4px;
+            margin: 0 24px 20px 24px;
+            border-radius: 10px;
+            gap: 4px;
+        }
+
+        .preview-tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .preview-tab-btn.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-tab-content {
+            flex: 1;
             overflow-y: auto;
+            padding: 0 24px 24px 24px;
+            display: none;
+        }
+
+        .preview-tab-content.active {
+            display: block;
+        }
+
+        .doc-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .doc-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .doc-card:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+            transform: translateX(4px);
+        }
+
+        .doc-card.active {
+            border-color: #2563eb;
+            background: #2563eb;
+            color: white;
+        }
+
+        .doc-card.active i {
+            color: white;
+        }
+
+        .doc-card i {
+            color: #3b82f6;
+            transition: color 0.2s ease;
+        }
+
+        .doc-card-info h4 {
+            margin: 0;
+            font-size: 13.5px;
+            font-weight: 700;
+        }
+
+        .doc-card-info p {
+            margin: 2px 0 0 0;
+            font-size: 11px;
+            opacity: 0.7;
         }
 
         .preview-main {
@@ -1104,74 +1208,95 @@
 
         /* --- Print Styles --- */
         @media print {
-            body * {
-                visibility: hidden;
-            }
-
-            /* Reset layout constraints for printing */
-            .modal-overlay,
-            .modal-container,
-            .preview-main,
-            .paper-viewport {
-                position: static;
-                width: 100%;
-                height: auto;
-                overflow: visible !important;
-                background: transparent;
-                display: block;
+            @page {
                 margin: 0;
-                padding: 0;
-                border: none;
-                box-shadow: none;
+                size: A4 portrait;
             }
 
-            /* Hide UI elements */
-            .preview-sidebar,
-            .preview-toolbar,
-            .sidebar,
-            .top-bar,
-            #toastContainer,
-            #confirmOverlay {
+            body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* HIDE EVERYTHING EXCEPT MODAL PARENTS */
+            body > *:not(.main-content), 
+            .sidebar:not(.preview-sidebar), 
+            .top-bar, 
+            .view-section, 
+            .toast-container, 
+            .confirm-overlay {
                 display: none !important;
             }
 
-            #printArea {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                gap: 0;
-                transform: none !important;
-                /* Reset zoom */
-                display: block;
-                /* Use block for print flow */
-                visibility: visible;
+            .main-content {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                background: white !important;
             }
 
-            #printArea * {
-                visibility: visible;
+            /* SHOW ONLY MODAL CONTENT */
+            #previewModal.modal-overlay {
+                display: block !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                visibility: visible !important;
+                background: white !important;
+                width: 100% !important;
+                height: auto !important;
+                z-index: 9999 !important;
+            }
+
+            .modal-container {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                background: white !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+
+            .preview-sidebar,
+            .preview-toolbar {
+                display: none !important;
+            }
+
+            .preview-main,
+            .paper-viewport,
+            #printArea {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                visibility: visible !important;
+                overflow: visible !important;
             }
 
             .paper {
-                width: 100%;
-                max-width: 100%;
-                box-shadow: none;
-                margin: 0;
-                padding: 40px;
-                /* Maintain padding for print */
-                border: none;
-                page-break-after: always;
-                break-after: page;
-                position: relative;
-                left: 0;
-                top: 0;
+                display: block !important;
+                width: 210mm !important;
+                min-height: 297mm !important;
+                padding: 40px !important;
+                margin: 0 auto !important;
+                border: none !important;
+                box-shadow: none !important;
+                visibility: visible !important;
+                page-break-after: always !important;
+                break-after: page !important;
             }
 
             .paper:last-child {
-                page-break-after: auto;
-                break-after: auto;
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+
+            #printArea {
+                transform: none !important;
             }
         }
 
@@ -1678,21 +1803,36 @@
         <div id="previewModal" class="modal-overlay">
             <div class="modal-container">
                 <div class="preview-sidebar">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                        <h3 style="font-size: 16px; font-weight: 900;">Dokumen Kelengkapan</h3>
-                        <button onclick="closePreview()"
-                            style="background:none; border:none; cursor:pointer; color: var(--text-muted);">
-                            <i data-lucide="x" size="20"></i>
+                    <div class="preview-sidebar-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="font-size: 18px; font-weight: 900; color: #0f172a;">Generator SPJ</h3>
+                            <button onclick="closePreview()"
+                                style="background: #f1f5f9; border: none; cursor: pointer; color: #64748b; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="x" size="18"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preview-tabs">
+                        <button class="preview-tab-btn active" onclick="switchPreviewTab('select')">
+                            <i data-lucide="file-text" size="16"></i> Jenis
+                        </button>
+                        <button class="preview-tab-btn" onclick="switchPreviewTab('form')">
+                            <i data-lucide="edit-3" size="16"></i> Isian
                         </button>
                     </div>
 
-                    <div class="doc-selector-wrapper">
-                        <label for="docType" class="doc-selector-label">
-                            <i data-lucide="file-check-2" size="18"></i>
-                            Pilih Jenis Dokumen
-                        </label>
-                        <select id="docType" onchange="handleDocTypeChange()">
+                    <!-- TAB: PILIH JENIS -->
+                    <div id="tab-select" class="preview-tab-content active">
+                        <div class="doc-grid" id="docPickerGrid">
+                            <!-- JS will populate this -->
+                        </div>
+                    </div>
+
+                    <!-- TAB: ISIAN DATA -->
+                    <div id="tab-form" class="preview-tab-content">
+                        <!-- Dropdown hidden but kept for logic -->
+                        <select id="docType" onchange="handleDocTypeChange()" style="display: none;">
                             <option value="kwitansi">Kwitansi SPJ</option>
                             <option value="nota">Nota Toko / Invoice</option>
                             <option value="pesanan">Surat Pesanan (Formal)</option>
@@ -1708,512 +1848,542 @@
                             <option value="sk_pembagian_tugas">SK Pembagian Tugas Guru</option>
                             <option value="daftar_penerima_honor">Daftar Penerima Honor</option>
                         </select>
-                    </div>
 
-                    <div class="form-group" id="fg-nomor">
-                        <label>Nomor Surat / Berita Acara / SPK</label>
-                        <input type="text" id="custNomorSurat" oninput="updatePreview()"
-                            placeholder="Contoh: 001/SD/2025">
-                    </div>
+                        <div
+                            style="margin-bottom: 20px; padding: 12px; background: #eff6ff; border-radius: 8px; border-left: 4px solid #2563eb;">
+                            <div style="font-size: 11px; font-weight: 700; color: #2563eb; text-transform: uppercase;">
+                                Sedang Mengedit:</div>
+                            <div id="currentDocTitle" style="font-size: 14px; font-weight: 700; color: #1e3a8a;">
+                                Kwitansi SPJ</div>
+                            <button onclick="switchPreviewTab('select')"
+                                style="background: none; border: none; color: #2563eb; font-size: 11px; font-weight: 600; cursor: pointer; padding: 0; margin-top: 4px;">Ganti
+                                Jenis Dokumen &raquo;</button>
+                        </div>
 
-                    <div class="form-group" id="fg-perihal">
-                        <label>Perihal / Subject</label>
-                        <input type="text" id="custPerihal" oninput="updatePreview()"
-                            placeholder="Contoh: Undangan Lomba">
-                    </div>
+                        <div class="form-group" id="fg-nomor">
+                            <label>Nomor Surat / Berita Acara / SPK</label>
+                            <input type="text" id="custNomorSurat" oninput="updatePreview()"
+                                placeholder="Contoh: 001/SD/2025">
+                        </div>
 
-                    <div class="form-group" id="fg-vendor-style">
-                        <label>Template Vendor</label>
-                        <select id="vendorStyle" onchange="updatePreview()"
-                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
-                            <option value="standard">Standard / Modern</option>
-                            <option value="plain">Grosir / Polos</option>
-                            <option value="rm-family">RM Family (Landscape)</option>
-                            <option value="cahya-cellular">Cahya Cellular (Blue)</option>
-                            <option value="media-komputer">Media Komputer (Media)</option>
-                            <option value="mitra-photocopy">Mitra Photocopy (Service)</option>
-                            <option value="sinar-abadi">Sinar Abadi (Classic Red)</option>
-                            <!-- Custom templates will be appended here -->
-                        </select>
-                    </div>
+                        <div class="form-group" id="fg-perihal">
+                            <label>Perihal / Subject</label>
+                            <input type="text" id="custPerihal" oninput="updatePreview()"
+                                placeholder="Contoh: Undangan Lomba">
+                        </div>
 
-                    <div class="form-group" id="fg-font-style">
-                        <label>Jenis Font (Tulisan Tangan)</label>
-                        <select id="fontStyle" onchange="updatePreview()"
-                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
-                            <option value="">Default (Arial/System)</option>
-                            <option value="'Caveat', cursive">Tulisan Tangan 1 (Caveat)</option>
-                            <option value="'Kalam', cursive">Tulisan Tangan 2 (Kalam)</option>
-                            <option value="'Patrick Hand', cursive">Tulisan Tangan 3 (Patrick Hand - Natural)</option>
-                            <option value="'Indie Flower', cursive">Tulisan Tangan 4 (Indie Flower - Santai)</option>
-                            <option value="'Reenie Beanie', cursive">Tulisan Tangan 5 (Kasar/Reenie)</option>
-                            <option value="'Shadows Into Light', cursive">Tulisan Tangan 6 (Rapi/Shadows)</option>
-                            <option value="'Nothing You Could Do', cursive">Tulisan Tangan 7 (Realistis/Nothing)
-                            </option>
-                            <option value="'Cedarville Cursive', cursive">Tulisan Tangan 8 (Sangat Natural)</option>
-                            <option value="'Zeyada', cursive">Tulisan Tangan 9 (Berantakan)</option>
-                            <option value="'La Belle Aurore', cursive">Tulisan Tangan 10 (Cepat/Kasar)</option>
-                            <option value="'Homemade Apple', cursive">Tulisan Tangan 11 (Miring/Jelek)</option>
-                            <option value="'Just Me Again Down Here', cursive">Tulisan Tangan 12 (Kurus/Tinggi)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group" id="fg-font-size">
-                        <label>Ukuran Tulisan (px)</label>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="range" id="fontSize" min="12" max="36" value="16" oninput="updatePreview()"
-                                style="flex-grow: 1;">
-                            <span id="fontSizeDisplay" style="font-size: 12px; width: 30px;">16px</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="fg-vendor-name">
-                        <label>Nama Vendor / Toko / Penerima</label>
-                        <input type="text" id="custVendorName" oninput="updatePreview()" placeholder="NAMA TOKO">
-                    </div>
-
-                    <div class="form-group" id="fg-uraian">
-                        <label>Uraian Belanja / Kegiatan</label>
-                        <textarea id="custUraian" oninput="updatePreview()" rows="3"
-                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
-                    </div>
-
-                    <div class="form-group" id="fg-jumlah">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <label>Nominal / Anggaran / Total (Rp)</label>
-                            <label style="font-size: 11px; display: flex; align-items: center; gap: 4px;">
-                                <input type="checkbox" id="manualTotal" onchange="updatePreview()"> Hitung Otomatis
-                            </label>
-                        </div>
-                        <input type="number" id="custJumlah" oninput="updatePreview()">
-                    </div>
-
-                    <!-- Extra Fields for Rencana -->
-                    <div id="rencanaExtraSection"
-                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Detail
-                            Perencanaan</label>
-                        <div class="form-group">
-                            <label>Kategori Barang/Jasa</label>
-                            <input type="text" id="custKategori" oninput="updatePreview()"
-                                placeholder="Contoh: Pemeliharaan Laptop Sekolah">
-                        </div>
-                        <div class="form-group">
-                            <label>Jumlah Barang/Jasa (Teks)</label>
-                            <input type="text" id="custJumlahBarang" oninput="updatePreview()"
-                                placeholder="Contoh: 1 (Satu) Paket">
-                        </div>
-                        <div class="form-group">
-                            <label>Spesifikasi / Ruang Lingkup</label>
-                            <textarea id="custSpesifikasi" oninput="updatePreview()" rows="2"
-                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"
-                                placeholder="Contoh: Belanja Jasa Service Laptop"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Persyaratan Penyedia</label>
-                            <textarea id="custPersyaratan" oninput="updatePreview()" rows="3"
-                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Perorangan/Badan Usaha Memenuhi syarat sebagai berikut:\na. Identitas Penyedia;</textarea>
-                        </div>
-                        <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                            <label style="font-size: 12px; font-weight: bold;">Pelaksana (Opsional - Default: Kepala
-                                Sekolah)</label>
-                            <input type="text" id="custPelaksanaNameRencana" oninput="updatePreview()"
-                                placeholder="Nama Pelaksana" style="margin-bottom: 5px;">
-                            <input type="text" id="custPelaksanaNipRencana" oninput="updatePreview()"
-                                placeholder="NIP Pelaksana">
-                        </div>
-                    </div>
-
-                    <!-- Extra Fields for SPK -->
-                    <div id="spkExtraSection"
-                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Detail
-                            SPK</label>
-                        <div class="form-group">
-                            <label>Nama Penyedia (CV / Toko)</label>
-                            <input type="text" id="custSpkProvider" oninput="updatePreview()"
-                                placeholder="Contoh: CV. Berkah Abadi">
-                        </div>
-                        <div class="form-group">
-                            <label>Tanggal Negosiasi</label>
-                            <input type="text" id="custTglNegosiasi" oninput="updatePreview()" placeholder="dd/mm/yyyy">
-                        </div>
-                        <div class="form-group">
-                            <label>Waktu Pelaksanaan</label>
-                            <input type="text" id="custWaktuPelaksanaan" oninput="updatePreview()"
-                                placeholder="dd/mm/yyyy (Default: Tanggal Transaksi)">
-                        </div>
-                        <div class="form-group">
-                            <label>Waktu Penyelesaian</label>
-                            <input type="text" id="custWaktuPenyelesaian" oninput="updatePreview()"
-                                placeholder="Contoh: 06 Juni 2025">
-                        </div>
-                        <div class="form-group">
-                            <label>Instruksi ke Penyedia</label>
-                            <textarea id="custInstruksi" oninput="updatePreview()" rows="3"
-                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Penagihan hanya dapat dilakukan setelah penyelesaian pekerjaan yang diperintahkan dalam SPK ini dan dibuktikan dengan Berita Acara Serah Terima.</textarea>
-                        </div>
-                        <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                            <label style="font-size: 12px; font-weight: bold;">Pelaksana (Opsional - Default: Kepala
-                                Sekolah)</label>
-                            <input type="text" id="custPelaksanaNameSpk" oninput="updatePreview()"
-                                placeholder="Nama Pelaksana" style="margin-bottom: 5px;">
-                            <input type="text" id="custPelaksanaNipSpk" oninput="updatePreview()"
-                                placeholder="NIP Pelaksana">
-                        </div>
-                    </div>
-
-                    <!-- Surat Perjanjian Kerja - Guru Honorer -->
-                    <div id="spkGuruHonorerSection"
-                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Isian
-                            Surat Perjanjian Kerja Guru Honorer</label>
-                        <div class="form-group">
-                            <label>Pihak Kesatu - Nama Kepala Sekolah</label>
-                            <input type="text" id="custSpkGuruKepalaNama" oninput="updatePreview()"
-                                placeholder="Yuniarti, S.Pd">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kesatu - Tempat, Tanggal Lahir</label>
-                            <input type="text" id="custSpkGuruKepalaTtl" oninput="updatePreview()"
-                                placeholder="Bandung, 07 Juli 1966">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kesatu - NIP</label>
-                            <input type="text" id="custSpkGuruKepalaNip" oninput="updatePreview()"
-                                placeholder="196607071986102005">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kedua - Nama Guru</label>
-                            <input type="text" id="custSpkGuruNama" oninput="updatePreview()"
-                                placeholder="Siti Aisah Nur Fitri, S.Pd">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kedua - Tempat, Tanggal Lahir</label>
-                            <input type="text" id="custSpkGuruTtl" oninput="updatePreview()"
-                                placeholder="Bandung, 08 September 1999">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kedua - Pendidikan Terakhir</label>
-                            <input type="text" id="custSpkGuruPendidikan" oninput="updatePreview()" placeholder="S1">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kedua - Alamat</label>
-                            <textarea id="custSpkGuruAlamat" oninput="updatePreview()" rows="2"
-                                style="width:100%; padding:8px; border-radius:6px; border:1px solid #e2e8f0;"
-                                placeholder="Kp. Tanjung Biru RT 02/015 Ds. Mandalamukti&#10;Kecamatan Cikalongwetan Kabupaten Bandung Barat"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Tugas Mengajar (contoh: guru kelas empat)</label>
-                            <input type="text" id="custSpkGuruTugas" oninput="updatePreview()"
-                                placeholder="guru kelas empat">
-                        </div>
-                        <div class="form-group">
-                            <label>Imbalan Jasa / Honor (Rp)</label>
-                            <input type="number" id="custSpkGuruHonor" oninput="updatePreview()" placeholder="1000000">
-                        </div>
-                    </div>
-
-                    <!-- Surat Perjanjian Kerja - Tenaga Honorer -->
-                    <div id="spkTenagaHonorerSection"
-                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Isian
-                            Surat Perjanjian Kerja Tenaga Honorer</label>
-                        <div class="form-group">
-                            <label>Pihak Kesatu - Nama Kepala Sekolah</label>
-                            <input type="text" id="custSpkTenagaKepalaNama" oninput="updatePreview()"
-                                placeholder="Yuniarti, S.Pd">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kesatu - Tempat, Tanggal Lahir</label>
-                            <input type="text" id="custSpkTenagaKepalaTtl" oninput="updatePreview()"
-                                placeholder="Bandung, 07 Juli 1966">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kesatu - NIP</label>
-                            <input type="text" id="custSpkTenagaKepalaNip" oninput="updatePreview()"
-                                placeholder="196607071986102005">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kedua - Nama Tenaga Honorer</label>
-                            <input type="text" id="custSpkTenagaNama" oninput="updatePreview()" placeholder="Herman">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kedua - Tempat, Tanggal Lahir</label>
-                            <input type="text" id="custSpkTenagaTtl" oninput="updatePreview()"
-                                placeholder="Bandung, 06 Agustus 1982">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kedua - Pendidikan Terakhir</label>
-                            <input type="text" id="custSpkTenagaPendidikan" oninput="updatePreview()" placeholder="SD">
-                        </div>
-                        <div class="form-group">
-                            <label>Pihak Kedua - Alamat</label>
-                            <textarea id="custSpkTenagaAlamat" oninput="updatePreview()" rows="2"
-                                style="width:100%; padding:8px; border-radius:6px; border:1px solid #e2e8f0;"
-                                placeholder="Kp. Pasirhalang RT 03/014 Ds. Mandalamukti&#10;Kecamatan Cikalongwetan Kabupaten Bandung Barat"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Tugas (contoh: penjaga sekolah)</label>
-                            <input type="text" id="custSpkTenagaTugas" oninput="updatePreview()"
-                                placeholder="penjaga sekolah">
-                        </div>
-                        <div class="form-group">
-                            <label>Imbalan Jasa / Honor (Rp)</label>
-                            <input type="number" id="custSpkTenagaHonor" oninput="updatePreview()"
-                                placeholder="1000000">
-                        </div>
-                    </div>
-
-                    <!-- SK Pembagian Tugas Section -->
-                    <div id="skPembagianTugasSection"
-                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Data
-                            Guru (Pihak Kedua)</label>
-
-                        <div class="form-group">
-                            <label>Nama Guru</label>
-                            <input type="text" id="custSkGuruNama" oninput="updatePreview()"
-                                placeholder="SITI AISAH NUR FITRI, S.Pd">
-                        </div>
-                        <div class="form-group">
-                            <label>NIP Guru</label>
-                            <input type="text" id="custSkGuruNip" oninput="updatePreview()" placeholder="-">
-                        </div>
-                        <div class="form-group">
-                            <label>Pangkat, Gol/Ruang</label>
-                            <input type="text" id="custSkGuruPangkat" oninput="updatePreview()" placeholder="-">
-                        </div>
-                        <div class="form-group">
-                            <label>Jabatan</label>
-                            <input type="text" id="custSkGuruJabatan" oninput="updatePreview()"
-                                placeholder="Guru Kelas">
-                        </div>
-                        <div class="form-group">
-                            <label>Tugas Mengajar</label>
-                            <input type="text" id="custSkGuruTugas" oninput="updatePreview()"
-                                placeholder="Mengajar Kelas IV">
-                        </div>
-                        <div class="form-group">
-                            <label>Jumlah Jam</label>
-                            <input type="text" id="custSkGuruJam" oninput="updatePreview()" placeholder="24 Jam/Minggu">
-                        </div>
-                        <div class="form-group">
-                            <label>Tahun Pelajaran</label>
-                            <input type="text" id="custSkTahunAjar" oninput="updatePreview()" placeholder="2025/2026">
-                        </div>
-                    </div>
-
-                    <!-- Daftar Penerima Honor -->
-                    <div id="daftarPenerimaHonorSection"
-                        style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Daftar
-                            Penerima Honor</label>
-                        <div class="form-group">
-                            <label>Judul Daftar (contoh: DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS
-                                ...)</label>
-                            <input type="text" id="custDaftarHonorJudul" oninput="updatePreview()"
-                                placeholder="DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS AGUSTUS 2025">
-                        </div>
-                        <div class="form-group">
-                            <label>Program</label>
-                            <input type="text" id="custDaftarHonorProgram" oninput="updatePreview()"
-                                placeholder="07 Pengembangan Standar Pembiayaan">
-                        </div>
-                        <div class="form-group">
-                            <label>Kegiatan</label>
-                            <input type="text" id="custDaftarHonorKegiatan" oninput="updatePreview()"
-                                placeholder="9 Pembayaran Honor Guru">
-                        </div>
-                        <div class="form-group">
-                            <label>Kode Rekening</label>
-                            <input type="text" id="custDaftarHonorKodeRekening" oninput="updatePreview()"
-                                placeholder="5.2.1.02.01">
-                        </div>
-                        <div class="form-group">
-                            <label>Kode Penggunaan</label>
-                            <input type="text" id="custDaftarHonorKodePenggunaan" oninput="updatePreview()"
-                                placeholder="9">
-                        </div>
-                        <div class="form-group">
-                            <label>Bulan dan Tahun (contoh: Agustus 2025)</label>
-                            <input type="text" id="custDaftarHonorBulan" oninput="updatePreview()"
-                                placeholder="Agustus 2025">
-                        </div>
-                        <div style="margin-bottom: 10px;">
-                            <button type="button" onclick="addHonorRow()" class="btn-primary"
-                                style="padding: 6px 12px; font-size: 12px; background: #22c55e;">
-                                <i data-lucide="plus" size="12"></i> Tambah Penerima
-                            </button>
-                        </div>
-                        <div id="honorList" style="display: flex; flex-direction: column; gap: 6px;"></div>
-                    </div>
-
-                    <!-- Dynamic Items for Nota -->
-                    <div id="notaItemsSection"
-                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Rincian
-                            Barang (Khusus Nota)</label>
-                        <div id="notaItemsList" style="display: flex; flex-direction: column; gap: 8px;">
-                            <!-- Items will be added here -->
-                        </div>
-                        <button onclick="addNotaItem()" class="btn-primary"
-                            style="margin-top: 10px; padding: 5px 10px; font-size: 12px; background: #22c55e;">
-                            <i data-lucide="plus" size="14"></i> Tambah Item
-                        </button>
-                    </div>
-
-                    <!-- Documentation Section -->
-                    <div id="documentationSection"
-                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Foto
-                            Kegiatan</label>
-
-                        <div class="form-group">
-                            <label>Jumlah Foto</label>
-                            <select id="docPhotoCount" onchange="updatePhotoInputs()"
-                                style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
-                                <option value="1">1 Foto</option>
-                                <option value="2">2 Foto</option>
-                                <option value="3">3 Foto</option>
-                                <option value="4">4 Foto</option>
-                                <option value="5">5 Foto</option>
+                        <div class="form-group" id="fg-vendor-style">
+                            <label>Template Vendor</label>
+                            <select id="vendorStyle" onchange="updatePreview()"
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                                <option value="standard">Standard / Modern</option>
+                                <option value="plain">Grosir / Polos</option>
+                                <option value="rm-family">RM Family (Landscape)</option>
+                                <option value="cahya-cellular">Cahya Cellular (Blue)</option>
+                                <option value="media-komputer">Media Komputer (Media)</option>
+                                <option value="mitra-photocopy">Mitra Photocopy (Service)</option>
+                                <option value="sinar-abadi">Sinar Abadi (Classic Red)</option>
+                                <!-- Custom templates will be appended here -->
                             </select>
                         </div>
 
-                        <div id="docPhotoInputsContainer">
-                            <!-- Inputs will be handled dynamically or just pre-rendered -->
-                            <div class="form-group" id="ph-1">
-                                <label style="font-size:11px;">Foto 1</label>
-                                <input type="file" onchange="handleDocPhotoUpload(this, 1)" accept="image/*"
-                                    style="font-size: 11px; width: 100%;">
-                            </div>
-                            <div class="form-group" id="ph-2" style="display:none;">
-                                <label style="font-size:11px;">Foto 2</label>
-                                <input type="file" onchange="handleDocPhotoUpload(this, 2)" accept="image/*"
-                                    style="font-size: 11px; width: 100%;">
-                            </div>
-                            <div class="form-group" id="ph-3" style="display:none;">
-                                <label style="font-size:11px;">Foto 3</label>
-                                <input type="file" onchange="handleDocPhotoUpload(this, 3)" accept="image/*"
-                                    style="font-size: 11px; width: 100%;">
-                            </div>
-                            <div class="form-group" id="ph-4" style="display:none;">
-                                <label style="font-size:11px;">Foto 4</label>
-                                <input type="file" onchange="handleDocPhotoUpload(this, 4)" accept="image/*"
-                                    style="font-size: 11px; width: 100%;">
-                            </div>
-                            <div class="form-group" id="ph-5" style="display:none;">
-                                <label style="font-size:11px;">Foto 5</label>
-                                <input type="file" onchange="handleDocPhotoUpload(this, 5)" accept="image/*"
-                                    style="font-size: 11px; width: 100%;">
+                        <div class="form-group" id="fg-font-style">
+                            <label>Jenis Font (Tulisan Tangan)</label>
+                            <select id="fontStyle" onchange="updatePreview()"
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                                <option value="">Default (Arial/System)</option>
+                                <option value="'Caveat', cursive">Tulisan Tangan 1 (Caveat)</option>
+                                <option value="'Kalam', cursive">Tulisan Tangan 2 (Kalam)</option>
+                                <option value="'Patrick Hand', cursive">Tulisan Tangan 3 (Patrick Hand - Natural)
+                                </option>
+                                <option value="'Indie Flower', cursive">Tulisan Tangan 4 (Indie Flower - Santai)
+                                </option>
+                                <option value="'Reenie Beanie', cursive">Tulisan Tangan 5 (Kasar/Reenie)</option>
+                                <option value="'Shadows Into Light', cursive">Tulisan Tangan 6 (Rapi/Shadows)</option>
+                                <option value="'Nothing You Could Do', cursive">Tulisan Tangan 7 (Realistis/Nothing)
+                                </option>
+                                <option value="'Cedarville Cursive', cursive">Tulisan Tangan 8 (Sangat Natural)</option>
+                                <option value="'Zeyada', cursive">Tulisan Tangan 9 (Berantakan)</option>
+                                <option value="'La Belle Aurore', cursive">Tulisan Tangan 10 (Cepat/Kasar)</option>
+                                <option value="'Homemade Apple', cursive">Tulisan Tangan 11 (Miring/Jelek)</option>
+                                <option value="'Just Me Again Down Here', cursive">Tulisan Tangan 12 (Kurus/Tinggi)
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="fg-font-size">
+                            <label>Ukuran Tulisan (px)</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" id="fontSize" min="12" max="36" value="16" oninput="updatePreview()"
+                                    style="flex-grow: 1;">
+                                <span id="fontSizeDisplay" style="font-size: 12px; width: 30px;">16px</span>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Notulen Section -->
-                    <div id="notulenSection"
-                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
-                        <div class="form-group">
+                        <div class="form-group" id="fg-vendor-name">
+                            <label>Nama Vendor / Toko / Penerima</label>
+                            <input type="text" id="custVendorName" oninput="updatePreview()" placeholder="NAMA TOKO">
+                        </div>
+
+                        <div class="form-group" id="fg-uraian">
+                            <label>Uraian Belanja / Kegiatan</label>
+                            <textarea id="custUraian" oninput="updatePreview()" rows="3"
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+                        </div>
+
+                        <div class="form-group" id="fg-jumlah">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <label>Nominal / Anggaran / Total (Rp)</label>
+                                <label style="font-size: 11px; display: flex; align-items: center; gap: 4px;">
+                                    <input type="checkbox" id="manualTotal" onchange="updatePreview()"> Hitung Otomatis
+                                </label>
+                            </div>
+                            <input type="number" id="custJumlah" oninput="updatePreview()">
+                        </div>
+
+                        <!-- Extra Fields for Rencana -->
+                        <div id="rencanaExtraSection"
+                            style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                            <label
+                                style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Detail
+                                Perencanaan</label>
+                            <div class="form-group">
+                                <label>Kategori Barang/Jasa</label>
+                                <input type="text" id="custKategori" oninput="updatePreview()"
+                                    placeholder="Contoh: Pemeliharaan Laptop Sekolah">
+                            </div>
+                            <div class="form-group">
+                                <label>Jumlah Barang/Jasa (Teks)</label>
+                                <input type="text" id="custJumlahBarang" oninput="updatePreview()"
+                                    placeholder="Contoh: 1 (Satu) Paket">
+                            </div>
+                            <div class="form-group">
+                                <label>Spesifikasi / Ruang Lingkup</label>
+                                <textarea id="custSpesifikasi" oninput="updatePreview()" rows="2"
+                                    style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"
+                                    placeholder="Contoh: Belanja Jasa Service Laptop"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Persyaratan Penyedia</label>
+                                <textarea id="custPersyaratan" oninput="updatePreview()" rows="3"
+                                    style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Perorangan/Badan Usaha Memenuhi syarat sebagai berikut:\na. Identitas Penyedia;</textarea>
+                            </div>
+                            <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                                <label style="font-size: 12px; font-weight: bold;">Pelaksana (Opsional - Default: Kepala
+                                    Sekolah)</label>
+                                <input type="text" id="custPelaksanaNameRencana" oninput="updatePreview()"
+                                    placeholder="Nama Pelaksana" style="margin-bottom: 5px;">
+                                <input type="text" id="custPelaksanaNipRencana" oninput="updatePreview()"
+                                    placeholder="NIP Pelaksana">
+                            </div>
+                        </div>
+
+                        <!-- Extra Fields for SPK -->
+                        <div id="spkExtraSection"
+                            style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                            <label
+                                style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Detail
+                                SPK</label>
+                            <div class="form-group">
+                                <label>Nama Penyedia (CV / Toko)</label>
+                                <input type="text" id="custSpkProvider" oninput="updatePreview()"
+                                    placeholder="Contoh: CV. Berkah Abadi">
+                            </div>
+                            <div class="form-group">
+                                <label>Tanggal Negosiasi</label>
+                                <input type="text" id="custTglNegosiasi" oninput="updatePreview()"
+                                    placeholder="dd/mm/yyyy">
+                            </div>
+                            <div class="form-group">
+                                <label>Waktu Pelaksanaan</label>
+                                <input type="text" id="custWaktuPelaksanaan" oninput="updatePreview()"
+                                    placeholder="dd/mm/yyyy (Default: Tanggal Transaksi)">
+                            </div>
+                            <div class="form-group">
+                                <label>Waktu Penyelesaian</label>
+                                <input type="text" id="custWaktuPenyelesaian" oninput="updatePreview()"
+                                    placeholder="Contoh: 06 Juni 2025">
+                            </div>
+                            <div class="form-group">
+                                <label>Instruksi ke Penyedia</label>
+                                <textarea id="custInstruksi" oninput="updatePreview()" rows="3"
+                                    style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Penagihan hanya dapat dilakukan setelah penyelesaian pekerjaan yang diperintahkan dalam SPK ini dan dibuktikan dengan Berita Acara Serah Terima.</textarea>
+                            </div>
+                            <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                                <label style="font-size: 12px; font-weight: bold;">Pelaksana (Opsional - Default: Kepala
+                                    Sekolah)</label>
+                                <input type="text" id="custPelaksanaNameSpk" oninput="updatePreview()"
+                                    placeholder="Nama Pelaksana" style="margin-bottom: 5px;">
+                                <input type="text" id="custPelaksanaNipSpk" oninput="updatePreview()"
+                                    placeholder="NIP Pelaksana">
+                            </div>
+                        </div>
+
+                        <!-- Surat Perjanjian Kerja - Guru Honorer -->
+                        <div id="spkGuruHonorerSection"
+                            style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                            <label
+                                style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Isian
+                                Surat Perjanjian Kerja Guru Honorer</label>
+                            <div class="form-group">
+                                <label>Pihak Kesatu - Nama Kepala Sekolah</label>
+                                <input type="text" id="custSpkGuruKepalaNama" oninput="updatePreview()"
+                                    placeholder="Yuniarti, S.Pd">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kesatu - Tempat, Tanggal Lahir</label>
+                                <input type="text" id="custSpkGuruKepalaTtl" oninput="updatePreview()"
+                                    placeholder="Bandung, 07 Juli 1966">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kesatu - NIP</label>
+                                <input type="text" id="custSpkGuruKepalaNip" oninput="updatePreview()"
+                                    placeholder="196607071986102005">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kedua - Nama Guru</label>
+                                <input type="text" id="custSpkGuruNama" oninput="updatePreview()"
+                                    placeholder="Siti Aisah Nur Fitri, S.Pd">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kedua - Tempat, Tanggal Lahir</label>
+                                <input type="text" id="custSpkGuruTtl" oninput="updatePreview()"
+                                    placeholder="Bandung, 08 September 1999">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kedua - Pendidikan Terakhir</label>
+                                <input type="text" id="custSpkGuruPendidikan" oninput="updatePreview()"
+                                    placeholder="S1">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kedua - Alamat</label>
+                                <textarea id="custSpkGuruAlamat" oninput="updatePreview()" rows="2"
+                                    style="width:100%; padding:8px; border-radius:6px; border:1px solid #e2e8f0;"
+                                    placeholder="Kp. Tanjung Biru RT 02/015 Ds. Mandalamukti&#10;Kecamatan Cikalongwetan Kabupaten Bandung Barat"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Tugas Mengajar (contoh: guru kelas empat)</label>
+                                <input type="text" id="custSpkGuruTugas" oninput="updatePreview()"
+                                    placeholder="guru kelas empat">
+                            </div>
+                            <div class="form-group">
+                                <label>Imbalan Jasa / Honor (Rp)</label>
+                                <input type="number" id="custSpkGuruHonor" oninput="updatePreview()"
+                                    placeholder="1000000">
+                            </div>
+                        </div>
+
+                        <!-- Surat Perjanjian Kerja - Tenaga Honorer -->
+                        <div id="spkTenagaHonorerSection"
+                            style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                            <label
+                                style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Isian
+                                Surat Perjanjian Kerja Tenaga Honorer</label>
+                            <div class="form-group">
+                                <label>Pihak Kesatu - Nama Kepala Sekolah</label>
+                                <input type="text" id="custSpkTenagaKepalaNama" oninput="updatePreview()"
+                                    placeholder="Yuniarti, S.Pd">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kesatu - Tempat, Tanggal Lahir</label>
+                                <input type="text" id="custSpkTenagaKepalaTtl" oninput="updatePreview()"
+                                    placeholder="Bandung, 07 Juli 1966">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kesatu - NIP</label>
+                                <input type="text" id="custSpkTenagaKepalaNip" oninput="updatePreview()"
+                                    placeholder="196607071986102005">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kedua - Nama Tenaga Honorer</label>
+                                <input type="text" id="custSpkTenagaNama" oninput="updatePreview()"
+                                    placeholder="Herman">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kedua - Tempat, Tanggal Lahir</label>
+                                <input type="text" id="custSpkTenagaTtl" oninput="updatePreview()"
+                                    placeholder="Bandung, 06 Agustus 1982">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kedua - Pendidikan Terakhir</label>
+                                <input type="text" id="custSpkTenagaPendidikan" oninput="updatePreview()"
+                                    placeholder="SD">
+                            </div>
+                            <div class="form-group">
+                                <label>Pihak Kedua - Alamat</label>
+                                <textarea id="custSpkTenagaAlamat" oninput="updatePreview()" rows="2"
+                                    style="width:100%; padding:8px; border-radius:6px; border:1px solid #e2e8f0;"
+                                    placeholder="Kp. Pasirhalang RT 03/014 Ds. Mandalamukti&#10;Kecamatan Cikalongwetan Kabupaten Bandung Barat"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Tugas (contoh: penjaga sekolah)</label>
+                                <input type="text" id="custSpkTenagaTugas" oninput="updatePreview()"
+                                    placeholder="penjaga sekolah">
+                            </div>
+                            <div class="form-group">
+                                <label>Imbalan Jasa / Honor (Rp)</label>
+                                <input type="number" id="custSpkTenagaHonor" oninput="updatePreview()"
+                                    placeholder="1000000">
+                            </div>
+                        </div>
+
+                        <!-- SK Pembagian Tugas Section -->
+                        <div id="skPembagianTugasSection"
+                            style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                            <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Data
+                                Guru (Pihak Kedua)</label>
+
+                            <div class="form-group">
+                                <label>Nama Guru</label>
+                                <input type="text" id="custSkGuruNama" oninput="updatePreview()"
+                                    placeholder="SITI AISAH NUR FITRI, S.Pd">
+                            </div>
+                            <div class="form-group">
+                                <label>NIP Guru</label>
+                                <input type="text" id="custSkGuruNip" oninput="updatePreview()" placeholder="-">
+                            </div>
+                            <div class="form-group">
+                                <label>Pangkat, Gol/Ruang</label>
+                                <input type="text" id="custSkGuruPangkat" oninput="updatePreview()" placeholder="-">
+                            </div>
+                            <div class="form-group">
+                                <label>Jabatan</label>
+                                <input type="text" id="custSkGuruJabatan" oninput="updatePreview()"
+                                    placeholder="Guru Kelas">
+                            </div>
+                            <div class="form-group">
+                                <label>Tugas Mengajar</label>
+                                <input type="text" id="custSkGuruTugas" oninput="updatePreview()"
+                                    placeholder="Mengajar Kelas IV">
+                            </div>
+                            <div class="form-group">
+                                <label>Jumlah Jam</label>
+                                <input type="text" id="custSkGuruJam" oninput="updatePreview()"
+                                    placeholder="24 Jam/Minggu">
+                            </div>
+                            <div class="form-group">
+                                <label>Tahun Pelajaran</label>
+                                <input type="text" id="custSkTahunAjar" oninput="updatePreview()"
+                                    placeholder="2025/2026">
+                            </div>
+                        </div>
+
+                        <!-- Daftar Penerima Honor -->
+                        <div id="daftarPenerimaHonorSection"
+                            style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+                            <label
+                                style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Daftar
+                                Penerima Honor</label>
+                            <div class="form-group">
+                                <label>Judul Daftar (contoh: DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS
+                                    ...)</label>
+                                <input type="text" id="custDaftarHonorJudul" oninput="updatePreview()"
+                                    placeholder="DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS AGUSTUS 2025">
+                            </div>
+                            <div class="form-group">
+                                <label>Program</label>
+                                <input type="text" id="custDaftarHonorProgram" oninput="updatePreview()"
+                                    placeholder="07 Pengembangan Standar Pembiayaan">
+                            </div>
+                            <div class="form-group">
+                                <label>Kegiatan</label>
+                                <input type="text" id="custDaftarHonorKegiatan" oninput="updatePreview()"
+                                    placeholder="9 Pembayaran Honor Guru">
+                            </div>
+                            <div class="form-group">
+                                <label>Kode Rekening</label>
+                                <input type="text" id="custDaftarHonorKodeRekening" oninput="updatePreview()"
+                                    placeholder="5.2.1.02.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Kode Penggunaan</label>
+                                <input type="text" id="custDaftarHonorKodePenggunaan" oninput="updatePreview()"
+                                    placeholder="9">
+                            </div>
+                            <div class="form-group">
+                                <label>Bulan dan Tahun (contoh: Agustus 2025)</label>
+                                <input type="text" id="custDaftarHonorBulan" oninput="updatePreview()"
+                                    placeholder="Agustus 2025">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <button type="button" onclick="addHonorRow()" class="btn-primary"
+                                    style="padding: 6px 12px; font-size: 12px; background: #22c55e;">
+                                    <i data-lucide="plus" size="12"></i> Tambah Penerima
+                                </button>
+                            </div>
+                            <div id="honorList" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                        </div>
+
+                        <!-- Dynamic Items for Nota -->
+                        <div id="notaItemsSection"
+                            style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                            <label
+                                style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Rincian
+                                Barang (Khusus Nota)</label>
+                            <div id="notaItemsList" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Items will be added here -->
+                            </div>
+                            <button onclick="addNotaItem()" class="btn-primary"
+                                style="margin-top: 10px; padding: 5px 10px; font-size: 12px; background: #22c55e;">
+                                <i data-lucide="plus" size="14"></i> Tambah Item
+                            </button>
+                        </div>
+
+                        <!-- Documentation Section -->
+                        <div id="documentationSection"
+                            style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                            <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Foto
+                                Kegiatan</label>
+
+                            <div class="form-group">
+                                <label>Jumlah Foto</label>
+                                <select id="docPhotoCount" onchange="updatePhotoInputs()"
+                                    style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+                                    <option value="1">1 Foto</option>
+                                    <option value="2">2 Foto</option>
+                                    <option value="3">3 Foto</option>
+                                    <option value="4">4 Foto</option>
+                                    <option value="5">5 Foto</option>
+                                </select>
+                            </div>
+
+                            <div id="docPhotoInputsContainer">
+                                <!-- Inputs will be handled dynamically or just pre-rendered -->
+                                <div class="form-group" id="ph-1">
+                                    <label style="font-size:11px;">Foto 1</label>
+                                    <input type="file" onchange="handleDocPhotoUpload(this, 1)" accept="image/*"
+                                        style="font-size: 11px; width: 100%;">
+                                </div>
+                                <div class="form-group" id="ph-2" style="display:none;">
+                                    <label style="font-size:11px;">Foto 2</label>
+                                    <input type="file" onchange="handleDocPhotoUpload(this, 2)" accept="image/*"
+                                        style="font-size: 11px; width: 100%;">
+                                </div>
+                                <div class="form-group" id="ph-3" style="display:none;">
+                                    <label style="font-size:11px;">Foto 3</label>
+                                    <input type="file" onchange="handleDocPhotoUpload(this, 3)" accept="image/*"
+                                        style="font-size: 11px; width: 100%;">
+                                </div>
+                                <div class="form-group" id="ph-4" style="display:none;">
+                                    <label style="font-size:11px;">Foto 4</label>
+                                    <input type="file" onchange="handleDocPhotoUpload(this, 4)" accept="image/*"
+                                        style="font-size: 11px; width: 100%;">
+                                </div>
+                                <div class="form-group" id="ph-5" style="display:none;">
+                                    <label style="font-size:11px;">Foto 5</label>
+                                    <input type="file" onchange="handleDocPhotoUpload(this, 5)" accept="image/*"
+                                        style="font-size: 11px; width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notulen Section -->
+                        <div id="notulenSection"
+                            style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                            <div class="form-group">
+                                <label>Waktu Kegiatan</label>
+                                <input type="text" id="custWaktu" oninput="updatePreview()"
+                                    placeholder="Contoh: 08.00 - 10.00 WIB">
+                            </div>
+                            <div class="form-group">
+                                <label>Hasil Pembahasan (Pisahkan dengan Enter)</label>
+                                <textarea id="custHasil" oninput="updatePreview()" rows="5"
+                                    placeholder="1. Poin satu&#10;2. Poin dua"
+                                    style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Kesimpulan</label>
+                                <textarea id="custKesimpulan" oninput="updatePreview()" rows="3"
+                                    placeholder="Kesimpulan rapat..."
+                                    style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Attendance Section -->
+                        <div id="attendanceSection"
+                            style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                            <label
+                                style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Daftar
+                                Hadir</label>
+                            <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                                <button onclick="addAttendanceRow()" class="btn-primary"
+                                    style="flex:1; padding: 5px; font-size: 11px; background: #22c55e;">
+                                    <i data-lucide="plus" size="12"></i> Baris
+                                </button>
+                                <button onclick="loadDefaultAttendance()" class="btn-primary"
+                                    style="flex:1; padding: 5px; font-size: 11px; background: #3b82f6;">
+                                    <i data-lucide="users" size="12"></i> Load Guru
+                                </button>
+                            </div>
+                            <div id="attendanceList" style="display: flex; flex-direction: column; gap: 5px;"></div>
+                        </div>
+
+
+
+                        <div class="form-group" id="fg-tanggal">
+                            <label>Tanggal Transaksi / BAST / SPK / Serah Terima</label>
+                            <input type="text" id="custTanggal" oninput="updatePreview()" placeholder="dd/mm/yyyy">
+                        </div>
+
+                        <div class="form-group" id="fg-tanggal-pesan">
+                            <label>Tanggal Surat / Pesan</label>
+                            <input type="text" id="custTanggalPesan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
+                        </div>
+
+                        <div class="form-group" id="fg-tanggal-kegiatan">
+                            <label>Tanggal Kegiatan</label>
+                            <input type="text" id="custTanggalKegiatan" oninput="updatePreview()"
+                                placeholder="dd/mm/yyyy">
+                        </div>
+
+                        <div class="form-group" id="fg-tempat">
+                            <label>Tempat Kegiatan / Lokasi</label>
+                            <input type="text" id="custTempatKegiatan" oninput="updatePreview()"
+                                placeholder="Contoh: SD Negeri 1 ...">
+                        </div>
+
+                        <div class="form-group" id="fg-waktu-kegiatan">
                             <label>Waktu Kegiatan</label>
-                            <input type="text" id="custWaktu" oninput="updatePreview()"
-                                placeholder="Contoh: 08.00 - 10.00 WIB">
+                            <input type="text" id="custWaktuKegiatan" oninput="updatePreview()"
+                                placeholder="Contoh: 08.00 sd Selesai">
                         </div>
-                        <div class="form-group">
-                            <label>Hasil Pembahasan (Pisahkan dengan Enter)</label>
-                            <textarea id="custHasil" oninput="updatePreview()" rows="5"
-                                placeholder="1. Poin satu&#10;2. Poin dua"
-                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+
+                        <div class="form-group" id="fg-vendor-address">
+                            <label>Alamat Vendor / Toko</label>
+                            <input type="text" id="custVendorAddress" oninput="updatePreview()"
+                                placeholder="Alamat Toko">
                         </div>
-                        <div class="form-group">
-                            <label>Kesimpulan</label>
-                            <textarea id="custKesimpulan" oninput="updatePreview()" rows="3"
-                                placeholder="Kesimpulan rapat..."
-                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+
+                        <div class="form-group" id="fg-tembusan">
+                            <label>Tembusan (Opsional)</label>
+                            <textarea id="custTembusan" oninput="updatePreview()" rows="2"
+                                style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"
+                                placeholder="1. Pengawas...&#10;2. K3S..."></textarea>
                         </div>
-                    </div>
 
-                    <!-- Attendance Section -->
-                    <div id="attendanceSection"
-                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
-                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Daftar
-                            Hadir</label>
-                        <div style="display: flex; gap: 5px; margin-bottom: 10px;">
-                            <button onclick="addAttendanceRow()" class="btn-primary"
-                                style="flex:1; padding: 5px; font-size: 11px; background: #22c55e;">
-                                <i data-lucide="plus" size="12"></i> Baris
-                            </button>
-                            <button onclick="loadDefaultAttendance()" class="btn-primary"
-                                style="flex:1; padding: 5px; font-size: 11px; background: #3b82f6;">
-                                <i data-lucide="users" size="12"></i> Load Guru
-                            </button>
+                        <div class="form-group" id="fg-logo-upload">
+                            <label>Logo Toko</label>
+                            <input type="file" accept="image/*" onchange="handleLogoUpload(this)"
+                                style="font-size: 11px; width: 100%;">
                         </div>
-                        <div id="attendanceList" style="display: flex; flex-direction: column; gap: 5px;"></div>
-                    </div>
 
-
-
-                    <div class="form-group" id="fg-tanggal">
-                        <label>Tanggal Transaksi / BAST / SPK / Serah Terima</label>
-                        <input type="text" id="custTanggal" oninput="updatePreview()" placeholder="dd/mm/yyyy">
-                    </div>
-
-                    <div class="form-group" id="fg-tanggal-pesan">
-                        <label>Tanggal Surat / Pesan</label>
-                        <input type="text" id="custTanggalPesan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
-                    </div>
-
-                    <div class="form-group" id="fg-tanggal-kegiatan">
-                        <label>Tanggal Kegiatan</label>
-                        <input type="text" id="custTanggalKegiatan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
-                    </div>
-
-                    <div class="form-group" id="fg-tempat">
-                        <label>Tempat Kegiatan / Lokasi</label>
-                        <input type="text" id="custTempatKegiatan" oninput="updatePreview()"
-                            placeholder="Contoh: SD Negeri 1 ...">
-                    </div>
-
-                    <div class="form-group" id="fg-waktu-kegiatan">
-                        <label>Waktu Kegiatan</label>
-                        <input type="text" id="custWaktuKegiatan" oninput="updatePreview()"
-                            placeholder="Contoh: 08.00 sd Selesai">
-                    </div>
-
-                    <div class="form-group" id="fg-vendor-address">
-                        <label>Alamat Vendor / Toko</label>
-                        <input type="text" id="custVendorAddress" oninput="updatePreview()" placeholder="Alamat Toko">
-                    </div>
-
-                    <div class="form-group" id="fg-tembusan">
-                        <label>Tembusan (Opsional)</label>
-                        <textarea id="custTembusan" oninput="updatePreview()" rows="2"
-                            style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"
-                            placeholder="1. Pengawas...&#10;2. K3S..."></textarea>
-                    </div>
-
-                    <div class="form-group" id="fg-logo-upload">
-                        <label>Logo Toko</label>
-                        <input type="file" accept="image/*" onchange="handleLogoUpload(this)"
-                            style="font-size: 11px; width: 100%;">
-                    </div>
-
-                    <div class="form-group" id="fg-stamp-upload">
-                        <label>Stempel Toko / Penyedia</label>
-                        <input type="file" accept="image/*" onchange="handleStampUpload(this)"
-                            style="font-size: 11px; width: 100%;">
-                    </div>
-
-                    <div style="margin-top: auto;">
-                        <label>Layout</label>
-                        <div style="display: flex; gap: 10px;">
-                            <button onclick="changeLayout('portrait')" style="flex:1; padding:8px; font-size:12px;"
-                                class="btn-primary">Portrait</button>
-                            <button onclick="changeLayout('landscape')" style="flex:1; padding:8px; font-size:12px;"
-                                class="btn-primary">Landscape</button>
+                        <div class="form-group" id="fg-stamp-upload">
+                            <label>Stempel Toko / Penyedia</label>
+                            <input type="file" accept="image/*" onchange="handleStampUpload(this)"
+                                style="font-size: 11px; width: 100%;">
                         </div>
-                    </div>
-                </div>
+
+                        <div style="margin-top: auto;">
+                            <label>Layout</label>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="changeLayout('portrait')" style="flex:1; padding:8px; font-size:12px;"
+                                    class="btn-primary">Portrait</button>
+                                <button onclick="changeLayout('landscape')" style="flex:1; padding:8px; font-size:12px;"
+                                    class="btn-primary">Landscape</button>
+                            </div>
+                        </div>
+                    </div> <!-- End tab-form -->
+                </div> <!-- End preview-sidebar -->
 
                 <div class="preview-main">
                     <div class="preview-toolbar">
@@ -2293,7 +2463,8 @@
                         <i data-lucide="x" size="20"></i>
                     </button>
                 </div>
-                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Menampilkan file PDF terbaru
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Menampilkan file PDF
+                    terbaru
                     yang mengandung kata "BKU" di Drive Anda.</p>
 
                 <div id="driveFileList"
@@ -2317,7 +2488,8 @@
                 <i data-lucide="alert-triangle" size="32"></i>
             </div>
             <h3 id="confirmTitle">Konfirmasi Hapus</h3>
-            <p id="confirmMessage">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
+            <p id="confirmMessage">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.
+            </p>
             <div class="confirm-actions">
                 <button class="confirm-btn-cancel" onclick="closeConfirm(false)">Batal</button>
                 <button class="confirm-btn-ok" onclick="closeConfirm(true)"><span id="confirmBtnText">Ya,
@@ -2671,19 +2843,17 @@
 
         function openPreview() {
             // Initialize customizer with global school data
-            // These fields now directly pull from the settings form, no need for separate cust inputs
-            // document.getElementById('custSchoolName').value = document.getElementById('schoolName').value || "SD NEGERI 01 CONTOH";
-            // document.getElementById('custKecamatan').value = document.getElementById('kecamatan').value || "Cikalongwetan";
-            // document.getElementById('custSchoolAddress').value = document.getElementById('schoolAddress').value || "Jl. Pendidikan No. 123";
-            // document.getElementById('custPrincipalName').value = document.getElementById('principalName').value || "NAMA KEPALA SEKOLAH";
-            // document.getElementById('custPrincipalNip').value = document.getElementById('principalNip').value || "19XXXXXXXX XXXXXX X XXX";
-
             document.getElementById('custPerihal').value = "Permohonan Belanja";
             document.getElementById('custTempatKegiatan').value = document.getElementById('schoolName').value || "Sekolah";
             document.getElementById('custWaktuKegiatan').value = "08.00 sd Selesai";
             document.getElementById('custTembusan').value = "1. Pengawas Pembina\n2. Arsip";
 
             document.getElementById('previewModal').style.display = 'flex';
+
+            // Initialization for Option B (New Sidebar UI)
+            initDocPicker();
+            switchPreviewTab('select'); // Start with the type picker
+
             updatePreview();
             lucide.createIcons();
         }
@@ -2744,8 +2914,71 @@
             }
         }
 
+        function switchPreviewTab(tabId) {
+            document.querySelectorAll('.preview-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.preview-tab-content').forEach(content => content.classList.remove('active'));
+
+            const activeBtn = document.querySelector(`.preview-tab-btn[onclick*="${tabId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            const activeContent = document.getElementById(`tab-${tabId}`);
+            if (activeContent) activeContent.classList.add('active');
+        }
+
+        function initDocPicker() {
+            const grid = document.getElementById('docPickerGrid');
+            const select = document.getElementById('docType');
+            const docs = [
+                { val: 'kwitansi', name: 'Kwitansi SPJ', icon: 'banknote', color: '#10b981', desc: 'Tanda terima pembayaran sah' },
+                { val: 'nota', name: 'Nota Toko / Invoice', icon: 'shopping-bag', color: '#3b82f6', desc: 'Rincian belanja dari penyedia' },
+                { val: 'pesanan', name: 'Surat Pesanan', icon: 'file-signature', color: '#f59e0b', desc: 'Pemesanan barang formal' },
+                { val: 'berita_acara', name: 'BAST', icon: 'clipboard-check', color: '#8b5cf6', desc: 'Berita Acara Serah Terima' },
+                { val: 'undangan', name: 'Surat Undangan', icon: 'mail', color: '#ec4899', desc: 'Undangan rapat atau kegiatan' },
+                { val: 'notulen', name: 'Notulen Kegiatan', icon: 'file-text', color: '#64748b', desc: 'Catatan hasil rapat' },
+                { val: 'daftar_hadir', name: 'Daftar Hadir', icon: 'users', color: '#06b6d4', desc: 'Bukti kehadiran peserta' },
+                { val: 'dokumentasi', name: 'Dokumentasi', icon: 'camera', color: '#f43f5e', desc: 'Foto-foto kegiatan' },
+                { val: 'rencana', name: 'Dok. Perencanaan', icon: 'map', color: '#14b8a6', desc: 'Kebutuhan & spesifikasi' },
+                { val: 'spk', name: 'SPK (Konstruksi/Jasa/Barang)', icon: 'briefcase', color: '#4f46e5', desc: 'Surat Perintah Kerja Umum' },
+                { val: 'spk_guru_honorer', name: 'PKS Guru Honorer', icon: 'user-check', color: '#2563eb', desc: 'Perjanjian kerja tahunan guru' },
+                { val: 'spk_tenaga_honorer', name: 'PKS Tenaga Honorer', icon: 'user-cog', color: '#2563eb', desc: 'Perjanjian kerja staf/penjaga' },
+                { val: 'sk_pembagian_tugas', name: 'SK Pembagian Tugas', icon: 'award', color: '#ef4444', desc: 'Lampiran PKS Guru' },
+                { val: 'daftar_penerima_honor', name: 'Daftar Terima Honor', icon: 'receipt', color: '#16a34a', desc: 'Tabel honorarium multi-penerima' }
+            ];
+
+            grid.innerHTML = docs.map(doc => `
+                <div class="doc-card ${select.value === doc.val ? 'active' : ''}" onclick="selectDocType('${doc.val}')">
+                    <i data-lucide="${doc.icon}" size="22"></i>
+                    <div class="doc-card-info">
+                        <h4>${doc.name}</h4>
+                        <p>${doc.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function selectDocType(val) {
+            const select = document.getElementById('docType');
+            select.value = val;
+
+            // Update UI
+            document.getElementById('currentDocTitle').innerText = select.options[select.selectedIndex].text;
+
+            // Re-render picker grid to show active
+            initDocPicker();
+
+            // Switch to form tab
+            switchPreviewTab('form');
+
+            // Call existing logic
+            handleDocTypeChange();
+        }
+
         function handleDocTypeChange() {
             const docType = document.getElementById('docType').value;
+            // Update current doc title in form tab
+            document.getElementById('currentDocTitle').innerText = document.getElementById('docType').options[document.getElementById('docType').selectedIndex].text;
+
             const notaSection = document.getElementById('notaItemsSection');
             const notulenSection = document.getElementById('notulenSection');
             const attendanceSection = document.getElementById('attendanceSection');
@@ -2773,16 +3006,20 @@
             ['fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
                 'fg-tanggal', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan',
                 'fg-vendor-address', 'fg-tembusan', 'fg-logo-upload', 'fg-stamp-upload'].forEach(id => {
-                    document.getElementById(id).style.display = 'none';
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
                 });
 
             // Helper to show specific fields
-            const showFields = (ids) => ids.forEach(id => document.getElementById(id).style.display = 'block');
+            const showFields = (ids) => ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'block';
+            });
 
             if (docType === 'kwitansi') {
-                showFields(['fg-nomor', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-name', 'fg-stamp-upload']); // Added stamp
+                showFields(['fg-nomor', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-name', 'fg-stamp-upload']);
             } else if (docType === 'nota') {
-                showFields(['fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-stamp-upload']); // Removed logo, kept stamp
+                showFields(['fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-stamp-upload']);
                 notaSection.style.display = 'block';
                 if (document.getElementById('notaItemsList').children.length === 0) {
                     addNotaItem();
@@ -2809,7 +3046,7 @@
                 showFields(['fg-uraian', 'fg-tanggal', 'fg-tempat', 'fg-jumlah']);
                 rencanaSection.style.display = 'block';
             } else if (docType === 'spk') {
-                showFields(['fg-nomor', 'fg-tanggal', 'fg-uraian', 'fg-jumlah']); // Removed fg-vendor-name
+                showFields(['fg-nomor', 'fg-tanggal', 'fg-uraian', 'fg-jumlah']);
                 spkSection.style.display = 'block';
                 notaSection.style.display = 'block';
             } else if (docType === 'spk_guru_honorer') {
@@ -3814,7 +4051,7 @@
                 parts.forEach(part => {
                     combinedHtml += `
                         <div class="paper ${currentLayout === 'landscape' ? 'a5-landscape' : 'a4'}">
-                            <div>${part}</div>
+                            ${part}
                         </div>
                     `;
                 });
@@ -4264,8 +4501,10 @@
             const tempatDibuat = document.getElementById('custTempatKegiatan')?.value || schoolData.kecamatan || "Bandung Barat";
             const tglDibuat = dt.fullDate;
 
+            const baseStyle = "font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px;";
+
             return `
-                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px;">
+                <div style="${baseStyle}">
                     ${schoolKop}
                     <div style="text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 8px;">SURAT PERJANJIAN KERJA</div>
                     <div style="text-align: center; font-size: 12px; margin-bottom: 20px;">Nomor : ${nomor}</div>
@@ -4304,10 +4543,9 @@
 
                     <p style="margin-top: 14px;"><strong>Pasal 4<br>Beban Kerja Guru</strong></p>
                     <p>Beban kerja Guru untuk melaksanakan pembelajaran paling sedikit 24 (dua puluh empat) jam tatap muka dan paling banyak 40 (empat puluh) jam tatap muka dalam 1 (satu) minggu.</p>
-
-                    <!-- PAGE_BREAK -->
-                    <div style="height: 40px;"></div>
-
+                </div>
+                <!-- PAGE_BREAK -->
+                <div style="${baseStyle}">
                     <p style="margin-top: 14px;"><strong>Pasal 5<br>Masa Berlaku Surat Perjanjian Kerja</strong></p>
                     <p>(1) Surat Perjanjian Kerja ini berlaku 1 tahun semenjak ditandatangani oleh PIHAK KESATU dan PIHAK KEDUA pada awal tahun anggaran sampai dengan akhir tahun anggaran; (2) Perpanjangan Perjanjian Kerja dapat dilaksanakan oleh Kepala Sekolah sesuai dengan Pasal 1 (satu) huruf (1) (2) (3).</p>
 
@@ -4320,17 +4558,14 @@
                     <p style="margin-top: 14px;"><strong>Pasal 8<br>Penutup</strong></p>
                     <p>Surat Perjanjian Kerja ini dibuat dengan sebenarnya dan bersifat mengikat serta untuk selanjutnya dapat dijadikan kekuatan hukum kembali oleh kedua belah pihak.</p>
 
-                    <div style="margin-top: 28px;">
-                        <table style="width: 100%; font-size: 12px;">
-                            <tr><td style="width: 140px;">Dibuat di</td><td>:</td><td>${tempatDibuat}</td></tr>
-                            <tr><td>Pada tanggal</td><td>:</td><td>${tglDibuat}</td></tr>
+                    <div style="margin-top: 40px; margin-left: auto; width: 280px; text-align: center;">
+                        <table style="width: 100%; font-size: 12px; margin-bottom: 20px;">
+                            <tr><td style="width: 100px; text-align: left;">Dibuat di</td><td style="width: 10px;">:</td><td style="text-align: left;">${tempatDibuat}</td></tr>
+                            <tr><td style="text-align: left;">Pada tanggal</td><td>:</td><td style="text-align: left;">${tglDibuat}</td></tr>
                         </table>
-                        <p style="margin-top: 12px;">Ditandatangani oleh :</p>
-                        <div style="margin-top: 60px;">
-                            <p style="font-weight: bold; margin-bottom: 4px;">Kepala ${sekolahShort},</p>
-                            <p style="font-weight: bold; text-decoration: underline; margin: 0;">${kepalaNama}</p>
-                            <p style="margin: 0;">NIP. ${kepalaNip}</p>
-                        </div>
+                        <p style="margin-top: 10px; margin-bottom: 80px;">Ditandatangani oleh :<br><strong>Kepala ${sekolahShort},</strong></p>
+                        <p style="font-weight: bold; text-decoration: underline; margin: 0; line-height: 1;">${kepalaNama}</p>
+                        <p style="margin: 0;">NIP. ${kepalaNip}</p>
                     </div>
                 </div>`;
         }
@@ -4355,8 +4590,10 @@
             const tempatDibuat = document.getElementById('custTempatKegiatan')?.value || schoolData.kecamatan || "Bandung Barat";
             const tglDibuat = dt.fullDate;
 
+            const baseStyle = "font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px;";
+
             return `
-                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px;">
+                <div style="${baseStyle}">
                     ${schoolKop}
                     <div style="text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 8px;">SURAT PERJANJIAN KERJA</div>
                     <div style="text-align: center; font-size: 12px; margin-bottom: 20px;">Nomor : ${nomor}</div>
@@ -4389,10 +4626,9 @@
                     <p style="margin-top: 14px;"><strong>Pasal 2<br>Hak dan Kewajiban</strong></p>
                     <p>(1) PIHAK KEDUA mempunyai hak : a. Mengembangkan diri sesuai dengan pekerjaannya; b. Memperoleh imbalan jasa (honor) dan/atau keuangan lain sesuai dengan peraturan yang berlaku dan kemampuan keuangan sekolah; c. Imbalan jasa (honor) yang diterima sebesar Rp ${honorNum.toLocaleString('id-ID')} (${honorTerbilang}); d. Mendapat ijin tidak masuk sekolah dan/atau cuti sesuai dengan Surat Permohonan dan Surat Keterangan pihak lain yang bersangkutan; e. Berbuat dan bertindak secara hukum untuk dan atas nama sekolah sesuai dengan tugas dan/atau ijin Kepala Sekolah.</p>
                     <p>(2) PIHAK KEDUA mempunyai kewajiban : a. Melaksanakan tugas sebagai ${tugas}; b. Mematuhi Peraturan Sekolah baik tertulis maupun tidak tertulis; c. Melaksanakan tugas dari Kepala Sekolah; d. Menjaga nama baik Sekolah dan Dinas Pendidikan Kabupaten Bandung Barat.</p>
-
-                    <!-- PAGE_BREAK -->
-                    <div style="height: 40px;"></div>
-
+                </div>
+                <!-- PAGE_BREAK -->
+                <div style="${baseStyle}">
                     <p style="margin-top: 14px;"><strong>Pasal 3<br>Masa Berlaku Surat Perjanjian Kerja</strong></p>
                     <p>(1) Surat Perjanjian Kerja ini berlaku 1 tahun semenjak ditandatangani oleh PIHAK KESATU dan PIHAK KEDUA pada awal tahun anggaran sampai dengan akhir tahun anggaran; (2) Perpanjangan Perjanjian Kerja dapat dilaksanakan oleh Kepala Sekolah sesuai dengan Pasal 1 (satu) huruf (1) (2) (3).</p>
 
@@ -4405,17 +4641,14 @@
                     <p style="margin-top: 14px;"><strong>Pasal 6<br>Penutup</strong></p>
                     <p>Surat Perjanjian Kerja ini dibuat dengan sebenarnya dan bersifat mengikat serta untuk selanjutnya dapat dijadikan kekuatan hukum kembali oleh kedua belah pihak.</p>
 
-                    <div style="margin-top: 28px;">
-                        <table style="width: 100%; font-size: 12px;">
-                            <tr><td style="width: 140px;">Dibuat di</td><td>:</td><td>${tempatDibuat}</td></tr>
-                            <tr><td>Pada tanggal</td><td>:</td><td>${tglDibuat}</td></tr>
+                    <div style="margin-top: 40px; margin-left: auto; width: 280px; text-align: center;">
+                        <table style="width: 100%; font-size: 12px; margin-bottom: 20px;">
+                            <tr><td style="width: 100px; text-align: left;">Dibuat di</td><td style="width: 10px;">:</td><td style="text-align: left;">${tempatDibuat}</td></tr>
+                            <tr><td style="text-align: left;">Pada tanggal</td><td>:</td><td style="text-align: left;">${tglDibuat}</td></tr>
                         </table>
-                        <p style="margin-top: 12px;">Ditandatangani oleh :</p>
-                        <div style="margin-top: 60px;">
-                            <p style="font-weight: bold; margin-bottom: 4px;">Kepala ${sekolahShort},</p>
-                            <p style="font-weight: bold; text-decoration: underline; margin: 0;">${kepalaNama}</p>
-                            <p style="margin: 0;">NIP. ${kepalaNip}</p>
-                        </div>
+                        <p style="margin-top: 10px; margin-bottom: 80px;">Ditandatangani oleh :<br><strong>Kepala ${sekolahShort},</strong></p>
+                        <p style="font-weight: bold; text-decoration: underline; margin: 0; line-height: 1;">${kepalaNama}</p>
+                        <p style="margin: 0;">NIP. ${kepalaNip}</p>
                     </div>
                 </div>`;
         }
