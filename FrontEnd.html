@@ -413,95 +413,257 @@
             gap: 6px;
         }
 
-        /* --- Dashboard Styles --- */
-        /* Layout Fix for Single Page */
+        /* ========================================
+           DASHBOARD PREMIUM REDESIGN 2026
+           Modern, Elegant & Professional
+           ======================================== */
+
         #dashboard-view.active {
-            height: calc(100vh - 80px);
-            /* Full height minus main-content padding */
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            min-height: calc(100vh - 100px);
         }
 
         .dashboard-container {
-            height: 100%;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
+            animation: fadeIn 0.5s ease-out;
         }
 
+        /* Premium Hero Section */
         .dashboard-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a8a 100%);
+            border-radius: 28px;
+            padding: 40px 48px;
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            min-height: 140px;
+        }
+
+        .dashboard-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 60%);
+            border-radius: 50%;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .dashboard-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
+            border-radius: 50%;
+            animation: pulse 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #60a5fa;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
         }
 
         .hero-text h1 {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            font-size: 34px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #ffffff 0%, #e0e7ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
+            background-clip: text;
         }
 
         .hero-text p {
-            font-size: 14px;
-            color: var(--text-muted);
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+            line-height: 1.6;
         }
 
+        /* Premium Clock Widget */
+        .clock-widget {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 20px 32px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: right;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .clock-widget:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .clock-time {
+            font-size: 48px;
+            font-weight: 900;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            letter-spacing: 8px;
+            filter: drop-shadow(0 4px 20px rgba(56, 189, 248, 0.5));
+        }
+
+        .clock-date {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        /* Dashboard Grid Layout */
         .dashboard-content-grid {
             display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 20px;
-            flex-grow: 1;
-            overflow: hidden;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            min-height: 500px;
         }
 
-        /* Stats Column */
+        /* Premium Stats Column */
         .stats-column {
             display: flex;
             flex-direction: column;
+            gap: 16px;
+        }
+
+        .stat-card-premium {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--stat-color, #3b82f6), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .stat-card-premium:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+            border-color: var(--stat-color, #3b82f6);
+        }
+
+        .stat-card-premium:hover::before {
+            opacity: 1;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
             gap: 12px;
         }
 
-        .stat-card-modern {
-            background: white;
+        .stat-icon-premium {
+            width: 52px;
+            height: 52px;
             border-radius: 16px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card-modern:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            border-color: var(--primary);
-        }
-
-        .stat-icon-modern {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
-        /* Quick Access Section */
+        .stat-card-premium:hover .stat-icon-premium {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-subtext {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* ========================================
+           ULTRA MINIMALIST QUICK ACCESS CARDS
+           Mindblowing Modern & Professional
+           ======================================== */
         .quick-access-section {
-            background: white;
-            border-radius: 24px;
-            padding: 24px;
-            border: 1px solid #e2e8f0;
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03);
+            box-shadow: none;
+            border: none;
         }
 
         .qa-grid {
@@ -510,130 +672,157 @@
             gap: 16px;
         }
 
-        .qa-card {
+        .qa-card-minimal {
             background: #ffffff;
             border-radius: 20px;
-            padding: 16px 20px;
+            padding: 28px 24px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             gap: 20px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(226, 232, 240, 0.6);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
         }
 
-        .qa-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border-color: #2563eb;
-        }
-
-        .qa-card::after {
+        .qa-card-minimal::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, transparent 100%);
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--card-gradient) 0%, transparent 60%);
             opacity: 0;
-            transition: 0.4s;
+            transition: opacity 0.5s;
+            z-index: 0;
         }
 
-        .qa-card:hover::after {
+        .qa-card-minimal::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--card-color);
+            border-radius: 3px 3px 0 0;
+            transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .qa-card-minimal:hover::before {
             opacity: 1;
         }
 
-        .qa-icon {
+        .qa-card-minimal:hover::after {
+            width: 60%;
+        }
+
+        .qa-card-minimal:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.04);
+            border-color: transparent;
+        }
+
+        .qa-icon-minimal {
             width: 56px;
             height: 56px;
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.4s;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             z-index: 1;
+            background: var(--card-bg);
+            color: var(--card-color);
         }
 
-        .qa-card:hover .qa-icon {
-            transform: rotate(-10deg) scale(1.1);
+        .qa-card-minimal:hover .qa-icon-minimal {
+            transform: scale(1.08);
+            box-shadow: 0 8px 24px var(--card-shadow);
         }
 
-        .qa-title {
+        .qa-icon-minimal i {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .qa-card-minimal:hover .qa-icon-minimal i {
+            transform: scale(1.15);
+        }
+
+        .qa-content-minimal {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .qa-title-minimal {
             font-size: 16px;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 2px;
-            z-index: 1;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+            transition: color 0.3s;
         }
 
-        .qa-desc {
+        .qa-card-minimal:hover .qa-title-minimal {
+            color: var(--card-color);
+        }
+
+        .qa-desc-minimal {
             font-size: 12px;
-            color: #64748b;
-            z-index: 1;
+            color: #94a3b8;
+            line-height: 1.5;
+            font-weight: 500;
         }
 
-        /* Modern Footer */
-        .modern-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 24px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            font-size: 12px;
-            color: #64748b;
-            margin-top: auto;
-        }
-
-        .dashboard-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            min-height: calc(100vh - 120px);
-            padding: 10px 0;
-        }
-
-        .dashboard-hero {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 24px;
-            padding: 30px 40px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.5);
-        }
-
-        .dashboard-hero::before {
-            content: '';
+        .qa-arrow-minimal {
             position: absolute;
-            top: -20%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+            top: 24px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--card-color);
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.03);
         }
 
-        .hero-text h1 {
-            font-size: 28px;
-            font-weight: 900;
-            margin-bottom: 5px;
-            letter-spacing: -0.5px;
+        .qa-card-minimal:hover .qa-arrow-minimal {
+            opacity: 1;
+            transform: translateX(0);
         }
 
-        .hero-text p {
-            font-size: 14px;
-            opacity: 0.7;
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .clock-widget {
+                text-align: center;
+            }
+
+            .clock-date {
+                justify-content: center;
+            }
         }
 
         .top-bar {
@@ -1568,121 +1757,140 @@
             </button>
         </div>
 
-        <!-- View 0: Dashboard -->
+        <!-- View 0: Dashboard - Premium Redesign -->
         <section id="dashboard-view" class="view-section active">
             <div class="dashboard-container">
-                <!-- Header Compact -->
-                <div class="dashboard-hero" style="padding: 24px 40px; min-height: 100px; margin-bottom: 24px;">
-                    <div class="hero-text">
-                        <h1 style="font-size: 26px; color: white;">Panel Administrasi Utama</h1>
-                        <p style="font-size: 14px; color: rgba(255,255,255,0.8);">Sistem Administrasi SPJ TOS Terpadu.
-                        </p>
-                    </div>
-                    <div class="clock-widget"
-                        style="background: rgba(255,255,255,0.08); padding: 12px 24px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); text-align: right; color: white;">
-                        <div class="clock-time" id="clock"
-                            style="font-size: 24px; font-weight: 800; letter-spacing: 1px; color: #38bdf8;">00:00:00
+                <!-- Premium Hero Section -->
+                <div class="dashboard-hero">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <i data-lucide="shield-check" size="14"></i>
+                            <span>Si-BOS Premium</span>
                         </div>
-                        <div class="clock-date"
-                            style="font-size: 11px; opacity: 0.8; display: flex; align-items: center; justify-content: flex-end; gap: 5px;">
+                        <div class="hero-text">
+                            <h1>Dashboard Administrasi</h1>
+                            <p>Sistem Manajemen Keuangan Sekolah Terpadu - Tahun Anggaran 2026</p>
+                        </div>
+                    </div>
+                    <div class="clock-widget">
+                        <div class="clock-time" id="clock">00:00:00</div>
+                        <div class="clock-date">
                             <i data-lucide="calendar" size="12"></i>
                             <span id="date">...</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Content Grid -->
+                <!-- Main Content Grid -->
                 <div class="dashboard-content-grid">
-                    <!-- Left: Stats -->
+                    <!-- Left Sidebar: Stats Cards -->
                     <div class="stats-column">
-                        <div class="stat-card-modern">
-                            <div class="stat-icon-modern" style="background: #eff6ff; color: #3b82f6;">
-                                <i data-lucide="calendar" size="20"></i>
-                            </div>
-                            <div>
-                                <div style="font-size: 11px; color: #64748b; font-weight: 600;">TAHUN ANGGARAN</div>
-                                <div style="font-size: 18px; font-weight: 700; color: #0f172a;">2026</div>
-                            </div>
-                        </div>
-                        <div class="stat-card-modern">
-                            <div class="stat-icon-modern" style="background: #f0fdf4; color: #22c55e;">
-                                <i data-lucide="check-circle-2" size="20"></i>
-                            </div>
-                            <div>
-                                <div style="font-size: 11px; color: #64748b; font-weight: 600;">STATUS SISTEM</div>
-                                <div style="font-size: 18px; font-weight: 700; color: #22c55e;">Online</div>
-                            </div>
-                        </div>
-                        <div class="stat-card-modern" style="align-items: flex-start; flex-direction: column;">
-                            <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
-                                <div class="stat-icon-modern" style="background: #fefce8; color: #eab308;">
-                                    <i data-lucide="info" size="20"></i>
+                        <!-- Tahun Anggaran Card -->
+                        <div class="stat-card-premium" style="--stat-color: #3b82f6;">
+                            <div class="stat-header">
+                                <div class="stat-icon-premium" style="background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #3b82f6;">
+                                    <i data-lucide="calendar" size="24"></i>
                                 </div>
-                                <div style="font-size: 11px; color: #64748b; font-weight: 600;">INFO TERBARU</div>
+                                <span class="stat-label">Tahun Anggaran</span>
                             </div>
-                            <div style="font-size: 12px; color: #475569; line-height: 1.5; margin-top: 5px;">
-                                Versi 1.0.0 Stable.<br>
+                            <div class="stat-value">2026</div>
+                            <div class="stat-subtext">Periode aktif pengelolaan dana BOS</div>
+                        </div>
+
+                        <!-- Status Sistem Card -->
+                        <div class="stat-card-premium" style="--stat-color: #22c55e;">
+                            <div class="stat-header">
+                                <div class="stat-icon-premium" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); color: #22c55e;">
+                                    <i data-lucide="check-circle-2" size="24"></i>
+                                </div>
+                                <span class="stat-label">Status Sistem</span>
+                            </div>
+                            <div class="stat-value" style="color: #22c55e;">Online</div>
+                            <div class="stat-subtext">Semua layanan berfungsi dengan baik</div>
+                        </div>
+
+                        <!-- Info Sistem Card -->
+                        <div class="stat-card-premium" style="--stat-color: #eab308;">
+                            <div class="stat-header">
+                                <div class="stat-icon-premium" style="background: linear-gradient(135deg, #fefce8, #fef08a); color: #eab308;">
+                                    <i data-lucide="info" size="24"></i>
+                                </div>
+                                <span class="stat-label">Informasi Sistem</span>
+                            </div>
+                            <div class="stat-subtext" style="font-size: 13px; line-height: 1.6;">
+                                <strong style="color: #0f172a; display: block; margin-bottom: 6px;">Versi 1.0.0 Stable</strong>
                                 Fitur upload BKU dan cetak kwitansi otomatis telah aktif.
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right: Quick Access -->
-                    <div class="quick-access-section" style="flex: 1.5;">
-                        <div
-                            style="font-size: 14px; font-weight: 800; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;">
-                            <i data-lucide="zap" size="16" style="color: #eab308; fill: #eab308;"></i> Akses Cepat
-                        </div>
+                    <!-- Right: Ultra Minimalist Quick Access -->
+                    <div class="quick-access-section">
                         <div class="qa-grid">
-                            <div class="qa-card"
-                                onclick="document.querySelector('.nav-item[onclick*=\'upload-view\']').click()">
-                                <div class="qa-icon" style="background: #eff6ff; color: #3b82f6;">
-                                    <i data-lucide="upload-cloud" size="28"></i>
+                            <!-- Unggah BKU Card -->
+                            <div class="qa-card-minimal"
+                                 style="--card-bg: linear-gradient(135deg, #eff6ff, #dbeafe); --card-color: #3b82f6; --card-gradient: rgba(59, 130, 246, 0.08); --card-shadow: rgba(59, 130, 246, 0.25);"
+                                 onclick="document.querySelector('.nav-item[onclick*=\'upload-view\']').click()">
+                                <div class="qa-arrow-minimal">
+                                    <i data-lucide="arrow-right" size="16"></i>
                                 </div>
-                                <div>
-                                    <div class="qa-title">Unggah BKU</div>
-                                    <div class="qa-desc">Import data Excel</div>
+                                <div class="qa-icon-minimal">
+                                    <i data-lucide="upload-cloud" size="26"></i>
                                 </div>
-                            </div>
-                            <div class="qa-card"
-                                onclick="document.querySelector('.nav-item[onclick*=\'manage-view\']').click()">
-                                <div class="qa-icon" style="background: #f0fdf4; color: #22c55e;">
-                                    <i data-lucide="layout-grid" size="28"></i>
-                                </div>
-                                <div>
-                                    <div class="qa-title">Kelola Transaksi</div>
-                                    <div class="qa-desc">Edit & Cetak SPJ</div>
+                                <div class="qa-content-minimal">
+                                    <div class="qa-title-minimal">Unggah BKU</div>
+                                    <div class="qa-desc-minimal">Import data Excel otomatis</div>
                                 </div>
                             </div>
-                            <div class="qa-card"
-                                onclick="document.querySelector('.nav-item[onclick*=\'settings-view\']').click()">
-                                <div class="qa-icon" style="background: #fefce8; color: #eab308;">
-                                    <i data-lucide="school" size="28"></i>
+
+                            <!-- Kelola Transaksi Card -->
+                            <div class="qa-card-minimal"
+                                 style="--card-bg: linear-gradient(135deg, #f0fdf4, #dcfce7); --card-color: #22c55e; --card-gradient: rgba(34, 197, 94, 0.08); --card-shadow: rgba(34, 197, 94, 0.25);"
+                                 onclick="document.querySelector('.nav-item[onclick*=\'manage-view\']').click()">
+                                <div class="qa-arrow-minimal">
+                                    <i data-lucide="arrow-right" size="16"></i>
                                 </div>
-                                <div>
-                                    <div class="qa-title">Data Sekolah</div>
-                                    <div class="qa-desc">Konfigurasi Kop</div>
+                                <div class="qa-icon-minimal">
+                                    <i data-lucide="layout-grid" size="26"></i>
+                                </div>
+                                <div class="qa-content-minimal">
+                                    <div class="qa-title-minimal">Kelola Transaksi</div>
+                                    <div class="qa-desc-minimal">Edit & cetak SPJ</div>
                                 </div>
                             </div>
-                            <div class="qa-card"
-                                onclick="document.querySelector('.nav-item[onclick*=\'designer-view\']').click()">
-                                <div class="qa-icon" style="background: #fdf2f8; color: #db2777;">
-                                    <i data-lucide="pen-tool" size="28"></i>
+
+                            <!-- Data Sekolah Card -->
+                            <div class="qa-card-minimal"
+                                 style="--card-bg: linear-gradient(135deg, #fefce8, #fef08a); --card-color: #eab308; --card-gradient: rgba(234, 179, 8, 0.08); --card-shadow: rgba(234, 179, 8, 0.25);"
+                                 onclick="document.querySelector('.nav-item[onclick*=\'settings-view\']').click()">
+                                <div class="qa-arrow-minimal">
+                                    <i data-lucide="arrow-right" size="16"></i>
                                 </div>
-                                <div>
-                                    <div class="qa-title">Desain Nota</div>
-                                    <div class="qa-desc">Buat Template</div>
+                                <div class="qa-icon-minimal">
+                                    <i data-lucide="school" size="26"></i>
+                                </div>
+                                <div class="qa-content-minimal">
+                                    <div class="qa-title-minimal">Data Sekolah</div>
+                                    <div class="qa-desc-minimal">Konfigurasi kop surat</div>
+                                </div>
+                            </div>
+
+                            <!-- Desain Nota Card -->
+                            <div class="qa-card-minimal"
+                                 style="--card-bg: linear-gradient(135deg, #fdf2f8, #fce7f3); --card-color: #db2777; --card-gradient: rgba(219, 39, 119, 0.08); --card-shadow: rgba(219, 39, 119, 0.25);"
+                                 onclick="document.querySelector('.nav-item[onclick*=\'designer-view\']').click()">
+                                <div class="qa-arrow-minimal">
+                                    <i data-lucide="arrow-right" size="16"></i>
+                                </div>
+                                <div class="qa-icon-minimal">
+                                    <i data-lucide="pen-tool" size="26"></i>
+                                </div>
+                                <div class="qa-content-minimal">
+                                    <div class="qa-title-minimal">Desain Nota</div>
+                                    <div class="qa-desc-minimal">Template kustom</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Modern Footer -->
-                <div class="modern-footer">
-                    <div>&copy; 2026 Si-BOS Administration System</div>
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        Architect by <span style="font-weight: 700; color: #2563eb;">SANTO X/CODE</span>
                     </div>
                 </div>
             </div>
