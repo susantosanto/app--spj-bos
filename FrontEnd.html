@@ -421,21 +421,24 @@
         #dashboard-view.active {
             display: flex;
             flex-direction: column;
-            min-height: calc(100vh - 100px);
+            height: calc(100vh - 40px);
+            overflow: hidden;
         }
 
         .dashboard-container {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 16px;
             animation: fadeIn 0.5s ease-out;
+            flex: 1;
+            min-height: 0;
         }
 
         /* Premium Hero Section */
         .dashboard-hero {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a8a 100%);
             border-radius: 28px;
-            padding: 40px 48px;
+            padding: 28px 36px;
             color: white;
             display: flex;
             justify-content: space-between;
@@ -443,7 +446,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            min-height: 140px;
+            min-height: 110px;
         }
 
         .dashboard-hero::before {
@@ -486,19 +489,19 @@
             gap: 8px;
             background: rgba(59, 130, 246, 0.15);
             border: 1px solid rgba(59, 130, 246, 0.3);
-            padding: 6px 16px;
+            padding: 5px 12px;
             border-radius: 50px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             color: #60a5fa;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             backdrop-filter: blur(10px);
         }
 
         .hero-text h1 {
-            font-size: 34px;
+            font-size: 28px;
             font-weight: 900;
             margin-bottom: 8px;
             letter-spacing: -1px;
@@ -509,10 +512,10 @@
         }
 
         .hero-text p {
-            font-size: 15px;
+            font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
             font-weight: 400;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         /* Premium Clock Widget */
@@ -521,8 +524,8 @@
             z-index: 10;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
-            padding: 20px 32px;
-            border-radius: 24px;
+            padding: 14px 24px;
+            border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: right;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -536,7 +539,7 @@
         }
 
         .clock-time {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: 900;
             font-variant-numeric: tabular-nums;
             background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
@@ -544,15 +547,15 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1;
-            letter-spacing: 8px;
+            letter-spacing: 6px;
             filter: drop-shadow(0 4px 20px rgba(56, 189, 248, 0.5));
         }
 
         .clock-date {
-            font-size: 13px;
+            font-size: 12px;
             color: rgba(255, 255, 255, 0.6);
             font-weight: 500;
-            margin-top: 8px;
+            margin-top: 6px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
@@ -562,9 +565,9 @@
         /* Dashboard Grid Layout */
         .dashboard-content-grid {
             display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 24px;
-            min-height: 500px;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            flex: 1;
         }
 
         /* Premium Stats Column */
@@ -669,17 +672,17 @@
         .qa-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            gap: 14px;
         }
 
         .qa-card-minimal {
             background: #ffffff;
-            border-radius: 20px;
-            padding: 28px 24px;
+            border-radius: 18px;
+            padding: 22px 20px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 20px;
+            gap: 16px;
             cursor: pointer;
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             border: 1px solid rgba(226, 232, 240, 0.6);
@@ -729,9 +732,9 @@
         }
 
         .qa-icon-minimal {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -762,10 +765,10 @@
         }
 
         .qa-title-minimal {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: #0f172a;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             letter-spacing: -0.3px;
             transition: color 0.3s;
         }
@@ -775,9 +778,9 @@
         }
 
         .qa-desc-minimal {
-            font-size: 12px;
+            font-size: 11px;
             color: #94a3b8;
-            line-height: 1.5;
+            line-height: 1.4;
             font-weight: 500;
         }
 
@@ -830,7 +833,7 @@
             justify-content: flex-end;
             align-items: center;
             gap: 16px;
-            margin-bottom: 30px;
+            margin-bottom: 12px;
             animation: fadeIn 0.5s ease-out;
         }
 
@@ -1446,7 +1449,7 @@
         /* --- Print Styles --- */
         @media print {
             @page {
-                margin: 0;
+                margin: 10mm;
                 size: A4 portrait;
             }
 
@@ -1455,11 +1458,9 @@
                 height: auto !important;
                 overflow: visible !important;
                 background: white !important;
-            }
-
-            body {
                 margin: 0 !important;
                 padding: 0 !important;
+                width: 100% !important;
             }
 
             /* HIDE EVERYTHING EXCEPT MODAL PARENTS */
@@ -1470,6 +1471,7 @@
             .toast-container,
             .confirm-overlay {
                 display: none !important;
+                visibility: hidden !important;
             }
 
             .main-content {
@@ -1485,15 +1487,20 @@
             /* SHOW ONLY MODAL CONTENT */
             #previewModal.modal-overlay {
                 display: block !important;
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                visibility: visible !important;
+                position: static !important;
                 background: white !important;
                 width: 100% !important;
                 height: auto !important;
                 z-index: 9999 !important;
                 overflow: visible !important;
+                backdrop-filter: none !important;
+                visibility: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            #previewModal.modal-overlay * {
+                visibility: visible !important;
             }
 
             .modal-container {
@@ -1503,16 +1510,31 @@
                 background: white !important;
                 box-shadow: none !important;
                 border-radius: 0 !important;
+                visibility: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .preview-modal-container {
+                display: block !important;
+                flex-direction: column !important;
+                width: 100% !important;
+                height: auto !important;
+                background: white !important;
+                visibility: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
             .preview-sidebar,
+            .preview-sidebar-header,
+            .preview-tabs,
             .preview-toolbar {
                 display: none !important;
+                visibility: hidden !important;
             }
 
-            .preview-main,
-            .paper-viewport,
-            #printArea {
+            .preview-main {
                 display: block !important;
                 width: 100% !important;
                 height: auto !important;
@@ -1523,22 +1545,64 @@
                 overflow: visible !important;
             }
 
+            .paper-viewport {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                visibility: visible !important;
+                overflow: visible !important;
+            }
+
+            #printArea {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                width: 100% !important;
+                height: auto !important;
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                visibility: visible !important;
+                overflow: visible !important;
+                transform: none !important;
+            }
+
             .paper {
                 display: block !important;
                 width: 210mm !important;
                 min-height: 297mm !important;
-                padding: 40px !important;
+                padding: 10mm 15mm !important;
                 margin: 0 auto !important;
                 border: none !important;
                 box-shadow: none !important;
                 visibility: visible !important;
                 page-break-after: always !important;
                 break-after: page !important;
+                page-break-before: auto !important;
+                break-before: auto !important;
+                box-sizing: border-box !important;
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                transform: none !important;
             }
 
             .paper:last-child {
                 page-break-after: auto !important;
                 break-after: auto !important;
+            }
+
+            #paper,
+            #paperContent {
+                display: block !important;
+                visibility: visible !important;
+                background: white !important;
+                color: black !important;
+                width: 100% !important;
+                transform: none !important;
             }
 
             #printArea {
@@ -1783,49 +1847,8 @@
 
                 <!-- Main Content Grid -->
                 <div class="dashboard-content-grid">
-                    <!-- Left Sidebar: Stats Cards -->
-                    <div class="stats-column">
-                        <!-- Tahun Anggaran Card -->
-                        <div class="stat-card-premium" style="--stat-color: #3b82f6;">
-                            <div class="stat-header">
-                                <div class="stat-icon-premium" style="background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #3b82f6;">
-                                    <i data-lucide="calendar" size="24"></i>
-                                </div>
-                                <span class="stat-label">Tahun Anggaran</span>
-                            </div>
-                            <div class="stat-value">2026</div>
-                            <div class="stat-subtext">Periode aktif pengelolaan dana BOS</div>
-                        </div>
-
-                        <!-- Status Sistem Card -->
-                        <div class="stat-card-premium" style="--stat-color: #22c55e;">
-                            <div class="stat-header">
-                                <div class="stat-icon-premium" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); color: #22c55e;">
-                                    <i data-lucide="check-circle-2" size="24"></i>
-                                </div>
-                                <span class="stat-label">Status Sistem</span>
-                            </div>
-                            <div class="stat-value" style="color: #22c55e;">Online</div>
-                            <div class="stat-subtext">Semua layanan berfungsi dengan baik</div>
-                        </div>
-
-                        <!-- Info Sistem Card -->
-                        <div class="stat-card-premium" style="--stat-color: #eab308;">
-                            <div class="stat-header">
-                                <div class="stat-icon-premium" style="background: linear-gradient(135deg, #fefce8, #fef08a); color: #eab308;">
-                                    <i data-lucide="info" size="24"></i>
-                                </div>
-                                <span class="stat-label">Informasi Sistem</span>
-                            </div>
-                            <div class="stat-subtext" style="font-size: 13px; line-height: 1.6;">
-                                <strong style="color: #0f172a; display: block; margin-bottom: 6px;">Versi 1.0.0 Stable</strong>
-                                Fitur upload BKU dan cetak kwitansi otomatis telah aktif.
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Right: Ultra Minimalist Quick Access -->
-                    <div class="quick-access-section">
+                    <div class="quick-access-section" style="grid-column: 1 / -1;">
                         <div class="qa-grid">
                             <!-- Unggah BKU Card -->
                             <div class="qa-card-minimal"
