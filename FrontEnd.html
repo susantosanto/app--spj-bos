@@ -474,8 +474,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
         }
 
         .hero-content {
@@ -1449,7 +1458,7 @@
         /* --- Print Styles --- */
         @media print {
             @page {
-                margin: 10mm;
+                margin: 15mm;
                 size: A4 portrait;
             }
 
@@ -1461,6 +1470,8 @@
                 margin: 0 !important;
                 padding: 0 !important;
                 width: 100% !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             /* HIDE EVERYTHING EXCEPT MODAL PARENTS */
@@ -1570,11 +1581,16 @@
                 transform: none !important;
             }
 
+            .paper * {
+                box-sizing: border-box !important;
+            }
+
             .paper {
                 display: block !important;
-                width: 210mm !important;
-                min-height: 297mm !important;
-                padding: 10mm 15mm !important;
+                width: 190mm !important;
+                max-width: 100% !important;
+                min-height: auto !important;
+                padding: 8mm 6mm !important;
                 margin: 0 auto !important;
                 border: none !important;
                 box-shadow: none !important;
@@ -1588,6 +1604,8 @@
                 top: 0 !important;
                 left: 0 !important;
                 transform: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             .paper:last-child {
@@ -1852,8 +1870,8 @@
                         <div class="qa-grid">
                             <!-- Unggah BKU Card -->
                             <div class="qa-card-minimal"
-                                 style="--card-bg: linear-gradient(135deg, #eff6ff, #dbeafe); --card-color: #3b82f6; --card-gradient: rgba(59, 130, 246, 0.08); --card-shadow: rgba(59, 130, 246, 0.25);"
-                                 onclick="document.querySelector('.nav-item[onclick*=\'upload-view\']').click()">
+                                style="--card-bg: linear-gradient(135deg, #eff6ff, #dbeafe); --card-color: #3b82f6; --card-gradient: rgba(59, 130, 246, 0.08); --card-shadow: rgba(59, 130, 246, 0.25);"
+                                onclick="document.querySelector('.nav-item[onclick*=\'upload-view\']').click()">
                                 <div class="qa-arrow-minimal">
                                     <i data-lucide="arrow-right" size="16"></i>
                                 </div>
@@ -1868,8 +1886,8 @@
 
                             <!-- Kelola Transaksi Card -->
                             <div class="qa-card-minimal"
-                                 style="--card-bg: linear-gradient(135deg, #f0fdf4, #dcfce7); --card-color: #22c55e; --card-gradient: rgba(34, 197, 94, 0.08); --card-shadow: rgba(34, 197, 94, 0.25);"
-                                 onclick="document.querySelector('.nav-item[onclick*=\'manage-view\']').click()">
+                                style="--card-bg: linear-gradient(135deg, #f0fdf4, #dcfce7); --card-color: #22c55e; --card-gradient: rgba(34, 197, 94, 0.08); --card-shadow: rgba(34, 197, 94, 0.25);"
+                                onclick="document.querySelector('.nav-item[onclick*=\'manage-view\']').click()">
                                 <div class="qa-arrow-minimal">
                                     <i data-lucide="arrow-right" size="16"></i>
                                 </div>
@@ -1884,8 +1902,8 @@
 
                             <!-- Data Sekolah Card -->
                             <div class="qa-card-minimal"
-                                 style="--card-bg: linear-gradient(135deg, #fefce8, #fef08a); --card-color: #eab308; --card-gradient: rgba(234, 179, 8, 0.08); --card-shadow: rgba(234, 179, 8, 0.25);"
-                                 onclick="document.querySelector('.nav-item[onclick*=\'settings-view\']').click()">
+                                style="--card-bg: linear-gradient(135deg, #fefce8, #fef08a); --card-color: #eab308; --card-gradient: rgba(234, 179, 8, 0.08); --card-shadow: rgba(234, 179, 8, 0.25);"
+                                onclick="document.querySelector('.nav-item[onclick*=\'settings-view\']').click()">
                                 <div class="qa-arrow-minimal">
                                     <i data-lucide="arrow-right" size="16"></i>
                                 </div>
@@ -1900,8 +1918,8 @@
 
                             <!-- Desain Nota Card -->
                             <div class="qa-card-minimal"
-                                 style="--card-bg: linear-gradient(135deg, #fdf2f8, #fce7f3); --card-color: #db2777; --card-gradient: rgba(219, 39, 119, 0.08); --card-shadow: rgba(219, 39, 119, 0.25);"
-                                 onclick="document.querySelector('.nav-item[onclick*=\'designer-view\']').click()">
+                                style="--card-bg: linear-gradient(135deg, #fdf2f8, #fce7f3); --card-color: #db2777; --card-gradient: rgba(219, 39, 119, 0.08); --card-shadow: rgba(219, 39, 119, 0.25);"
+                                onclick="document.querySelector('.nav-item[onclick*=\'designer-view\']').click()">
                                 <div class="qa-arrow-minimal">
                                     <i data-lucide="arrow-right" size="16"></i>
                                 </div>
@@ -4150,7 +4168,7 @@
                 // --- TEMPLATE SURAT PESANAN (FORMAL) ---
                 const jmlPesanan = document.getElementById('custJumlahPesanan').value || "1 Paket";
                 html = `
-                    <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                    <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
                         ${schoolKop}
                         <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
                             <p>${schoolData.kecamatan}, ${datePesanInfo.fullDate}</p>
@@ -4203,7 +4221,7 @@
             } else if (docType === 'berita_acara') {
                 // --- TEMPLATE BERITA ACARA SERAH TERIMA ---
                 html = `
-                    <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                    <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
                         ${schoolKop}
                         
                         <div style="text-align: center; margin-bottom: 30px;">
@@ -4295,7 +4313,7 @@
             } else if (docType === 'kwitansi') {
                 // --- TEMPLATE KWITANSI BENDAHARA (SESUAI GAMBAR) ---
                 html = `
-                    <div style="border: 4px double #000; padding: 25px; font-family: Arial, sans-serif; color: #000; background: #fff;">
+                    <div style="border: 4px double #000; padding: 15px; font-family: Arial, sans-serif; color: #000; background: #fff; width: 100%; box-sizing: border-box;">
                         <h1 style="text-align: center; text-decoration: underline; margin-bottom: 20px; font-size: 24px; letter-spacing: 5px;">KUITANSI</h1>
                         
                         <div style="display: grid; grid-template-columns: 180px 20px 1fr; gap: 10px; line-height: 2;">
@@ -4314,7 +4332,7 @@
                                 <p style="margin:0; font-size: 18px; font-weight: bold;">${jumlah.toLocaleString('id-ID')},-</p>
                             </div>
                             
-                            <div style="display: flex; gap: 40px;">
+                            <div style="display: grid; grid-template-columns: repeat(3, 110px); gap: 5px; justify-content: flex-end; align-items: flex-start;">
                                 <div style="text-align: center;">
                                     <p style="margin-bottom: 5px; font-size: 13px;">Setuju Dibayar,</p>
                                     <p style="font-weight: bold; margin-bottom: 60px; font-size: 13px;">Kepala Sekolah</p>
@@ -4327,11 +4345,11 @@
                                     <p style="font-weight: bold; text-decoration: underline; margin:0; font-size: 12px;">${schoolData.treasurer}</p>
                                     <p style="margin:0; font-size: 11px;">NIP. ${schoolData.treasurerNip}</p>
                                 </div>
-                                <div style="text-align: center; position: relative;">
+                                <div style="text-align: center; position: relative; width: 110px;">
                                     <p style="margin-bottom: 5px; font-size: 13px;">&nbsp;</p>
                                     ${stampBase64 ? `<img src="${stampBase64}" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 70px; opacity: 0.8;">` : ''}
                                     <p style="font-weight: bold; margin-bottom: 60px; font-size: 13px;">Penerima</p>
-                                    <p style="font-weight: bold; margin:0; font-size: 14px; white-space: nowrap;">( ${vendorName || "................................."} )</p>
+                                    <p style="font-weight: bold; margin:0; font-size: 11px;">( ${vendorName || "................................."} )</p>
                                 </div>
                             </div>
                         </div>
@@ -4341,7 +4359,7 @@
                 // --- TEMPLATE UNDANGAN (SESUAI TEKS) ---
                 const hariKegiatan = document.getElementById('custHari').value || dateKegiatanInfo.dayName;
                 html = `
-                    <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                    <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
                         ${schoolKop}
                         <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
                             <p>${schoolData.kecamatan}, ${datePesanInfo.fullDate}</p>
@@ -4446,7 +4464,7 @@
             const tempat = document.getElementById('custTempatKegiatan').value || "Ruang Kelas";
 
             return `
-                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px;">
+                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
                     ${schoolKop}
                     <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">NOTULEN KEGIATAN</div>
                     
@@ -4504,7 +4522,7 @@
                     </tr> `;
             });
             return `
-                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
                     ${schoolKop}
                     <div style="text-align: center; margin-bottom: 20px;">
                         <h2 style="margin: 0;">DAFTAR HADIR</h2>
@@ -4598,7 +4616,7 @@
             }
 
             return `
-                <div style="font-family:'Times New Roman',Times,serif; color:#000; padding:10px 40px;">
+                <div style="font-family:'Times New Roman',Times,serif; color:#000; padding:10px 40px; width: 100%; box-sizing: border-box;">
                     ${schoolKop}
                     <div style="text-align:center; margin-bottom:16px;">
                         <h2 style="text-decoration:underline; margin-bottom:6px; font-size:18px;">LEMBAR DOKUMENTASI</h2>
@@ -4640,7 +4658,7 @@
 
 
             return `
-                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px;">
+                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
                     ${schoolKop}
                     <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">DOKUMEN PERENCANAAN</div>
                     
@@ -4770,7 +4788,7 @@
             const terbilangText = terbilang(jumlahTotal) + " Rupiah";
 
             return `
-                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; font-size: 12px;"> 
+                <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;"> 
                     ${schoolKop}
                     <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 5px; border-top:none;">
                         <tr>
@@ -4874,7 +4892,7 @@
             const tempatDibuat = document.getElementById('custTempatKegiatan')?.value || schoolData.kecamatan || "Bandung Barat";
             const tglDibuat = dt.fullDate;
 
-            const baseStyle = "font-family: 'Times New Roman', Times, serif; color: #000; padding: 0 40px 10px 40px; font-size: 12px;";
+            const baseStyle = "font-family: 'Times New Roman', Times, serif; color: #000; padding: 0 40px 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;";
 
             return `
                 <div style="${baseStyle}">
@@ -4963,7 +4981,7 @@
             const tempatDibuat = document.getElementById('custTempatKegiatan')?.value || schoolData.kecamatan || "Bandung Barat";
             const tglDibuat = dt.fullDate;
 
-            const baseStyle = "font-family: 'Times New Roman', Times, serif; color: #000; padding: 0 40px 10px 40px; font-size: 12px;";
+            const baseStyle = "font-family: 'Times New Roman', Times, serif; color: #000; padding: 0 40px 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;";
 
             return `
                 <div style="${baseStyle}">
@@ -5048,7 +5066,7 @@
             const sekolahShort = schoolData.name.replace(/SEKOLAH\s+/, '').replace(/NEGERI\s+/, 'SDN ');
 
             return `
-                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px;">
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;">
                     ${schoolKop}
                     
                     <div style="text-align: center; margin-bottom: 20px;">
@@ -5195,7 +5213,7 @@
             `).join('');
 
             return `
-                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 24px; font-size: 11px;">
+                <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 24px; font-size: 11px; width: 100%; box-sizing: border-box;">
                     ${schoolKop}
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 8px;">
                         <div>
