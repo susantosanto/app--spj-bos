@@ -454,7 +454,7 @@
         .dashboard-content-grid {
             display: grid;
             grid-template-columns: 280px 1fr;
-            gap: 24px;
+            gap: 20px;
             flex-grow: 1;
             overflow: hidden;
         }
@@ -463,13 +463,13 @@
         .stats-column {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .stat-card-modern {
             background: white;
             border-radius: 16px;
-            padding: 20px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             gap: 16px;
@@ -497,7 +497,7 @@
         .quick-access-section {
             background: white;
             border-radius: 24px;
-            padding: 30px;
+            padding: 24px;
             border: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
@@ -507,77 +507,73 @@
         .qa-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            align-content: start;
+            gap: 16px;
         }
 
         .qa-card {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 20px;
+            padding: 16px 20px;
             display: flex;
-            flex-direction: row;
             align-items: center;
-            justify-content: flex-start;
             gap: 20px;
-            text-align: left;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
-            height: auto;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(226, 232, 240, 0.8);
             position: relative;
             overflow: hidden;
-        }
-
-        .qa-card::before {
-            content: '';
-            position: absolute;
-            top: -30px;
-            right: -30px;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            transition: 0.5s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
         }
 
         .qa-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
-            border-color: #3b82f6;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #2563eb;
+        }
+
+        .qa-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .qa-card:hover::after {
+            opacity: 1;
         }
 
         .qa-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 0;
-            transition: 0.3s;
+            transition: all 0.4s;
             position: relative;
             z-index: 1;
         }
 
         .qa-card:hover .qa-icon {
-            transform: scale(1.1);
+            transform: rotate(-10deg) scale(1.1);
         }
 
         .qa-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 4px;
-            position: relative;
+            font-size: 16px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 2px;
             z-index: 1;
         }
 
         .qa-desc {
-            font-size: 11px;
-            color: var(--text-muted);
-            line-height: 1.4;
-            position: relative;
+            font-size: 12px;
+            color: #64748b;
             z-index: 1;
         }
 
@@ -586,15 +582,60 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: white;
-            border-radius: 16px;
-            border: 1px solid #e2e8f0;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
             font-size: 12px;
-            color: var(--text-muted);
+            color: #64748b;
+            margin-top: auto;
         }
 
-        /* --- Top Bar & User Profile (New) --- */
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: calc(100vh - 120px);
+            padding: 10px 0;
+        }
+
+        .dashboard-hero {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 24px;
+            padding: 30px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.5);
+        }
+
+        .dashboard-hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-text h1 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-text p {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
         .top-bar {
             display: flex;
             justify-content: flex-end;
@@ -1019,14 +1060,21 @@
         }
 
         .modal-container {
-            background: #f1f5f9;
-            width: 98%;
-            height: 95vh;
-            border-radius: 12px;
-            display: flex !important;
-            flex-direction: row !important;
+            background: #ffffff;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .preview-modal-container {
+            width: 98% !important;
+            height: 95vh !important;
+            flex-direction: row !important;
+            background: #f1f5f9;
+            border-radius: 12px;
         }
 
         .preview-sidebar {
@@ -1373,21 +1421,86 @@
             padding: 10px;
         }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .info-grid {
+        /* Drive File Item List */
+        .drive-file-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drive-file-item:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .file-icon {
+            width: 48px;
+            height: 48px;
+            background: #f1f5f9;
+            color: #64748b;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .drive-file-item:hover .file-icon {
+            background: #2563eb;
+            color: white;
+        }
+
+        .file-details {
+            flex-grow: 1;
+        }
+
+        .file-name {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 2px;
+        }
+
+        .file-date {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .file-action {
+            color: #cbd5e1;
+            transition: all 0.2s ease;
+        }
+
+        .drive-file-item:hover .file-action {
+            color: #2563eb;
+            transform: translateX(3px);
+        }
+
+        .form-grid-modal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-full-width {
+            grid-column: span 2;
+        }
+
+        /* Responsive Modal */
+        @media (max-width: 600px) {
+            .form-grid-modal {
                 grid-template-columns: 1fr;
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-
-            .btn-submit {
+            .form-full-width {
                 grid-column: span 1;
             }
         }
@@ -1459,15 +1572,20 @@
         <section id="dashboard-view" class="view-section active">
             <div class="dashboard-container">
                 <!-- Header Compact -->
-                <div class="dashboard-hero">
+                <div class="dashboard-hero" style="padding: 24px 40px; min-height: 100px; margin-bottom: 24px;">
                     <div class="hero-text">
-                        <h1>Panel Administrasi Utama</h1>
-                        <p>Sistem Administrasi SPJ Bantuan Operasional Sekolah Terpadu.</p>
+                        <h1 style="font-size: 26px; color: white;">Panel Administrasi Utama</h1>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.8);">Sistem Administrasi SPJ TOS Terpadu.
+                        </p>
                     </div>
-                    <div class="clock-widget">
-                        <div class="clock-time" id="clock">00:00:00</div>
-                        <div class="clock-date">
-                            <i data-lucide="calendar" size="14"></i>
+                    <div class="clock-widget"
+                        style="background: rgba(255,255,255,0.08); padding: 12px 24px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); text-align: right; color: white;">
+                        <div class="clock-time" id="clock"
+                            style="font-size: 24px; font-weight: 800; letter-spacing: 1px; color: #38bdf8;">00:00:00
+                        </div>
+                        <div class="clock-date"
+                            style="font-size: 11px; opacity: 0.8; display: flex; align-items: center; justify-content: flex-end; gap: 5px;">
+                            <i data-lucide="calendar" size="12"></i>
                             <span id="date">...</span>
                         </div>
                     </div>
@@ -1495,8 +1613,7 @@
                                 <div style="font-size: 18px; font-weight: 700; color: #22c55e;">Online</div>
                             </div>
                         </div>
-                        <div class="stat-card-modern"
-                            style="flex-grow: 1; align-items: flex-start; flex-direction: column;">
+                        <div class="stat-card-modern" style="align-items: flex-start; flex-direction: column;">
                             <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
                                 <div class="stat-icon-modern" style="background: #fefce8; color: #eab308;">
                                     <i data-lucide="info" size="20"></i>
@@ -1511,10 +1628,10 @@
                     </div>
 
                     <!-- Right: Quick Access -->
-                    <div class="quick-access-section">
+                    <div class="quick-access-section" style="flex: 1.5;">
                         <div
-                            style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
-                            <i data-lucide="zap" size="18" style="color: #eab308; fill: #eab308;"></i> Akses Cepat
+                            style="font-size: 14px; font-weight: 800; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                            <i data-lucide="zap" size="16" style="color: #eab308; fill: #eab308;"></i> Akses Cepat
                         </div>
                         <div class="qa-grid">
                             <div class="qa-card"
@@ -1575,44 +1692,34 @@
         <section id="upload-view" class="view-section">
             <div class="header-center">
                 <h2>Mulai Dokumentasi SPJ</h2>
-                <p>Unggah file Buku Kas Umum (BKU) Anda. AI kami akan mengekstrak setiap transaksi belanja untuk
-                    dibuatkan kwitansi dan kelengkapan nya otomatis.</p>
+                <p>Pilih file Buku Kas Umum (BKU) Anda untuk memulai ekstraksi transaksi otomatis.</p>
             </div>
 
             <div style="max-width: 600px; margin: 0 auto 60px;">
-                <div class="upload-card" onclick="openDrivePicker()"
-                    style="margin-bottom:0; border-style: solid; border-color: #22c55e; background: #f0fdf4; padding: 60px 40px;">
-                    <div class="upload-icon-wrapper"
-                        style="background: #22c55e; color: white; width: 80px; height: 80px;">
-                        <i data-lucide="hard-drive" size="40"></i>
+                <div class="upload-container-premium">
+                    <div class="upload-card-new" onclick="openDrivePicker()"
+                        style="background: linear-gradient(135deg, #166534 0%, #22c55e 100%); padding: 80px 40px; border-radius: 32px; color: white; cursor: pointer; transition: all 0.4s ease; position: relative; overflow: hidden; box-shadow: 0 30px 60px -12px rgba(34, 197, 94, 0.4); text-align: center;">
+                        <div
+                            style="position: absolute; top: -50px; right: -50px; width: 250px; height: 250px; background: rgba(255,255,255,0.1); border-radius: 50%;">
+                        </div>
+                        <div class="upload-icon-premium"
+                            style="background: rgba(255,255,255,0.2); color: white; width: 90px; height: 90px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; backdrop-filter: blur(5px);">
+                            <i data-lucide="hard-drive" size="44"></i>
+                        </div>
+                        <h3 style="font-size: 32px; font-weight: 900; margin-bottom: 12px; letter-spacing: -1px;">Google
+                            Drive</h3>
+                        <p
+                            style="opacity: 0.9; text-transform: none; letter-spacing: 0; font-size: 16px; font-weight: 400; max-width: 300px; margin: 0 auto;">
+                            Pilih file BKU langsung dari folder Drive Anda dengan cepat.</p>
+                        <div
+                            style="margin-top: 40px; display: inline-flex; align-items: center; gap: 12px; font-weight: 800; font-size: 15px; background: rgba(255,255,255,0.2); padding: 12px 24px; border-radius: 50px;">
+                            <span>Cari File Sekarang</span>
+                            <i data-lucide="arrow-right" size="18"></i>
+                        </div>
                     </div>
-                    <h3 style="color: #166534; font-size: 24px;">Unggah File dari Google Drive</h3>
                 </div>
             </div>
 
-            <div class="info-grid">
-                <div class="info-card">
-                    <div class="icon-box" style="background: rgba(249, 115, 22, 0.1); color: #f97316;">
-                        <i data-lucide="file-search" size="24"></i>
-                    </div>
-                    <h4>Ekstraksi Pintar</h4>
-                    <p>Secara otomatis mengenali toko, jumlah, dan jenis belanja sekolah.</p>
-                </div>
-                <div class="info-card">
-                    <div class="icon-box" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
-                        <i data-lucide="printer" size="24"></i>
-                    </div>
-                    <h4>Siap Cetak</h4>
-                    <p>Kwitansi dan Nota diformat sesuai standar pelaporan Dana BOS.</p>
-                </div>
-                <div class="info-card">
-                    <div class="icon-box" style="background: rgba(168, 85, 247, 0.1); color: #a855f7;">
-                        <i data-lucide="check-circle" size="24"></i>
-                    </div>
-                    <h4>Akurat & Cepat</h4>
-                    <p>Mengurangi kesalahan penulisan angka dan terbilang secara manual.</p>
-                </div>
-            </div>
         </section>
 
         <!-- View 2: Kelola Transaksi -->
@@ -1810,7 +1917,7 @@
 
         <!-- Preview Modal -->
         <div id="previewModal" class="modal-overlay">
-            <div class="modal-container">
+            <div class="modal-container preview-modal-container">
                 <div class="preview-sidebar">
                     <div class="preview-sidebar-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -2286,14 +2393,22 @@
                             </div>
                         </div>
 
+                        <div class="form-group" id="fg-hari" style="display: none;">
+                            <label>Hari Kegiatan</label>
+                            <input type="text" id="custHari" oninput="updatePreview()" placeholder="Contoh: Senin">
+                        </div>
+
+
+
+                        <div class="form-group" id="fg-jumlah-pesanan" style="display: none;">
+                            <label>Jumlah Pesanan (Teks)</label>
+                            <input type="text" id="custJumlahPesanan" oninput="updatePreview()"
+                                placeholder="Contoh: 1 (Satu) Paket">
+                        </div>
+
                         <!-- Notulen Section -->
                         <div id="notulenSection"
                             style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
-                            <div class="form-group">
-                                <label>Waktu Kegiatan</label>
-                                <input type="text" id="custWaktu" oninput="updatePreview()"
-                                    placeholder="Contoh: 08.00 - 10.00 WIB">
-                            </div>
                             <div class="form-group">
                                 <label>Hasil Pembahasan (Pisahkan dengan Enter)</label>
                                 <textarea id="custHasil" oninput="updatePreview()" rows="5"
@@ -2345,13 +2460,13 @@
                                 placeholder="dd/mm/yyyy">
                         </div>
 
-                        <div class="form-group" id="fg-tempat">
+                        <div class="form-group" id="fg-tempat" style="display: none;">
                             <label>Tempat Kegiatan / Lokasi</label>
                             <input type="text" id="custTempatKegiatan" oninput="updatePreview()"
                                 placeholder="Contoh: SD Negeri 1 ...">
                         </div>
 
-                        <div class="form-group" id="fg-waktu-kegiatan">
+                        <div class="form-group" id="fg-waktu-kegiatan" style="display: none;">
                             <label>Waktu Kegiatan</label>
                             <input type="text" id="custWaktuKegiatan" oninput="updatePreview()"
                                 placeholder="Contoh: 08.00 sd Selesai">
@@ -2421,33 +2536,42 @@
 
         <!-- Add Manual Transaction Modal -->
         <div id="addModal" class="modal-overlay">
-            <div class="modal-container" style="max-width: 500px; height: auto; flex-direction: column; padding: 24px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="font-size: 20px; font-weight: 700;">Tambah Transaksi Manual</h3>
-                    <button onclick="closeAddModal()" style="background:none; border:none; cursor:pointer;">
+            <div class="modal-container" style="width: 100%; max-width: 500px; padding: 32px;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
+                    <h3 style="font-size: 20px; font-weight: 800; color: #0f172a;">Tambah Transaksi Manual</h3>
+                    <button onclick="closeAddModal()"
+                        style="background: #f8fafc; border: none; cursor: pointer; color: #64748b; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
                         <i data-lucide="x" size="20"></i>
                     </button>
                 </div>
 
-                <div class="form-group">
-                    <label>Tanggal</label>
-                    <input type="date" id="addDate">
-                </div>
-                <div class="form-group">
-                    <label>No Bukti</label>
-                    <input type="text" id="addNoBukti" placeholder="Contoh: BKU-001">
-                </div>
-                <div class="form-group">
-                    <label>Uraian Belanja</label>
-                    <input type="text" id="addUraian" placeholder="Contoh: Belanja ATK Kegiatan...">
-                </div>
-                <div class="form-group">
-                    <label>Penerima / Toko</label>
-                    <input type="text" id="addPenerima" placeholder="Contoh: Toko Abadi">
-                </div>
-                <div class="form-group">
-                    <label>Jumlah (Rp)</label>
-                    <input type="number" id="addJumlah" placeholder="0">
+                <div class="form-grid-modal">
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="date" id="addDate"
+                            style="width: 100%; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label>No Bukti</label>
+                        <input type="text" id="addNoBukti" placeholder="Contoh: BKU-001"
+                            style="width: 100%; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px;">
+                    </div>
+                    <div class="form-group form-full-width">
+                        <label>Uraian Belanja</label>
+                        <input type="text" id="addUraian" placeholder="Contoh: Belanja ATK Kegiatan..."
+                            style="width: 100%; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px;">
+                    </div>
+                    <div class="form-group form-full-width">
+                        <label>Penerima / Toko</label>
+                        <input type="text" id="addPenerima" placeholder="Contoh: Toko Abadi"
+                            style="width: 100%; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px;">
+                    </div>
+                    <div class="form-group form-full-width">
+                        <label>Jumlah (Rp)</label>
+                        <input type="number" id="addJumlah" placeholder="0"
+                            style="width: 100%; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px;">
+                    </div>
                 </div>
 
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
@@ -2464,17 +2588,17 @@
 
         <!-- Drive Picker Modal -->
         <div id="driveModal" class="modal-overlay">
-            <div class="modal-container"
-                style="max-width: 600px; height: 500px; flex-direction: column; padding: 24px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="font-size: 20px; font-weight: 700;">File BKU di Google Drive</h3>
-                    <button onclick="closeDrivePicker()" style="background:none; border:none; cursor:pointer;">
+            <div class="modal-container" style="width: 100%; max-width: 600px; padding: 32px;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
+                    <h3 style="font-size: 20px; font-weight: 800; color: #0f172a;">File BKU di Google Drive</h3>
+                    <button onclick="closeDrivePicker()"
+                        style="background: #f8fafc; border: none; cursor: pointer; color: #64748b; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
                         <i data-lucide="x" size="20"></i>
                     </button>
                 </div>
-                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Menampilkan file PDF
-                    terbaru
-                    yang mengandung kata "BKU" di Drive Anda.</p>
+                <p style="font-size: 14px; color: #64748b; margin-bottom: 24px;">Menampilkan file Excel terbaru yang
+                    mengandung kata "BKU" di Drive Anda.</p>
 
                 <div id="driveFileList"
                     style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
@@ -3013,7 +3137,7 @@
 
             // Reset visibility of all grouped fields first
             ['fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
-                'fg-tanggal', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan',
+                'fg-tanggal', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-hari', 'fg-tempat', 'fg-waktu-kegiatan', 'fg-jumlah-pesanan',
                 'fg-vendor-address', 'fg-tembusan', 'fg-logo-upload', 'fg-stamp-upload'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
@@ -3034,13 +3158,13 @@
                     addNotaItem();
                 }
             } else if (docType === 'pesanan') {
-                showFields(['fg-nomor', 'fg-perihal', 'fg-vendor-name', 'fg-uraian', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan']);
+                showFields(['fg-nomor', 'fg-perihal', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah-pesanan', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan']);
             } else if (docType === 'berita_acara') {
                 showFields(['fg-nomor', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address']);
             } else if (docType === 'undangan') {
-                showFields(['fg-nomor', 'fg-perihal', 'fg-uraian', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan', 'fg-tembusan']);
+                showFields(['fg-nomor', 'fg-perihal', 'fg-uraian', 'fg-hari', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan', 'fg-tembusan']);
             } else if (docType === 'notulen') {
-                showFields(['fg-uraian', 'fg-tanggal']);
+                showFields(['fg-uraian', 'fg-tanggal', 'fg-tanggal-kegiatan', 'fg-hari', 'fg-tempat', 'fg-waktu-kegiatan']);
                 notulenSection.style.display = 'block';
             } else if (docType === 'daftar_hadir') {
                 showFields(['fg-uraian']);
@@ -3793,6 +3917,7 @@
                 }
             } else if (docType === 'pesanan') {
                 // --- TEMPLATE SURAT PESANAN (FORMAL) ---
+                const jmlPesanan = document.getElementById('custJumlahPesanan').value || "1 Paket";
                 html = `
                     <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
                         ${schoolKop}
@@ -3827,7 +3952,7 @@
                                 <tr>
                                     <td style="border: 1px solid #000; padding: 8px; text-align: center;">1</td>
                                     <td style="border: 1px solid #000; padding: 8px;">${cleanUraian}</td>
-                                    <td style="border: 1px solid #000; padding: 8px; text-align: center;">1 Paket</td>
+                                    <td style="border: 1px solid #000; padding: 8px; text-align: center;">${jmlPesanan}</td>
                                 </tr>
                             </table>
                         </div>
@@ -3983,6 +4108,7 @@
                 `;
             } else if (docType === 'undangan') {
                 // --- TEMPLATE UNDANGAN (SESUAI TEKS) ---
+                const hariKegiatan = document.getElementById('custHari').value || dateKegiatanInfo.dayName;
                 html = `
                     <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px;">
                         ${schoolKop}
@@ -4009,9 +4135,9 @@
 
                         <div style="margin: 20px 40px; line-height: 2;">
                             <div style="display: grid; grid-template-columns: 100px 20px 1fr;">
-                                <div>Hari</div><div>:</div><div>${dateKegiatanInfo.dayName}</div>
+                                <div>Hari</div><div>:</div><div>${hariKegiatan}</div>
                                 <div>Tanggal</div><div>:</div><div>${dateKegiatanInfo.fullDate}</div>
-                                <div>Tempat</div><div>:</div><div>${schoolData.name} - ${tempatKegiatan}</div>
+                                <div>Tempat</div><div>:</div><div>${tempatKegiatan}</div>
                                 <div>Waktu</div><div>:</div><div>${waktuKegiatan}</div>
                             </div>
                         </div>
@@ -4082,7 +4208,9 @@
             const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "")
                 .replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
 
-            const hariTanggal = document.getElementById('custTanggalKegiatan').value || getDateText(new Date()).fullDate;
+            const tglKegiatanRaw = document.getElementById('custTanggalKegiatan').value;
+            const tglKegiatanText = tglKegiatanRaw ? getDateText(tglKegiatanRaw).fullDate : dateInfo.fullDate;
+            const hariKegiatan = document.getElementById('custHari').value || (tglKegiatanRaw ? getDateText(tglKegiatanRaw).dayName : dateInfo.dayName);
             const waktu = document.getElementById('custWaktuKegiatan').value || "08.00 s.d Selesai";
             const tempat = document.getElementById('custTempatKegiatan').value || "Ruang Kelas";
 
@@ -4092,23 +4220,28 @@
                     <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">NOTULEN KEGIATAN</div>
                     
                     <table style="width: 100%; margin-bottom: 20px;">
-                        <tr><td style="width: 150px;">Hari / Tanggal</td><td>: ${hariTanggal}</td></tr>
+                        <tr><td style="width: 150px;">Hari / Tanggal</td><td>: ${hariKegiatan} / ${tglKegiatanText}</td></tr>
                         <tr><td>Waktu</td><td>: ${waktu}</td></tr>
                         <tr><td>Tempat</td><td>: ${tempat}</td></tr>
                         <tr><td>Acara</td><td>: ${cleanUraian}</td></tr>
                     </table>
                     
                     <div style="text-align: justify; margin-bottom: 20px;">
-                        Pada hari ini <strong>${hariTanggal}</strong>, bertempat di <strong>${tempat}</strong>, telah dilaksanakan kegiatan <strong>${cleanUraian}</strong>.
+                        Pada hari ini <strong>${hariKegiatan}</strong> tanggal <strong>${tglKegiatanText}</strong>, bertempat di <strong>${tempat}</strong>, telah dilaksanakan kegiatan <strong>${cleanUraian}</strong>.
                         <br><br>
                         Adapun hasil kegiatan tersebut adalah sebagai berikut:
                         <br>
-                        <div style="border: 1px solid #000; height: 300px; margin-top: 10px;"></div>
+                        <div style="border: 1px solid #000; min-height: 300px; margin-top: 10px; padding: 15px; font-size: 14px; line-height: 1.8;">
+                            ${(document.getElementById('custHasil').value || "1. Pembahasan rencana kegiatan...\n2. Penentuan jadwal pimpinan...").replace(/\n/g, '<br>')}
+                            <br><br>
+                            <strong>Kesimpulan:</strong><br>
+                            ${document.getElementById('custKesimpulan').value || "Kegiatan berjalan lancar dan sesuai rencana."}
+                        </div>
                     </div>
 
                     <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
                         <div style="text-align: center;">
-                            <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${hariTanggal}</p>
+                            <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${tglKegiatanText}</p>
                             <p style="font-weight: bold; margin-bottom: 80px;">Ketua Panitia / Notulen,</p>
                             <p style="font-weight: bold; text-decoration: underline; margin:0;">( .................................... )</p>
                         </div>
@@ -5124,8 +5257,11 @@
                 addNotaItem(tx.uraian.replace(/"/g, '&quot;'), 1, tx.pengeluaran);
             }
 
-            handleDocTypeChange(); // This will trigger openPreview and auto-select template
-            document.getElementById('previewModal').style.display = 'flex'; // Ensure modal opens
+            initDocPicker(); // Ensure the doc list is populated
+            handleDocTypeChange();
+            switchPreviewTab('form'); // Go straight to form since transaction is selected
+            document.getElementById('previewModal').style.display = 'flex';
+            lucide.createIcons();
         }
 
         // --- Drive Picker Logic ---
@@ -5144,15 +5280,17 @@
                     const listDiv = document.getElementById('driveFileList');
                     if (response.success && response.files && response.files.length > 0) {
                         listDiv.innerHTML = response.files.map(file => `
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: 0.2s;" 
-                                 onclick="processDriveFile('${file.id}', '${file.name}')"
-                                 onmouseover="this.style.borderColor='#2563eb'; this.style.background='#eff6ff'"
-                                 onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc'">
-                                <div>
-                                    <div style="font-weight: 600; font-size: 14px;">${file.name}</div>
-                                    <div style="font-size: 11px; color: var(--text-muted);">${file.date}</div>
+                            <div class="drive-file-item" onclick="processDriveFile('${file.id}', '${file.name}')">
+                                <div class="file-icon">
+                                    <i data-lucide="${file.name.toLowerCase().endsWith('.pdf') ? 'file-text' : 'file-spreadsheet'}" size="24"></i>
                                 </div>
-                                <i data-lucide="chevron-right" size="18" color="#2563eb"></i>
+                                <div class="file-details">
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-date">${file.date}</div>
+                                </div>
+                                <div class="file-action">
+                                    <i data-lucide="arrow-right" size="18"></i>
+                                </div>
                             </div>
                         `).join('');
                     } else {
@@ -5174,10 +5312,19 @@
         }
 
         function processDriveFile(fileId, fileName) {
-            closeDrivePicker();
+            // Show loading in the modal
+            const listDiv = document.getElementById('driveFileList');
+            listDiv.innerHTML = `
+                <div style="text-align: center; padding: 60px; color: #2563eb;">
+                    <i data-lucide="loader-2" class="spin" size="48" style="margin-bottom: 20px;"></i>
+                    <h4 style="font-weight: 800; color: #0f172a; font-size: 18px; margin-bottom: 8px;">Mengekstrak Data...</h4>
+                    <p style="font-size: 14px; color: #64748b; line-height: 1.6;">Harap tunggu sebentar, sistem sedang memproses <br><span style="color: #2563eb; font-weight: 600;">${fileName}</span></p>
+                </div>
+            `;
+            lucide.createIcons();
 
             // Visual feedback on the main button card
-            const driveCard = document.querySelector('.upload-card');
+            const driveCard = document.querySelector('.upload-card-new');
             const originalContent = driveCard.innerHTML;
             driveCard.innerHTML = `
                                     <div class="upload-icon-wrapper" style="background: #22c55e; color: white; width: 80px; height: 80px;">
@@ -5190,16 +5337,33 @@
 
             google.script.run
                 .withSuccessHandler((response) => {
-                    driveCard.innerHTML = originalContent;
+                    closeDrivePicker(); // Close modal on success
+                    if (driveCard) {
+                        driveCard.innerHTML = originalContent;
+                    }
                     lucide.createIcons();
 
                     if (response.success) {
-                        renderTransactions(response.data);
-                        document.getElementById('extractionInfo').innerText = `Ditemukan ${response.data.length} transaksi dari Excel: ${fileName}`;
-                        showView('manage-view', document.querySelector('.nav-item[onclick*="manage-view"]'));
+                        if (response.data && response.data.length > 0) {
+                            renderTransactions(response.data);
+                            document.getElementById('extractionInfo').innerText = `Ditemukan ${response.data.length} transaksi dari Excel: ${fileName}`;
+                            showView('manage-view', document.querySelector('.nav-item[onclick*="manage-view"]'));
+                            showToast("Berhasil memproses " + response.data.length + " transaksi.");
+                        } else {
+                            showToast("File berhasil dibaca, namun tidak ditemukan data transaksi yang valid.", "warning");
+                        }
                     } else {
-                        showToast("Gagal memproses file Excel: " + response.error, "error");
+                        showToast("Gagal memproses file: " + (response.error || "Terjadi kesalahan sistem"), "error");
+                        console.error("Drive Processing Error:", response.error);
                     }
+                })
+                .withFailureHandler((err) => {
+                    if (driveCard) {
+                        driveCard.innerHTML = originalContent;
+                    }
+                    lucide.createIcons();
+                    showToast("Koneksi gagal atau sesi habis. Silakan coba lagi.", "error");
+                    console.error("Script Run Failure:", err);
                 })
                 .processExcelByFileId(fileId);
         }
