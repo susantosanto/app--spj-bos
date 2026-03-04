@@ -1,0 +1,11 @@
+# Ignore Node.js extraction scripts
+extract-templates.js
+extract-templates-auto.js
+
+# Ignore development files
+*.md
+.gitignore
+.claspignore
+
+# Ignore template reference files (not needed in production)
+tpl_*.html

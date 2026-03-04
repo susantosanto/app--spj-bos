@@ -1,6 +1,6 @@
 <script>
     // --- Global State Variables ---
-    
+
     let allTransactions = [];
     let currentScale = 0.8;
     let currentLayout = 'portrait';
@@ -8,7 +8,41 @@
     let stampBase64 = null;
     let logoKBBBase64 = null;
     let docPhotos = {}; // Replaced single docPhotoBase64
-    
+
     // Cached templates
     let customTemplates = {};
+
+    // Helper to get school data (moved here for early availability)
+    function getSchoolData() {
+        return {
+            name: document.getElementById('schoolName')?.value || "SD NEGERI 01",
+            address: document.getElementById('schoolAddress')?.value || "",
+            kecamatan: document.getElementById('kecamatan')?.value || "",
+            npsn: document.getElementById('npsn')?.value || "",
+            principal: document.getElementById('principalName')?.value || "",
+            principalNip: document.getElementById('principalNip')?.value || "",
+            treasurer: document.getElementById('treasurerName')?.value || "",
+            treasurerNip: document.getElementById('treasurerNip')?.value || ""
+        };
+    }
+
+    // Helper to get school kop surat
+    function getSchoolKop(schoolData) {
+        return `
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    ${logoBase64 ? `<img src="${logoBase64}" style="height: 60px; width: auto;">` : ''}
+                    <div>
+                        <h1 style="margin: 0; font-size: 18px; font-weight: bold;">${schoolData.name}</h1>
+                        <p style="margin: 3px 0 0 0; font-size: 12px;">${schoolData.address}</p>
+                        <p style="margin: 2px 0 0 0; font-size: 11px;">Kec. ${schoolData.kecamatan} | NPSN: ${schoolData.npsn}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Expose globally
+    window.getSchoolData = getSchoolData;
+    window.getSchoolKop = getSchoolKop;
 </script>

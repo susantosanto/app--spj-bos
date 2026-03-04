@@ -1,21 +1,65 @@
 <script>
     // --- Preview Functions ---
 
-    function openPreview() {
-        // Initialize customizer with global school data
-        document.getElementById('custPerihal').value = "Permohonan Belanja";
-        document.getElementById('custTempatKegiatan').value = document.getElementById('schoolName').value || "Sekolah";
-        document.getElementById('custWaktuKegiatan').value = "08.00 sd Selesai";
-        document.getElementById('custTembusan').value = "1. Pengawas Pembina\n2. Arsip";
+    // Make functions globally available
+    window.openPreview = openPreview;
+    window.closePreview = closePreview;
+    window.zoomPreview = zoomPreview;
+    window.changeLayout = changeLayout;
+    window.handleLogoUpload = handleLogoUpload;
+    window.handleStampUpload = handleStampUpload;
+    window.handleDocPhotoUpload = handleDocPhotoUpload;
+    window.updatePhotoInputs = updatePhotoInputs;
+    window.switchPreviewTab = switchPreviewTab;
+    window.updatePreview = updatePreview;
+    window.collectFormData = collectFormData;
 
-        document.getElementById('previewModal').style.display = 'flex';
+    function openPreview() {
+        console.log('openPreview() called');
+
+        // Check if modal exists
+        const modal = document.getElementById('previewModal');
+        if (!modal) {
+            console.error('Preview modal not found!');
+            alert('Error: Preview modal tidak ditemukan. Pastikan FrontEnd_v2.html sudah di-load.');
+            return;
+        }
+
+        // Initialize customizer with global school data
+        const perihalEl = document.getElementById('custPerihal');
+        if (perihalEl) perihalEl.value = "Permohonan Belanja";
+
+        const tempatKegiatanEl = document.getElementById('custTempatKegiatan');
+        if (tempatKegiatanEl) tempatKegiatanEl.value = document.getElementById('schoolName')?.value || "Sekolah";
+
+        const waktuKegiatanEl = document.getElementById('custWaktuKegiatan');
+        if (waktuKegiatanEl) waktuKegiatanEl.value = "08.00 sd Selesai";
+
+        const tembusanEl = document.getElementById('custTembusan');
+        if (tembusanEl) tembusanEl.value = "1. Pengawas Pembina\n2. Arsip";
+
+        // Show modal
+        modal.style.display = 'flex';
+        console.log('Modal displayed');
 
         // Initialize for Option B (New Sidebar UI)
-        initDocPicker();
-        switchPreviewTab('select'); // Start with the type picker
+        if (typeof initDocPicker === 'function') {
+            initDocPicker();
+        }
 
-        updatePreview();
-        lucide.createIcons();
+        if (typeof switchPreviewTab === 'function') {
+            switchPreviewTab('select'); // Start with the type picker
+        }
+
+        if (typeof updatePreview === 'function') {
+            updatePreview();
+        }
+
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
+
+        console.log('openPreview() completed');
     }
 
     function closePreview() {
@@ -99,15 +143,15 @@
             tanggalKegiatan: document.getElementById('custTanggalKegiatan').value || "",
             nomorSurat: document.getElementById('custNomorSurat').value || "",
             perihal: document.getElementById('custPerihal').value || "",
-            waktu: document.getElementById('custWaktu').value || "",
-            tempat: document.getElementById('custTempat').value || "",
-            hari: document.getElementById('custHari').value || "",
-            tembusan: document.getElementById('custTembusan').value || "",
-            hasil: document.getElementById('custHasil').value || "",
-            kesimpulan: document.getElementById('custKesimpulan').value || "",
-            kategori: document.getElementById('custKategori').value || "",
-            jumlahBarang: document.getElementById('custJumlahBarang').value || "1",
-            spesifikasi: document.getElementById('custSpesifikasi').value || "",
+            waktu: document.getElementById('custWaktuKegiatan').value || "",
+            tempat: document.getElementById('custTempatKegiatan').value || "",
+            hari: document.getElementById('custHari')?.value || "",
+            tembusan: document.getElementById('custTembusan')?.value || "",
+            hasil: document.getElementById('custHasil')?.value || "",
+            kesimpulan: document.getElementById('custKesimpulan')?.value || "",
+            kategori: document.getElementById('custKategori')?.value || "",
+            jumlahBarang: document.getElementById('custJumlahBarang')?.value || "1",
+            spesifikasi: document.getElementById('custSpesifikasi')?.value || "",
             schoolData: getSchoolData(),
             logoBase64: logoBase64,
             stampBase64: stampBase64,
@@ -117,10 +161,16 @@
 
     // Main update preview function
     function updatePreview() {
-        updateRincianSections();
+        console.log('updatePreview() called');
+
+        // Update rincian sections first
+        if (typeof updateRincianSections === 'function') {
+            updateRincianSections();
+        }
 
         const data = collectFormData();
-        
+        console.log('Collected data:', data);
+
         // Template map
         const templateMap = {
             'kwitansi': getHtml_kwitansi,
@@ -140,20 +190,36 @@
         };
 
         const generator = templateMap[data.docType];
+        console.log('Template generator for', data.docType, ':', generator);
+
         if (generator) {
-            document.getElementById('paperContent').innerHTML = generator(data);
+            try {
+                const html = generator(data);
+                console.log('Generated HTML length:', html?.length);
+                document.getElementById('paperContent').innerHTML = html;
+            } catch (e) {
+                console.error('Error generating template:', e);
+                document.getElementById('paperContent').innerHTML = '<p style="padding: 20px; color: red;">Error generating preview: ' + e.message + '</p>';
+            }
+        } else {
+            console.warn('No template found for docType:', data.docType);
+            document.getElementById('paperContent').innerHTML = '<p style="padding: 20px; color: #666;">Select a document type to preview</p>';
         }
 
         // Update paper class based on docType
         const paper = document.getElementById('paperContent');
-        paper.className = 'paper';
-        if (data.docType === 'kwitansi') {
-            paper.classList.add('kwitansi');
-        } else if (data.docType === 'nota') {
-            paper.classList.add('nota-kecil');
-            if (currentLayout === 'landscape') paper.classList.add('landscape');
-        } else {
-            paper.classList.add('a4');
+        if (paper) {
+            paper.className = 'paper';
+            if (data.docType === 'kwitansi') {
+                paper.classList.add('kwitansi');
+            } else if (data.docType === 'nota') {
+                paper.classList.add('nota-kecil');
+                if (currentLayout === 'landscape') paper.classList.add('landscape');
+            } else {
+                paper.classList.add('a4');
+            }
         }
+
+        console.log('updatePreview() completed');
     }
 </script>

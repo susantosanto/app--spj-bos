@@ -75,28 +75,76 @@
     // Rincian Sections Visibility
     function updateRincianSections() {
         const docType = document.getElementById('docType').value;
-        
+
         // Hide all sections first
-        document.getElementById('notaItemsSection').style.display = 'none';
-        document.getElementById('notulenSection').style.display = 'none';
-        document.getElementById('attendanceSection').style.display = 'none';
-        document.getElementById('documentationSection').style.display = 'none';
-        document.getElementById('rencanaExtraSection').style.display = 'none';
-        document.getElementById('spkExtraSection').style.display = 'none';
+        const sections = [
+            'notaItemsSection',
+            'notulenSection',
+            'attendanceSection',
+            'documentationSection',
+            'rencanaExtraSection',
+            'spkExtraSection',
+            'rincianMakananSection',
+            'rincianBarangSection',
+            'rincianJasaSection',
+            'spkGuruHonorerSection',
+            'spkTenagaHonorerSection',
+            'skPembagianTugasSection',
+            'daftarPenerimaHonorSection',
+            'daftarHonorExtraSection'
+        ];
+
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
 
         // Show relevant sections based on docType
         if (docType === 'nota') {
-            document.getElementById('notaItemsSection').style.display = 'block';
+            const el = document.getElementById('notaItemsSection');
+            if (el) el.style.display = 'block';
         } else if (docType === 'notulen') {
-            document.getElementById('notulenSection').style.display = 'block';
+            const el = document.getElementById('notulenSection');
+            if (el) el.style.display = 'block';
         } else if (docType === 'daftar_hadir') {
-            document.getElementById('attendanceSection').style.display = 'block';
+            const el = document.getElementById('attendanceSection');
+            if (el) el.style.display = 'block';
         } else if (docType === 'dokumentasi') {
-            document.getElementById('documentationSection').style.display = 'block';
+            const el = document.getElementById('documentationSection');
+            if (el) el.style.display = 'block';
         } else if (docType === 'rencana') {
-            document.getElementById('rencanaExtraSection').style.display = 'block';
-        } else if (['spk', 'spk_guru_honorer', 'spk_tenaga_honorer'].includes(docType)) {
-            document.getElementById('spkExtraSection').style.display = 'block';
+            const el = document.getElementById('rencanaExtraSection');
+            if (el) el.style.display = 'block';
+        } else if (docType === 'spk') {
+            const el = document.getElementById('spkExtraSection');
+            if (el) el.style.display = 'block';
+        } else if (docType === 'pesanan') {
+            // Show appropriate rincian based on jenis pesanan
+            const jenisPesanan = document.getElementById('custJenisKegiatanPesanan')?.value || 'makanan';
+            if (jenisPesanan === 'makanan') {
+                const rm = document.getElementById('rincianMakananSection');
+                if (rm) rm.style.display = 'block';
+            } else if (jenisPesanan === 'barang') {
+                const rb = document.getElementById('rincianBarangSection');
+                if (rb) rb.style.display = 'block';
+            } else if (jenisPesanan === 'jasa') {
+                const rj = document.getElementById('rincianJasaSection');
+                if (rj) rj.style.display = 'block';
+            }
+        } else if (docType === 'spk_guru_honorer') {
+            const el = document.getElementById('spkGuruHonorerSection');
+            if (el) el.style.display = 'block';
+        } else if (docType === 'spk_tenaga_honorer') {
+            const el = document.getElementById('spkTenagaHonorerSection');
+            if (el) el.style.display = 'block';
+        } else if (docType === 'sk_pembagian_tugas') {
+            const el = document.getElementById('skPembagianTugasSection');
+            if (el) el.style.display = 'block';
+        } else if (docType === 'daftar_penerima_honor') {
+            const el1 = document.getElementById('daftarPenerimaHonorSection');
+            const el2 = document.getElementById('daftarHonorExtraSection');
+            if (el1) el1.style.display = 'block';
+            if (el2) el2.style.display = 'block';
         }
     }
 

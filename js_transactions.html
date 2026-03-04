@@ -1,6 +1,15 @@
 <script>
     // --- Transaction Management Functions ---
 
+    // Make functions globally available
+    window.renderTransactions = renderTransactions;
+    window.openAddModal = openAddModal;
+    window.closeAddModal = closeAddModal;
+    window.saveManualTransaction = saveManualTransaction;
+    window.removeTransaction = removeTransaction;
+    window.openPreviewForTransaction = openPreviewForTransaction;
+    window.generateSpj = generateSpj;
+
     // Render transactions to table
     function renderTransactions(transactions) {
         const tbody = document.getElementById('transactionTbody');
@@ -86,16 +95,19 @@
     // Open preview for specific transaction
     function openPreviewForTransaction(index) {
         const tx = allTransactions[index];
-        if (!tx) return;
+        if (!tx) {
+            console.error('Transaction not found at index:', index);
+            return;
+        }
 
         // Populate form with transaction data
-        document.getElementById('custVendorName').value = tx.penerima;
-        document.getElementById('custVendorAddress').value = "Alamat " + tx.penerima;
-        document.getElementById('custUraian').value = tx.uraian;
-        document.getElementById('custJumlah').value = tx.pengeluaran;
-        document.getElementById('custTanggal').value = tx.tanggal.replace(/\//g, '-');
-        document.getElementById('custTanggalPesan').value = tx.tanggal.replace(/\//g, '-');
-        document.getElementById('custTanggalKegiatan').value = tx.tanggal.replace(/\//g, '-');
+        document.getElementById('custVendorName').value = tx.penerima || '';
+        document.getElementById('custVendorAddress').value = "Alamat " + (tx.penerima || '');
+        document.getElementById('custUraian').value = tx.uraian || '';
+        document.getElementById('custJumlah').value = tx.pengeluaran || 0;
+        document.getElementById('custTanggal').value = tx.tanggal ? tx.tanggal.replace(/\//g, '-') : '';
+        document.getElementById('custTanggalPesan').value = tx.tanggal ? tx.tanggal.replace(/\//g, '-') : '';
+        document.getElementById('custTanggalKegiatan').value = tx.tanggal ? tx.tanggal.replace(/\//g, '-') : '';
         document.getElementById('custNomorSurat').value = "020/SD-BOS/" + new Date().getFullYear();
 
         document.getElementById('custPerihal').value = (tx.type === 'konsumsi' ? "Belanja Konsumsi" : "Pesanan Barang/Jasa");
@@ -120,11 +132,18 @@
             addNotaItem(tx.uraian, 1, tx.pengeluaran);
         }
 
-        initDocPicker();
-        handleDocTypeChange();
-        switchPreviewTab('form');
+        // Show modal FIRST before initializing
         document.getElementById('previewModal').style.display = 'flex';
-        lucide.createIcons();
+
+        // Initialize doc picker and update preview
+        setTimeout(() => {
+            initDocPicker();
+            handleDocTypeChange();
+            updateRincianSections();
+            updatePreview();
+            switchPreviewTab('form');
+            lucide.createIcons();
+        }, 100);
     }
 
     // Generate SPJ (placeholder for future implementation)

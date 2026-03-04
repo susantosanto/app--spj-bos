@@ -13,12 +13,11 @@ function doGet() {
 
 function getMainPageHtml() {
     // ═══════════════════════════════════════════════════════════════════
-    // SWITCH VERSION HERE:
-    // Uncomment FrontEnd_v2 to use new modular version
-    // Comment FrontEnd to disable old version
+    // REKOMENDASI: Gunakan FrontEnd.html (ASLI) untuk production
+    // FrontEnd_v2.html adalah versi modular untuk development/testing saja
     // ═══════════════════════════════════════════════════════════════════
-    return HtmlService.createTemplateFromFile('FrontEnd')
-    // return HtmlService.createTemplateFromFile('FrontEnd_v2')
+    return HtmlService.createTemplateFromFile('FrontEnd')  // ← ORIGINAL (100% WORKING)
+    // return HtmlService.createTemplateFromFile('FrontEnd_v2')  // ← MODULAR (TESTING ONLY)
         .evaluate()
         .setTitle('Si-BOS | Sistem Administrasi SPJ')
         .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)

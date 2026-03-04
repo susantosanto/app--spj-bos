@@ -1,27 +1,35 @@
 <script>
     // --- Core Application Functions ---
 
-    // Initialize Lucide Icons on load
-    lucide.createIcons();
+    // Initialize Lucide Icons when DOM ready
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
+    });
 
     // Load Initial Data on window load
     window.addEventListener('load', () => {
         // Load School Data from LocalStorage
         const savedSchoolData = JSON.parse(localStorage.getItem('spj_school_data') || '{}');
         if (savedSchoolData) {
-            document.getElementById('schoolName').value = savedSchoolData.schoolName || '';
-            document.getElementById('schoolAddress').value = savedSchoolData.schoolAddress || '';
-            document.getElementById('npsn').value = savedSchoolData.npsn || '';
-            document.getElementById('kecamatan').value = savedSchoolData.kecamatan || '';
-            document.getElementById('principalName').value = savedSchoolData.principalName || '';
-            document.getElementById('principalNip').value = savedSchoolData.principalNip || '';
-            document.getElementById('treasurerName').value = savedSchoolData.treasurerName || '';
-            document.getElementById('treasurerNip').value = savedSchoolData.treasurerNip || '';
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.value = val || '';
+            };
+            setVal('schoolName', savedSchoolData.schoolName);
+            setVal('schoolAddress', savedSchoolData.schoolAddress);
+            setVal('npsn', savedSchoolData.npsn);
+            setVal('kecamatan', savedSchoolData.kecamatan);
+            setVal('principalName', savedSchoolData.principalName);
+            setVal('principalNip', savedSchoolData.principalNip);
+            setVal('treasurerName', savedSchoolData.treasurerName);
+            setVal('treasurerNip', savedSchoolData.treasurerNip);
         }
 
-        loadCustomTemplates(); // Load saved custom templates
-        renderSavedTemplatesList(); // Render list in designer view
-        startRealtimeClock();
+        if (typeof loadCustomTemplates === 'function') loadCustomTemplates();
+        if (typeof renderSavedTemplatesList === 'function') renderSavedTemplatesList();
+        if (typeof startRealtimeClock === 'function') startRealtimeClock();
 
         // Load KBB Logo
         google.script.run.withSuccessHandler(res => {
@@ -141,4 +149,11 @@
         }
         confirmCallback = null;
     }
+
+    // Expose core functions globally
+    window.showView = showView;
+    window.handleLogout = handleLogout;
+    window.showToast = showToast;
+    window.showConfirm = showConfirm;
+    window.closeConfirm = closeConfirm;
 </script>
