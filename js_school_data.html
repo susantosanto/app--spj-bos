@@ -1,92 +1,48 @@
 <script>
-    // --- School Data Management Functions ---
+        // --- Backup & Restore Logic ---
+        function backupData() {
+            const data = {
+                transactions: allTransactions,
+                customTemplates: JSON.parse(localStorage.getItem('spj_custom_templates') || '{}'),
+                timestamp: new Date().toISOString()
+            };
 
-    // Save School Data
-    document.getElementById('schoolForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const data = {
-            schoolName: document.getElementById('schoolName').value,
-            schoolAddress: document.getElementById('schoolAddress').value,
-            npsn: document.getElementById('npsn').value,
-            kecamatan: document.getElementById('kecamatan').value,
-            principalName: document.getElementById('principalName').value,
-            principalNip: document.getElementById('principalNip').value,
-            treasurerName: document.getElementById('treasurerName').value,
-            treasurerNip: document.getElementById('treasurerNip').value
-        };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "backup_sibos_" + new Date().toISOString().slice(0, 10) + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
 
-        // Save to LocalStorage
-        localStorage.setItem('spj_school_data', JSON.stringify(data));
+        function restoreData(input) {
+            const file = input.files[0];
+            if (!file) return;
 
-        // Save to Script Properties (server-side)
-        google.script.run.withSuccessHandler(() => {
-            showToast("Data sekolah berhasil disimpan!");
-        }).saveSchoolData(data);
-    });
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
 
-    // Load School Data from server
-    function loadSchoolData() {
-        google.script.run.withSuccessHandler(data => {
-            if (data && data.schoolName) {
-                document.getElementById('schoolName').value = data.schoolName || '';
-                document.getElementById('schoolAddress').value = data.schoolAddress || '';
-                document.getElementById('npsn').value = data.npsn || '';
-                document.getElementById('kecamatan').value = data.kecamatan || '';
-                document.getElementById('principalName').value = data.principalName || '';
-                document.getElementById('principalNip').value = data.principalNip || '';
-                document.getElementById('treasurerName').value = data.treasurerName || '';
-                document.getElementById('treasurerNip').value = data.treasurerNip || '';
-            }
-        }).getSchoolData();
-    }
+                    if (data.transactions) {
+                        allTransactions = data.transactions;
+                        renderTransactions(allTransactions);
+                        document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi (Restored)`;
+                    }
 
-    // --- Backup & Restore Logic ---
-    function backupData() {
-        const data = {
-            transactions: allTransactions,
-            customTemplates: JSON.parse(localStorage.getItem('spj_custom_templates') || '{}'),
-            timestamp: new Date().toISOString()
-        };
+                    if (data.customTemplates) {
+                        localStorage.setItem('spj_custom_templates', JSON.stringify(data.customTemplates));
+                        if (typeof loadCustomTemplates === 'function') loadCustomTemplates();
+                    }
 
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "backup_sibos_" + new Date().toISOString().slice(0, 10) + ".json");
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-        
-        showToast("Backup berhasil diunduh!");
-    }
-
-    function restoreData(input) {
-        const file = input.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            try {
-                const data = JSON.parse(e.target.result);
-
-                if (data.transactions) {
-                    allTransactions = data.transactions;
-                    renderTransactions(allTransactions);
-                    document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi (Restored)`;
+                    showToast("Data berhasil dipulihkan!");
+                } catch (err) {
+                    showToast("Gagal memproses file backup: " + err, "error");
                 }
+            };
+            reader.readAsText(file);
+            input.value = ''; // reset
+        }
 
-                if (data.customTemplates) {
-                    localStorage.setItem('spj_custom_templates', JSON.stringify(data.customTemplates));
-                    if (typeof loadCustomTemplates === 'function') loadCustomTemplates();
-                    if (typeof renderSavedTemplatesList === 'function') renderSavedTemplatesList();
-                }
-
-                showToast("Data berhasil dipulihkan!");
-            } catch (err) {
-                showToast("Gagal memproses file backup: " + err, "error");
-            }
-        };
-        reader.readAsText(file);
-        input.value = ''; // reset
-    }
 </script>

@@ -1,24 +1,42 @@
-<!-- SPK Guru Honorer Section -->
-<div id="spkGuruHonorerSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Detail PKS Guru Honorer</h4>
+<div id="spkGuruHonorerSection" style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+    <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Isian Surat Perjanjian Kerja
+        Guru Honorer</label>
     <div class="form-group">
-        <label>Nama Guru</label>
-        <input type="text" id="custSpkGuruName" placeholder="Nama guru honorer" oninput="updatePreview()">
+        <label>Pihak Kesatu - Nama Kepala Sekolah</label>
+        <input type="text" id="custSpkGuruKepalaNama" oninput="updatePreview()" placeholder="Yuniarti, S.Pd">
     </div>
     <div class="form-group">
-        <label>NIP</label>
-        <input type="text" id="custSpkGuruNip" placeholder="NIP (jika ada)" oninput="updatePreview()">
+        <label>Pihak Kesatu - Tempat, Tanggal Lahir</label>
+        <input type="text" id="custSpkGuruKepalaTtl" oninput="updatePreview()" placeholder="Bandung, 07 Juli 1966">
     </div>
     <div class="form-group">
-        <label>Mata Pelajaran</label>
-        <input type="text" id="custSpkGuruMapel" placeholder="Mata pelajaran yang diampu" oninput="updatePreview()">
+        <label>Pihak Kesatu - NIP</label>
+        <input type="text" id="custSpkGuruKepalaNip" oninput="updatePreview()" placeholder="196607071986102005">
     </div>
     <div class="form-group">
-        <label>Jam Mengajar per Minggu</label>
-        <input type="number" id="custSpkGuruJam" placeholder="24" oninput="updatePreview()">
+        <label>Pihak Kedua - Nama Guru</label>
+        <input type="text" id="custSpkGuruNama" oninput="updatePreview()" placeholder="Siti Aisah Nur Fitri, S.Pd">
     </div>
-    <div class="form-group full-width">
-        <label>Honor per Bulan</label>
-        <input type="number" id="custSpkGuruHonor" placeholder="500000" oninput="updatePreview()">
+    <div class="form-group">
+        <label>Pihak Kedua - Tempat, Tanggal Lahir</label>
+        <input type="text" id="custSpkGuruTtl" oninput="updatePreview()" placeholder="Bandung, 08 September 1999">
+    </div>
+    <div class="form-group">
+        <label>Pihak Kedua - Pendidikan Terakhir</label>
+        <input type="text" id="custSpkGuruPendidikan" oninput="updatePreview()" placeholder="S1">
+    </div>
+    <div class="form-group">
+        <label>Pihak Kedua - Alamat</label>
+        <textarea id="custSpkGuruAlamat" oninput="updatePreview()" rows="2"
+            style="width:100%; padding:8px; border-radius:6px; border:1px solid #e2e8f0;"
+            placeholder="Kp. Tanjung Biru RT 02/015 Ds. Mandalamukti&#10;Kecamatan Cikalongwetan Kabupaten Bandung Barat"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Tugas Mengajar (contoh: guru kelas empat)</label>
+        <input type="text" id="custSpkGuruTugas" oninput="updatePreview()" placeholder="guru kelas empat">
+    </div>
+    <div class="form-group">
+        <label>Imbalan Jasa / Honor (Rp)</label>
+        <input type="number" id="custSpkGuruHonor" oninput="updatePreview()" placeholder="1000000">
     </div>
 </div>

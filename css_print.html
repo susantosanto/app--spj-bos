@@ -186,9 +186,6 @@
 
         .paper {
             display: block !important;
-            width: 210mm !important;
-            max-width: 100% !important;
-            min-height: 297mm !important;
             padding: 10mm 8mm !important;
             margin: 0 auto 15mm auto !important;
             border: none !important;
@@ -211,15 +208,19 @@
             print-color-adjust: exact !important;
         }
 
-        .paper::-webkit-scrollbar {
-            display: none !important;
+        .paper.a4 {
+            width: 210mm !important;
+            min-height: 297mm !important;
         }
 
-        /* Last page - no page break after */
-        .paper:last-child {
-            page-break-after: auto !important;
-            break-after: auto !important;
-            margin-bottom: 0 !important;
+        .paper.a5-landscape {
+            width: 210mm !important;
+            min-height: 148mm !important;
+        }
+
+        .paper.a5-portrait {
+            width: 148mm !important;
+            min-height: 210mm !important;
         }
 
         /* Override for nota - keep fixed A5 size */
@@ -279,6 +280,10 @@
             print-color-adjust: exact !important;
         }
 
+        .paper.nota-kecil.landscape::-webkit-scrollbar {
+            display: none !important;
+        }
+
         /* Kwitansi - Fixed Landscape Medium Size (210mm x 130mm) */
         .paper.kwitansi {
             display: block !important;
@@ -311,12 +316,13 @@
             display: none !important;
         }
 
+        /* Last page - no page break after */
         .paper:last-child {
             page-break-after: auto !important;
             break-after: auto !important;
         }
 
-        #printArea,
+        #paper,
         #paperContent {
             display: block !important;
             visibility: visible !important;

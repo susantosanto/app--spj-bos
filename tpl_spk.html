@@ -1,22 +1,139 @@
-<!-- Template: SPK (Surat Perintah Kerja) -->
-<!-- Usage: getHtml_spk(data) -->
-<div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;">
-    ${getSchoolKop(data.schoolData)}
-    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 10px;">
-        <tr>
-            <td rowspan="4" style="border: 1px solid #000; padding: 10px; width: 40%; text-align: center; font-weight: bold;">SURAT PERINTAH KERJA (SPK)</td>
-            <td style="border: 1px solid #000; padding: 5px;">Nama : ${data.schoolData.name}</td>
-        </tr>
-        <tr><td style="border: 1px solid #000; padding: 5px;">Nomor : ${data.nomorSurat}</td></tr>
-        <tr><td style="border: 1px solid #000; padding: 5px;">Tanggal : ${getDateText(data.tanggal).fullDate}</td></tr>
-        <tr><td style="border: 1px solid #000; padding: 5px;">Pekerjaan : ${data.uraian}<br>Nilai : Rp ${data.jumlah.toLocaleString('id-ID')}</td></tr>
-    </table>
-    <div style="margin: 20px 0; line-height: 1.8;">
-        <p style="margin: 0;">Terbilang: <em>${terbilang(data.jumlah)} Rupiah</em></p>
-        <p style="margin: 10px 0 0 0;">Diberikan kepada: <strong>${data.vendorName}</strong></p>
-    </div>
-    <div style="display: flex; justify-content: space-between; margin-top: 40px;">
-        <div style="text-align: center; width: 200px;"><p style="margin-bottom: 5px;">Penyedia,</p><p style="font-weight: bold; margin-bottom: 80px;">${data.vendorName}</p></div>
-        <div style="text-align: center; width: 200px;"><p style="margin-bottom: 5px;">${getDateText(data.tanggal).fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Pelaksana</p><p style="font-weight: bold; text-decoration: underline; margin:0;">${data.schoolData.principal}</p></div>
-    </div>
-</div>
+<script>
+    // --- SPK TEMPLATE ---
+    function getSpkHtml(uraian, schoolData, schoolKop) {
+        const nomorSpk = document.getElementById('custNomorSurat')?.value || "";
+        const tglSpk = document.getElementById('custTanggal')?.value || "";
+        const tglNegosiasi = document.getElementById('custTglNegosiasi')?.value || "";
+        const waktuPelaksanaan = document.getElementById('custWaktuPelaksanaan')?.value || document.getElementById('custTanggal')?.value || "";
+        const waktuPenyelesaian = document.getElementById('custWaktuPenyelesaian')?.value || "";
+        const instruksi = (document.getElementById('custInstruksi')?.value || "").replace(/\n/g, '<br>');
+        const jumlahTotal = parseInt(document.getElementById('custJumlah')?.value || "0");
+        const penyedia = document.getElementById('custSpkProvider')?.value || "Penyedia Barang/Jasa";
+
+        const pelaksanaName = document.getElementById('custPelaksanaNameSpk')?.value || schoolData.principal;
+        const pelaksanaNip = document.getElementById('custPelaksanaNipSpk')?.value || schoolData.principalNip;
+
+        const items = [];
+        document.querySelectorAll('.nota-item-row').forEach(row => {
+            const inputs = row.querySelectorAll('input');
+            items.push({
+                name: inputs[0]?.value || "",
+                qty: parseInt(inputs[1]?.value) || 0,
+                price: parseInt(inputs[2]?.value) || 0,
+                total: (parseInt(inputs[1]?.value) || 0) * (parseInt(inputs[2]?.value) || 0)
+            });
+        });
+
+        if (items.length === 0) {
+            items.push({ name: uraian, qty: 1, price: jumlahTotal, total: jumlahTotal });
+        }
+
+        const itemsHtml = items.map((item, i) => `
+            <tr style="height: 25px;">
+                <td style="border: 1px solid #000; padding: 2px 5px; text-align: center;">${i + 1}</td>
+                <td style="border: 1px solid #000; padding: 2px 5px;">${item.name}</td>
+                <td style="border: 1px solid #000; padding: 2px 5px; text-align: center;">${item.qty}</td>
+                <td style="border: 1px solid #000; padding: 2px 5px; text-align: center;">unit</td>
+                <td style="border: 1px solid #000; padding: 2px 5px; text-align: right;">Rp ${item.price.toLocaleString('id-ID')}</td>
+                <td style="border: 1px solid #000; padding: 2px 5px; text-align: right;">Rp ${item.total.toLocaleString('id-ID')}</td>
+            </tr>
+        `).join('');
+
+        const emptyRows = Array(Math.max(0, 3 - items.length)).fill(`
+            <tr style="height: 25px;">
+                 <td style="border: 1px solid #000; padding: 2px 5px;">&nbsp;</td>
+                 <td style="border: 1px solid #000; padding: 2px 5px;"></td>
+                 <td style="border: 1px solid #000; padding: 2px 5px;"></td>
+                 <td style="border: 1px solid #000; padding: 2px 5px;"></td>
+                 <td style="border: 1px solid #000; padding: 2px 5px;">Rp -</td>
+                 <td style="border: 1px solid #000; padding: 2px 5px;">Rp -</td>
+            </tr>
+        `).join('');
+
+        const terbilangText = terbilang(jumlahTotal) + " Rupiah";
+
+        return `
+            <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;">
+                ${schoolKop}
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 5px; border-top:none;">
+                    <tr>
+                        <td rowspan="3" style="border: 1px solid #000; padding: 5px; width: 40%; vertical-align: middle; text-align: center; font-weight: bold;">
+                            SURAT PERINTAH KERJA (SPK)
+                        </td>
+                        <td style="border: 1px solid #000; padding: 3px 5px;">Nama Satuan Pendidikan : ${schoolData.name}</td>
+                    </tr>
+                    <tr>
+                         <td style="border: 1px solid #000; padding: 3px 5px;">Nomor SPK : ${nomorSpk}</td>
+                    </tr>
+                    <tr>
+                         <td style="border: 1px solid #000; padding: 3px 5px;">Tanggal SPK : ${getDateText(tglSpk).fullDate}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 3px 5px;">Paket Pekerjaan : ${uraian}</td>
+                        <td style="border: 1px solid #000; padding: 3px 5px;">
+                            Tanggal Negosiasi : ${getDateText(tglNegosiasi).fullDate}<br>
+                            <span style="font-size: 10px;">SPK ini mulai berlaku efektif terhitung sejak tanggal ditetapkan.</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 5px;">
+                     <tr>
+                        <td style="border: 1px solid #000; padding: 3px 5px; width: 50%;">WAKTU PELAKSANAAN : ${getDateText(waktuPelaksanaan).fullDate}</td>
+                        <td style="border: 1px solid #000; padding: 3px 5px;">PENYELESAIAN : ${waktuPenyelesaian ? getDateText(waktuPenyelesaian).fullDate : '-'}</td>
+                    </tr>
+                </table>
+
+                <div style="text-align: center; font-weight: bold; border: 1px solid #000; padding: 3px; border-bottom: none; background: #eee;">RINCIAN PEKERJAAN</div>
+                 <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 10px;">
+                    <thead>
+                        <tr style="text-align: center; font-weight: bold; background: #eee;">
+                            <th style="border: 1px solid #000; padding: 3px; width: 30px;">No</th>
+                            <th style="border: 1px solid #000; padding: 3px;">Uraian Barang/Jasa</th>
+                            <th style="border: 1px solid #000; padding: 3px; width: 60px;">Qty</th>
+                            <th style="border: 1px solid #000; padding: 3px; width: 60px;">Sat</th>
+                            <th style="border: 1px solid #000; padding: 3px; width: 100px;">Harga</th>
+                            <th style="border: 1px solid #000; padding: 3px; width: 100px;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsHtml}
+                        ${emptyRows}
+                        <tr style="background: #fbbf24; font-weight: bold;">
+                            <td colspan="5" style="border: 1px solid #000; padding: 3px 5px; text-align: right;">Total Pembayaran</td>
+                            <td style="border: 1px solid #000; padding: 3px 5px; text-align: right;">Rp ${jumlahTotal.toLocaleString('id-ID')}</td>
+                        </tr>
+                          <tr>
+                            <td colspan="6" style="border: 1px solid #000; padding: 3px 5px; font-weight: bold; background: #f3f4f6; font-style: italic;">
+                                Terbilang : ${terbilangText}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                 <div style="border: 1px solid #000; padding: 5px; margin-bottom: 20px;">
+                    <span style="text-decoration: underline; font-weight: bold;">INSTRUKSI:</span><br>
+                    ${instruksi}
+                 </div>
+
+                  <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 10px; width: 50%; text-align: center; vertical-align: top;">
+                            <br>
+                            <strong>Penyedia,</strong>
+                            <br><br><br><br>
+                            <strong>${penyedia}</strong>
+                        </td>
+                        <td style="border: 1px solid #000; padding: 10px; width: 50%; text-align: center; vertical-align: top;">
+                            ${schoolData.kecamatan}, ${getDateText(tglSpk).fullDate}<br>
+                            <strong>Pelaksana,</strong>
+                            <br><br><br><br>
+                            <strong>${pelaksanaName}</strong><br>
+                            NIP. ${pelaksanaNip}
+                        </td>
+                    </tr>
+                  </table>
+            </div>
+         `;
+    }
+</script>

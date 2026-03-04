@@ -1,6 +1,6 @@
 // ─── HELPER FUNCTION FOR MODULAR HTML INCLUDES ───────────
 function include(filename) {
-    return HtmlService.createHtmlOutputFromFile(filename).getContent();
+    return HtmlService.createTemplateFromFile(filename).evaluate().getContent();
 }
 
 function doGet() {
@@ -16,10 +16,10 @@ function getMainPageHtml() {
     // REKOMENDASI: Gunakan FrontEnd.html (ASLI) untuk production
     // FrontEnd_v2.html adalah versi modular untuk development/testing saja
     // ═══════════════════════════════════════════════════════════════════
-    return HtmlService.createTemplateFromFile('FrontEnd')  // ← ORIGINAL (100% WORKING)
-    // return HtmlService.createTemplateFromFile('FrontEnd_v2')  // ← MODULAR (TESTING ONLY)
+    // return HtmlService.createTemplateFromFile('FrontEnd') // ← ORIGINAL
+    return HtmlService.createTemplateFromFile('FrontEnd_v2') // ← MODULAR (TESTING ONLY)
         .evaluate()
-        .setTitle('Si-BOS | Sistem Administrasi SPJ')
+        .setTitle('Si-BOS | Sistem Administrasi SPJ (v2)')
         .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
         .addMetaTag('viewport', 'width=device-width, initial-scale=1')
         .getContent();

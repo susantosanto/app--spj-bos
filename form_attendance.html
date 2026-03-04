@@ -1,11 +1,14 @@
-<!-- Attendance Section -->
-<div id="attendanceSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Daftar Hadir</h4>
-    <div id="attendanceList" style="display: flex; flex-direction: column; gap: 8px;"></div>
-    <button type="button" class="btn-primary" onclick="addAttendanceRow()" style="margin-top: 12px; width: 100%; justify-content: center;">
-        <i data-lucide="plus" size="16"></i> Tambah Peserta
-    </button>
-    <button type="button" class="btn-danger" onclick="loadDefaultAttendance()" style="margin-top: 8px; width: 100%; justify-content: center;">
-        <i data-lucide="users" size="16"></i> Load Default
-    </button>
+<div id="attendanceSection" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+    <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Daftar Hadir</label>
+    <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+        <button onclick="addAttendanceRow()" class="btn-primary"
+            style="flex:1; padding: 5px; font-size: 11px; background: #22c55e;">
+            <i data-lucide="plus" size="12"></i> Baris
+        </button>
+        <button onclick="loadDefaultAttendance()" class="btn-primary"
+            style="flex:1; padding: 5px; font-size: 11px; background: #3b82f6;">
+            <i data-lucide="users" size="12"></i> Load Guru
+        </button>
+    </div>
+    <div id="attendanceList" style="display: flex; flex-direction: column; gap: 5px;"></div>
 </div>

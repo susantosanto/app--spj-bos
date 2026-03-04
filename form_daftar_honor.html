@@ -1,8 +1,38 @@
-<!-- Daftar Penerima Honor Section -->
-<div id="daftarPenerimaHonorSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Daftar Penerima Honor</h4>
-    <div id="honorList" style="display: flex; flex-direction: column; gap: 8px;"></div>
-    <button type="button" class="btn-primary" onclick="addHonorRow()" style="margin-top: 12px; width: 100%; justify-content: center;">
-        <i data-lucide="plus" size="16"></i> Tambah Penerima
-    </button>
+<div id="daftarPenerimaHonorSection"
+    style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+    <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Daftar Penerima
+        Honor</label>
+    <div class="form-group">
+        <label>Judul Daftar (contoh: DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS ...)</label>
+        <input type="text" id="custDaftarHonorJudul" oninput="updatePreview()"
+            placeholder="DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS AGUSTUS 2025">
+    </div>
+    <div class="form-group">
+        <label>Program</label>
+        <input type="text" id="custDaftarHonorProgram" oninput="updatePreview()"
+            placeholder="07 Pengembangan Standar Pembiayaan">
+    </div>
+    <div class="form-group">
+        <label>Kegiatan</label>
+        <input type="text" id="custDaftarHonorKegiatan" oninput="updatePreview()" placeholder="9 Pembayaran Honor Guru">
+    </div>
+    <div class="form-group">
+        <label>Kode Rekening</label>
+        <input type="text" id="custDaftarHonorKodeRekening" oninput="updatePreview()" placeholder="5.2.1.02.01">
+    </div>
+    <div class="form-group">
+        <label>Kode Penggunaan</label>
+        <input type="text" id="custDaftarHonorKodePenggunaan" oninput="updatePreview()" placeholder="9">
+    </div>
+    <div class="form-group">
+        <label>Bulan dan Tahun (contoh: Agustus 2025)</label>
+        <input type="text" id="custDaftarHonorBulan" oninput="updatePreview()" placeholder="Agustus 2025">
+    </div>
+    <div style="margin-bottom: 10px;">
+        <button type="button" onclick="addHonorRow()" class="btn-primary"
+            style="padding: 6px 12px; font-size: 12px; background: #22c55e;">
+            <i data-lucide="plus" size="12"></i> Tambah Penerima
+        </button>
+    </div>
+    <div id="honorList" style="display: flex; flex-direction: column; gap: 6px;"></div>
 </div>

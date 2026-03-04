@@ -1,0 +1,180 @@
+<script>
+    // --- UI/UX Interactive Logic ---
+    lucide.createIcons();
+
+    window.addEventListener('load', () => {
+        // Hide initial loader
+        const loader = document.getElementById('initialLoader');
+        if (loader) {
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.remove(), 500);
+            }, 800);
+        }
+
+        // Initialize App
+        startRealtimeClock();
+        loadSettings(); // Dari localStorage di views/dashboard
+    });
+
+    function showView(viewId, element) {
+        // Navigation Logic
+        const views = document.querySelectorAll('.view-section');
+        views.forEach(v => v.classList.remove('active'));
+
+        const targetView = document.getElementById(viewId);
+        if (targetView) targetView.classList.add('active');
+
+        // Nav visual state
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(i => i.classList.remove('active'));
+        if (element) element.classList.add('active');
+    }
+
+    function handleLogout() {
+        showConfirm("Apakah Anda yakin ingin keluar?", () => {
+            // Animasi transisi keluar
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                window.location.reload();
+            }, 600);
+        }, "Logout System", "Ya, Logout Sekarang");
+    }
+
+    // --- Toast Notification System ---
+    function showToast(message, type = 'success', duration = 3000) {
+        const toastContainer = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.classList.add('toast', type);
+
+        let iconHtml = '';
+        if (type === 'success') {
+            iconHtml = '<i data-lucide="check-circle" size="20"></i>';
+        } else if (type === 'error') {
+            iconHtml = '<i data-lucide="x-circle" size="20"></i>';
+        } else {
+            iconHtml = '<i data-lucide="info" size="20"></i>';
+        }
+
+        toast.innerHTML = `
+            <div class="toast-icon">${iconHtml}</div>
+            <div class="toast-content">
+                <div class="toast-title">${message}</div>
+            </div>
+        `;
+        toastContainer.appendChild(toast);
+        lucide.createIcons(); // Re-render lucide icons for the new toast
+
+        setTimeout(() => {
+            toast.classList.add('toast-out');
+            toast.addEventListener('animationend', () => {
+                toast.remove();
+            });
+        }, duration);
+    }
+
+    // --- Custom Confirm Modal System ---
+    let confirmCallback = null;
+
+    function showConfirm(message, onConfirm, title = "Konfirmasi", btnText = "Hapus Data") {
+        const confirmOverlay = document.getElementById('confirmOverlay');
+        document.getElementById('confirmTitle').innerText = title;
+        document.getElementById('confirmMessage').innerText = message;
+        document.getElementById('confirmBtnText').innerText = btnText;
+        confirmCallback = onConfirm;
+        confirmOverlay.style.display = 'flex';
+        lucide.createIcons();
+    }
+
+    function closeConfirm(confirmed) {
+        const confirmOverlay = document.getElementById('confirmOverlay');
+        confirmOverlay.style.display = 'none';
+        if (confirmed && confirmCallback) {
+            confirmCallback();
+        }
+        confirmCallback = null; // Reset callback
+    }
+
+    // Action: Save School Data
+    function saveData() {
+        const formData = {
+            schoolName: document.getElementById('schoolName').value,
+            schoolAddress: document.getElementById('schoolAddress').value,
+            npsn: document.getElementById('npsn').value,
+            kecamatan: document.getElementById('kecamatan').value,
+            principalName: document.getElementById('principalName').value,
+            principalNip: document.getElementById('principalNip').value,
+            treasurerName: document.getElementById('treasurerName').value,
+            treasurerNip: document.getElementById('treasurerNip').value
+        };
+
+        const btn = document.querySelector('.btn-submit');
+        const originalText = btn.innerHTML;
+
+        // Visual feedback
+        btn.innerHTML = '<i data-lucide="loader-2" class="spin" size="18"></i> Menyimpan...';
+        lucide.createIcons();
+        btn.disabled = true;
+
+        // Save to LocalStorage instead of Google Script Properties
+        localStorage.setItem('spj_school_data', JSON.stringify(formData));
+
+        setTimeout(() => {
+            showToast("Data Berhasil Disimpan di Browser!");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
+        }, 500);
+    }
+
+    function renderTransactions(data) {
+        allTransactions = data;
+        const tbody = document.getElementById('transactionTbody');
+        const container = document.getElementById('transactionTableContainer');
+        const emptyState = document.getElementById('emptyState');
+
+        if (data.length === 0) {
+            container.style.display = 'none';
+            emptyState.style.display = 'block';
+            return;
+        }
+
+        container.style.display = 'block';
+        emptyState.style.display = 'none';
+
+        tbody.innerHTML = data.map(tx => `
+            <tr class="hover-row" style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 16px; font-size: 14px;">${tx.tanggal}</td>
+                <td style="padding: 16px; font-size: 14px;"><span style="background: #eff6ff; color: #2563eb; padding: 4px 8px; border-radius: 4px; font-weight: 600;">${tx.noBukti}</span></td>
+                <td style="padding: 16px; font-size: 14px; max-width: 300px;">${tx.uraian}</td>
+                <td style="padding: 16px; font-size: 14px; font-weight: 600;">Rp ${tx.pengeluaran.toLocaleString('id-ID')}</td>
+                <td style="padding: 16px; display: flex; gap: 8px;">
+                    <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="generateSpj('${tx.id}')" title="Cetak">
+                        <i data-lucide="printer" size="14"></i>
+                    </button>
+                    <button class="btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="removeTransaction('${tx.id}')" title="Hapus">
+                        <i data-lucide="trash-2" size="14"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+        lucide.createIcons();
+    }
+</script>
+
+<style>
+    .spin {
+        animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>

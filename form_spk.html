@@ -1,24 +1,31 @@
-<!-- SPK Extra Section -->
-<div id="spkExtraSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Detail SPK</h4>
+<div id="spkExtraSection" style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+    <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Detail SPK</label>
     <div class="form-group">
-        <label>Provider</label>
-        <input type="text" id="custSpkProvider" placeholder="Penyedia barang/jasa" oninput="updatePreview()">
+        <label>Nama Penyedia (CV / Toko)</label>
+        <input type="text" id="custSpkProvider" oninput="updatePreview()" placeholder="Contoh: CV. Berkah Abadi">
     </div>
     <div class="form-group">
-        <label>Tgl Negosiasi</label>
-        <input type="date" id="custTglNegosiasi" onchange="updatePreview()">
+        <label>Tanggal Negosiasi</label>
+        <input type="text" id="custTglNegosiasi" oninput="updatePreview()" placeholder="dd/mm/yyyy">
     </div>
     <div class="form-group">
         <label>Waktu Pelaksanaan</label>
-        <input type="date" id="custWaktuPelaksanaan" onchange="updatePreview()">
+        <input type="text" id="custWaktuPelaksanaan" oninput="updatePreview()"
+            placeholder="dd/mm/yyyy (Default: Tanggal Transaksi)">
     </div>
     <div class="form-group">
         <label>Waktu Penyelesaian</label>
-        <input type="date" id="custWaktuPenyelesaian" onchange="updatePreview()">
+        <input type="text" id="custWaktuPenyelesaian" oninput="updatePreview()" placeholder="Contoh: 06 Juni 2025">
     </div>
-    <div class="form-group full-width">
-        <label>Instruksi</label>
-        <textarea id="custInstruksi" placeholder="Instruksi pekerjaan..." style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 80px;" oninput="updatePreview()"></textarea>
+    <div class="form-group">
+        <label>Instruksi ke Penyedia</label>
+        <textarea id="custInstruksi" oninput="updatePreview()" rows="3"
+            style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">Penagihan hanya dapat dilakukan setelah penyelesaian pekerjaan yang diperintahkan dalam SPK ini dan dibuktikan dengan Berita Acara Serah Terima.</textarea>
+    </div>
+    <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+        <label style="font-size: 12px; font-weight: bold;">Pelaksana (Opsional - Default: Kepala Sekolah)</label>
+        <input type="text" id="custPelaksanaNameSpk" oninput="updatePreview()" placeholder="Nama Pelaksana"
+            style="margin-bottom: 5px;">
+        <input type="text" id="custPelaksanaNipSpk" oninput="updatePreview()" placeholder="NIP Pelaksana">
     </div>
 </div>

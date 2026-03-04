@@ -35,14 +35,6 @@
         border-left-color: #10b981;
     }
 
-    .toast.warning {
-        border-left-color: #f59e0b;
-    }
-
-    .toast.info {
-        border-left-color: #3b82f6;
-    }
-
     .toast-icon {
         display: flex;
         align-items: center;
@@ -60,16 +52,6 @@
     .toast.error .toast-icon {
         background: #fef2f2;
         color: #ef4444;
-    }
-
-    .toast.warning .toast-icon {
-        background: #fffbeb;
-        color: #f59e0b;
-    }
-
-    .toast.info .toast-icon {
-        background: #eff6ff;
-        color: #3b82f6;
     }
 
     .toast-content {
@@ -201,7 +183,14 @@
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-    /* --- Logout Button (Sidebar) --- */
+    .sidebar-footer {
+        padding-top: 20px;
+        font-size: 11px;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: auto;
+    }
+
     .btn-logout {
         display: flex;
         align-items: center;
@@ -226,18 +215,45 @@
         box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
     }
 
-    /* --- Spin Animation --- */
-    .spin {
-        animation: rotate 2s linear infinite;
+    /* --- Clock Widget Styles --- */
+    .clock-widget {
+        background: var(--white);
+        padding: 12px 24px;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        transition: var(--transition);
     }
 
-    @keyframes rotate {
-        from {
-            transform: rotate(0deg);
-        }
+    .clock-widget:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary);
+    }
 
-        to {
-            transform: rotate(360deg);
-        }
+    .clock-time {
+        font-size: 42px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #2563eb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1.1;
+        letter-spacing: 6px;
+        filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.4));
+    }
+
+    .clock-date {
+        font-size: 13px;
+        color: #64748b;
+        font-weight: 500;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
 </style>

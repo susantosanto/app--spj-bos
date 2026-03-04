@@ -1,8 +1,24 @@
-<!-- Pesanan Section (Rincian Makanan/Barang/Jasa) -->
-<div id="pesananSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Rincian Pesanan</h4>
-    <div id="pesananItemsList" style="display: flex; flex-direction: column; gap: 8px;"></div>
-    <button type="button" class="btn-primary" onclick="addNotaItem()" style="margin-top: 12px; width: 100%; justify-content: center;">
-        <i data-lucide="plus" size="16"></i> Tambah Item
-    </button>
+<div class="form-group" id="fg-hari" style="display: none;">
+    <label>Hari Kegiatan</label>
+    <input type="text" id="custHari" oninput="updatePreview()" placeholder="Contoh: Senin">
 </div>
+
+<div class="form-group" id="fg-jumlah-pesanan" style="display: none;">
+    <label>Jumlah Pesanan (Teks)</label>
+    <input type="text" id="custJumlahPesanan" oninput="updatePreview()" placeholder="Contoh: 1 (Satu) Paket">
+</div>
+
+<div class="form-group" id="fg-jenis-kegiatan-pesanan" style="display: none;">
+    <label>Jenis Kegiatan / Pembelian</label>
+    <select id="custJenisKegiatanPesanan" onchange="updateRincianSections(); updatePreview()"
+        style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 13px;">
+        <option value="">-- Pilih Jenis Kegiatan --</option>
+        <option value="makanan">Makanan / Minuman (Konsumsi)</option>
+        <option value="barang">Pembelian Barang</option>
+        <option value="jasa">Pembelian Jasa</option>
+    </select>
+</div>
+
+<?!= include('form_makanan'); ?>
+<?!= include('form_barang'); ?>
+<?!= include('form_jasa'); ?>

@@ -1,0 +1,205 @@
+<script>
+    // --- Form Dynamic Handlers ---
+    function initDocPicker() {
+        const docTypes = [
+            { id: 'nota', name: 'Nota / Kwitansi Toko', icon: 'shopping-cart' },
+            { id: 'kwitansi', name: 'Kuitansi Bendahara', icon: 'file-text' },
+            { id: 'pesanan', name: 'Surat Pesanan', icon: 'send' },
+            { id: 'berita_acara', name: 'BA Serah Terima', icon: 'clipboard-check' },
+            { id: 'undangan', name: 'Surat Undangan', icon: 'mail' },
+            { id: 'notulen', name: 'Notulen Kegiatan', icon: 'book-open' },
+            { id: 'daftar_hadir', name: 'Daftar Hadir', icon: 'users' },
+            { id: 'dokumentasi', name: 'Lembar Dokumentasi', icon: 'camera' },
+            { id: 'rencana', name: 'Dokumen Perencanaan', icon: 'calendar' },
+            { id: 'spk', name: 'Surat Perintah Kerja (SPK)', icon: 'briefcase' },
+            { id: 'spk_guru_honorer', name: 'PKS Guru Honorer', icon: 'user-check' },
+            { id: 'spk_tenaga_honorer', name: 'PKS Tenaga Honorer', icon: 'user' },
+            { id: 'daftar_penerima_honor', name: 'Daftar Penerima Honor', icon: 'award' },
+            { id: 'sk_pembagian_tugas', name: 'SK Pembagian Tugas', icon: 'file-edit' }
+        ];
+
+        const list = document.getElementById('docPickerList');
+        if (list) {
+            list.innerHTML = docTypes.map(doc => `
+                <div class="doc-type-item" onclick="selectDocType('${doc.id}')">
+                    <div class="doc-icon"><i data-lucide="${doc.icon}" size="18"></i></div>
+                    <div class="doc-name">${doc.name}</div>
+                    <i data-lucide="chevron-right" size="14"></i>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+    }
+
+    function selectDocType(val) {
+        const select = document.getElementById('docType');
+        if (select) {
+            select.value = val;
+            handleDocTypeChange();
+            switchPreviewTab('form');
+        }
+    }
+
+    function handleDocTypeChange() {
+        const docType = document.getElementById('docType').value;
+        const allSections = document.querySelectorAll('.custom-form-section');
+        allSections.forEach(s => s.classList.remove('active'));
+
+        const target = document.getElementById('section_' + docType);
+        if (target) target.classList.add('active');
+
+        // Initial rows if empty
+        if ((docType === 'nota' || docType === 'spk') && document.querySelectorAll('.nota-item-row').length === 0) {
+            addNotaItem(document.getElementById('custUraian').value, 1, document.getElementById('custJumlah').value);
+        }
+        if (docType === 'daftar_penerima_honor' && document.querySelectorAll('.honor-row').length === 0) {
+            addHonorRow();
+        }
+        if (docType === 'daftar_hadir' && document.querySelectorAll('.attendance-row').length === 0) {
+            loadDefaultAttendance();
+        }
+
+        updateRincianSections();
+        updatePreview();
+    }
+
+    function addAttendanceRow(nama = "", jabatan = "") {
+        const list = document.getElementById('attendanceList');
+        const div = document.createElement('div');
+        div.className = 'dynamic-row attendance-row';
+        div.innerHTML = `
+            <input type="text" placeholder="Nama" value="${nama}" oninput="updatePreview()">
+            <input type="text" placeholder="Jabatan" value="${jabatan}" oninput="updatePreview()">
+            <button class="btn-icon-danger" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="14"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function loadDefaultAttendance() {
+        const list = document.getElementById('attendanceList');
+        if (!list) return;
+        list.innerHTML = '';
+        const defaults = [
+            { n: 'DRS. H. DEDI SUMARDI, M.MPd', j: 'Pengarah' },
+            { n: 'H. ADE RAHMAT, S.Pd', j: 'Ketua' },
+            { n: 'DEDI SURYADI, S.Pd', j: 'Sekretaris' },
+            { n: 'CICIH, S.Pd', j: 'Bendahara' }
+        ];
+        defaults.forEach(d => addAttendanceRow(d.n, d.j));
+    }
+
+    function addHonorRow(nama = "", jabatan = "", jumlah = 0) {
+        const list = document.getElementById('honorRecipientsList');
+        const div = document.createElement('div');
+        div.className = 'dynamic-row honor-row';
+        div.innerHTML = `
+            <div style="display: grid; grid-template-columns: 30px 1fr 1fr 1fr; gap: 5px; width: 100%; margin-bottom: 5px;">
+                <input type="text" placeholder="No" value="${document.querySelectorAll('.honor-row').length + 1}">
+                <input type="text" placeholder="Nama PTK" value="${nama}" oninput="updatePreview()">
+                <input type="text" placeholder="Jabatan/Tugas" value="${jabatan}" oninput="updatePreview()">
+                <input type="text" placeholder="Gol/Ruang" value="" oninput="updatePreview()">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 30px; gap: 5px; width: 100%;">
+                <input type="text" placeholder="Volume" value="1 Bln" oninput="updatePreview()">
+                <input type="number" placeholder="Unit Cost" value="${jumlah}" oninput="updatePreview()">
+                <input type="number" placeholder="Bruto" value="${jumlah}" oninput="updatePreview()">
+                <input type="number" placeholder="Pajak" value="0" oninput="updatePreview()">
+                <button class="btn-icon-danger" onclick="this.parentElement.parentElement.remove(); updatePreview();">
+                    <i data-lucide="trash-2" size="14"></i>
+                </button>
+            </div>
+            <input type="number" placeholder="Netto" value="${jumlah}" style="margin-top: 5px;" oninput="updatePreview()">
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function addNotaItem(name = "", qty = 1, price = 0) {
+        const list = document.getElementById('notaItemsList');
+        const div = document.createElement('div');
+        div.className = 'dynamic-row nota-item-row';
+        div.innerHTML = `
+            <input type="text" placeholder="Nama Item" value="${name}" oninput="updatePreview()">
+            <input type="number" placeholder="Qty" value="${qty}" style="width: 60px;" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" oninput="updatePreview()">
+            <button class="btn-icon-danger" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="14"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function addMakananRow(menu = "", vol = 1, unit = "Box", price = 0) {
+        const list = document.getElementById('makananList');
+        const div = document.createElement('div');
+        div.className = 'dynamic-row makanan-row';
+        div.innerHTML = `
+            <input type="text" placeholder="Menu" value="${menu}" oninput="updatePreview()">
+            <input type="number" placeholder="Vol" value="${vol}" style="width: 50px;" oninput="updatePreview()">
+            <input type="text" placeholder="Sat" value="${unit}" style="width: 60px;" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" oninput="updatePreview()">
+            <input type="number" placeholder="Total" value="${vol * price}" style="width: 100px;" oninput="updatePreview()">
+             <button class="btn-icon-danger" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="14"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function addBarangRow(no = "", nama = "", spek = "", vol = 1, unit = "Unit", price = 0) {
+        const list = document.getElementById('barangList');
+        const div = document.createElement('div');
+        div.className = 'dynamic-row barang-row';
+        div.innerHTML = `
+            <input type="text" placeholder="No" value="${no}" style="width: 30px;" oninput="updatePreview()">
+            <input type="text" placeholder="Nama" value="${nama}" oninput="updatePreview()">
+            <input type="text" placeholder="Spek" value="${spek}" oninput="updatePreview()">
+            <input type="number" placeholder="Vol" value="${vol}" style="width: 50px;" oninput="updatePreview()">
+            <input type="text" placeholder="Sat" value="${unit}" style="width: 40px;" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" oninput="updatePreview()">
+            <button class="btn-icon-danger" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="14"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function addJasaRow(no = "", jenis = "", vol = 1, unit = "Kgt", price = 0) {
+        const list = document.getElementById('jasaList');
+        const div = document.createElement('div');
+        div.className = 'dynamic-row jasa-row';
+        div.innerHTML = `
+            <input type="text" placeholder="No" value="${no}" style="width: 30px;" oninput="updatePreview()">
+            <input type="text" placeholder="Jenis" value="${jenis}" oninput="updatePreview()">
+            <input type="number" placeholder="Vol" value="${vol}" style="width: 50px;" oninput="updatePreview()">
+            <input type="text" placeholder="Sat" value="${unit}" style="width: 40px;" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" oninput="updatePreview()">
+            <button class="btn-icon-danger" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="14"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function updateRincianSections() {
+        const type = document.getElementById('custPerihal').value;
+        const sections = document.querySelectorAll('.rincian-section');
+        sections.forEach(s => s.style.display = 'none');
+        if (type === 'konsumsi') document.getElementById('rincianMakanan').style.display = 'block';
+        else if (type === 'barang') document.getElementById('rincianBarang').style.display = 'block';
+        else if (type === 'jasa') document.getElementById('rincianJasa').style.display = 'block';
+    }
+</script>

@@ -15,13 +15,11 @@
             <div class="form-grid">
                 <div class="form-group full-width">
                     <label>Nama Sekolah</label>
-                    <input type="text" id="schoolName" name="schoolName"
-                        placeholder="Contoh: SD NEGERI 01 CONTOH">
+                    <input type="text" id="schoolName" name="schoolName" placeholder="Contoh: SD NEGERI 01 CONTOH">
                 </div>
                 <div class="form-group full-width">
                     <label>Alamat Lengkap</label>
-                    <input type="text" id="schoolAddress" name="schoolAddress"
-                        placeholder="Jl. Pendidikan No. 123">
+                    <input type="text" id="schoolAddress" name="schoolAddress" placeholder="Jl. Pendidikan No. 123">
                 </div>
                 <div class="form-group">
                     <label>NPSN</label>
@@ -33,46 +31,49 @@
                 </div>
                 <div class="form-group">
                     <label>Nama Kepala Sekolah</label>
-                    <input type="text" id="principalName" name="principalName"
-                        placeholder="Nama Lengkap & Gelar">
+                    <input type="text" id="principalName" name="principalName" placeholder="Nama Lengkap & Gelar">
                 </div>
                 <div class="form-group">
                     <label>NIP Kepala Sekolah</label>
-                    <input type="text" id="principalNip" name="principalNip"
-                        placeholder="19XXXXXXXX XXXXXX X XXX">
+                    <input type="text" id="principalNip" name="principalNip" placeholder="19XXXXXXXX XXXXXX X XXX">
                 </div>
                 <div class="form-group">
                     <label>Nama Bendahara</label>
-                    <input type="text" id="treasurerName" name="treasurerName"
-                        placeholder="Nama Lengkap & Gelar">
+                    <input type="text" id="treasurerName" name="treasurerName" placeholder="Nama Lengkap & Gelar">
                 </div>
                 <div class="form-group">
                     <label>NIP Bendahara</label>
-                    <input type="text" id="treasurerNip" name="treasurerNip"
-                        placeholder="19XXXXXXXX XXXXXX X XXX">
+                    <input type="text" id="treasurerNip" name="treasurerNip" placeholder="19XXXXXXXX XXXXXX X XXX">
                 </div>
 
-                <button type="submit" class="btn-primary btn-submit">
+                <button type="button" class="btn-primary btn-submit" onclick="saveData()">
                     <i data-lucide="save" size="18"></i>
-                    Simpan Data Sekolah
+                    Simpan Perubahan
                 </button>
             </div>
         </form>
+    </div>
 
-        <!-- Backup & Restore -->
-        <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 30px;">
-            <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #1e293b;">Backup & Restore</h4>
-            <div style="display: flex; gap: 12px;">
-                <button class="btn-primary" onclick="backupData()">
-                    <i data-lucide="download" size="18"></i>
-                    Backup Data
-                </button>
-                <button class="btn-primary" onclick="document.getElementById('restoreInput').click()">
-                    <i data-lucide="upload" size="18"></i>
-                    Restore Data
-                </button>
-                <input type="file" id="restoreInput" accept=".json" style="display: none;" onchange="restoreData(this)">
+    <!-- Backup & Restore Section -->
+    <div class="settings-container" style="margin-top: 30px;">
+        <div class="settings-header">
+            <div class="settings-icon" style="background: #f0fdf4; color: #16a34a;">
+                <i data-lucide="database" size="32"></i>
             </div>
+            <div class="settings-title">
+                <h3>Backup & Restore Data</h3>
+                <p>Simpan data transaksi dan konfigurasi ke file komputer Anda.</p>
+            </div>
+        </div>
+        <div class="form-grid">
+            <button type="button" class="btn-primary" onclick="backupData()" style="background: #0ea5e9;">
+                <i data-lucide="download" size="18"></i> Download Backup (.json)
+            </button>
+            <button type="button" class="btn-primary" onclick="document.getElementById('restoreFile').click()"
+                style="background: #64748b;">
+                <i data-lucide="upload" size="18"></i> Restore Data
+            </button>
+            <input type="file" id="restoreFile" accept=".json" style="display: none;" onchange="restoreData(this)">
         </div>
     </div>
 </section>

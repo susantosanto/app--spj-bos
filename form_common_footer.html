@@ -1,0 +1,62 @@
+<div class="form-group" id="fg-tanggal">
+    <label>Tanggal Transaksi / BAST / SPK / Serah Terima</label>
+    <input type="text" id="custTanggal" oninput="updatePreview()" placeholder="dd/mm/yyyy">
+</div>
+
+<div class="form-group" id="fg-tanggal-pesan">
+    <label>Tanggal Surat / Pesan</label>
+    <input type="text" id="custTanggalPesan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
+</div>
+
+<div class="form-group" id="fg-tanggal-kegiatan">
+    <label>Tanggal Kegiatan</label>
+    <input type="text" id="custTanggalKegiatan" oninput="updatePreview()" placeholder="dd/mm/yyyy">
+</div>
+
+<div class="form-group" id="fg-tempat" style="display: none;">
+    <label>Tempat Kegiatan / Lokasi</label>
+    <input type="text" id="custTempatKegiatan" oninput="updatePreview()" placeholder="Contoh: SD Negeri 1 ...">
+</div>
+
+<div class="form-group" id="fg-waktu-kegiatan" style="display: none;">
+    <label>Waktu Kegiatan</label>
+    <input type="text" id="custWaktuKegiatan" oninput="updatePreview()" placeholder="Contoh: 08.00 sd Selesai">
+</div>
+
+<div class="form-group" id="fg-vendor-address">
+    <label>Alamat Vendor / Toko</label>
+    <input type="text" id="custVendorAddress" oninput="updatePreview()" placeholder="Alamat Toko">
+</div>
+
+<div class="form-group" id="fg-tempat-tanggal-kwitansi" style="display: none;">
+    <label>Tempat & Tanggal Kwitansi</label>
+    <input type="text" id="custTempatTanggalKwitansi" oninput="updatePreview()"
+        placeholder="Contoh: Cikalongwetan, 20 Januari 2025">
+</div>
+
+<div class="form-group" id="fg-tembusan">
+    <label>Tembusan (Opsional)</label>
+    <textarea id="custTembusan" oninput="updatePreview()" rows="2"
+        style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"
+        placeholder="1. Pengawas...&#10;2. K3S..."></textarea>
+</div>
+
+<div class="form-group" id="fg-logo-upload">
+    <label>Logo Toko</label>
+    <input type="file" accept="image/*" onchange="handleLogoUpload(this)" style="font-size: 11px; width: 100%;">
+</div>
+
+<div class="form-group" id="fg-stamp-upload">
+    <label>Stempel Toko / Penyedia</label>
+    <input type="file" accept="image/*" onchange="handleStampUpload(this)" style="font-size: 11px; width: 100%;">
+</div>
+
+<div style="margin-top: auto;">
+    <label>Layout</label>
+    <div style="display: flex; gap: 10px;">
+        <button onclick="changeLayout('portrait')" style="flex:1; padding:8px; font-size:12px;"
+            class="btn-primary">Portrait</button>
+        <button onclick="changeLayout('landscape')" style="flex:1; padding:8px; font-size:12px;"
+            class="btn-primary">Landscape</button>
+    </div>
+</div>

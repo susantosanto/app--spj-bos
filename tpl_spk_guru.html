@@ -1,22 +1,91 @@
-<!-- Template: PKS Guru Honorer -->
-<!-- Usage: getHtml_spkGuru(data) - reuse SPK template -->
-<div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;">
-    ${getSchoolKop(data.schoolData)}
-    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 10px;">
-        <tr>
-            <td rowspan="4" style="border: 1px solid #000; padding: 10px; width: 40%; text-align: center; font-weight: bold;">PERJANJIAN KERJA SAMA GURU HONORER</td>
-            <td style="border: 1px solid #000; padding: 5px;">Nama : ${data.schoolData.name}</td>
-        </tr>
-        <tr><td style="border: 1px solid #000; padding: 5px;">Nomor : ${data.nomorSurat}</td></tr>
-        <tr><td style="border: 1px solid #000; padding: 5px;">Tanggal : ${getDateText(data.tanggal).fullDate}</td></tr>
-        <tr><td style="border: 1px solid #000; padding: 5px;">Guru : ${data.vendorName}<br>Mata Pelajaran : ${data.mapel || "-"}</td></tr>
-    </table>
-    <div style="margin: 20px 0; line-height: 1.8;">
-        <p style="margin: 0;">Terbilang: <em>${terbilang(data.jumlah)} Rupiah</em></p>
-        <p style="margin: 10px 0 0 0;">Honor per bulan untuk guru honorer.</p>
-    </div>
-    <div style="display: flex; justify-content: space-between; margin-top: 40px;">
-        <div style="text-align: center; width: 200px;"><p style="margin-bottom: 5px;">Guru Honorer,</p><p style="font-weight: bold; margin-bottom: 80px;">${data.vendorName}</p></div>
-        <div style="text-align: center; width: 200px;"><p style="margin-bottom: 5px;">${getDateText(data.tanggal).fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p><p style="font-weight: bold; text-decoration: underline; margin:0;">${data.schoolData.principal}</p></div>
-    </div>
-</div>
+<script>
+    // --- SPK GURU HONORER TEMPLATE ---
+    function getSpkGuruHonorerHtml(schoolData, schoolKop) {
+        const nomor = document.getElementById('custNomorSurat')?.value || "814.1/SD01-VII/2024";
+        const tanggalStr = document.getElementById('custTanggal')?.value || "15/07/2024";
+        const dt = getDateText(tanggalStr);
+        const dateTerbilang = dt.dateTerbilang || tanggalStr;
+        const dayName = dt.dayName || 'Sabtu';
+        const kepalaNama = document.getElementById('custSpkGuruKepalaNama')?.value || schoolData.principal;
+        const kepalaTtl = document.getElementById('custSpkGuruKepalaTtl')?.value || "Bandung, 07 Juli 1966";
+        const kepalaNip = document.getElementById('custSpkGuruKepalaNip')?.value || schoolData.principalNip;
+        const guruNama = document.getElementById('custSpkGuruNama')?.value || "Siti Aisah Nur Fitri, S.Pd";
+        const guruTtl = document.getElementById('custSpkGuruTtl')?.value || "Bandung, 08 September 1999";
+        const guruPendidikan = document.getElementById('custSpkGuruPendidikan')?.value || "S1";
+        const guruAlamat = (document.getElementById('custSpkGuruAlamat')?.value || "Kp. Tanjung Biru RT 02/015 Ds. Mandalamukti\nKecamatan Cikalongwetan Kabupaten Bandung Barat").replace(/\n/g, '<br>');
+        const tugas = document.getElementById('custSpkGuruTugas')?.value || "guru kelas empat";
+        const honorNum = parseInt(document.getElementById('custSpkGuruHonor')?.value || "1000000", 10);
+        const honorTerbilang = terbilang(honorNum).toLowerCase().replace(/^\s+/, '') + " Rupiah";
+        const sekolahShort = schoolData.name.replace(/SEKOLAH\s+/, '').replace(/NEGERI\s+/, 'SDN ');
+        const tempatDibuat = document.getElementById('custTempatKegiatan')?.value || schoolData.kecamatan || "Bandung Barat";
+        const tglDibuat = dt.fullDate;
+
+        const baseStyle = "font-family: 'Times New Roman', Times, serif; color: #000; padding: 0 40px 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;";
+
+        return `
+            <div style="${baseStyle}">
+                ${schoolKop}
+                <div style="text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 4px;">SURAT PERJANJIAN KERJA</div>
+                <div style="text-align: center; font-size: 12px; margin-bottom: 8px;">Nomor : ${nomor}</div>
+                <div style="text-align: center; font-weight: bold; margin-bottom: 2px;">ANTARA</div>
+                <div style="text-align: center; font-weight: bold; margin-bottom: 2px;">${schoolData.name.toUpperCase()}</div>
+                <div style="text-align: center; font-weight: bold; margin-bottom: 6px;">DENGAN</div>
+                <div style="text-align: center; font-weight: bold; margin-bottom: 8px;">GURU HONORER</div>
+
+                <p style="text-align: justify; line-height: 1.3; margin-bottom: 4px;">Pada hari ini ${dayName} tanggal ${dateTerbilang}, bertempat di ${sekolahShort} Kabupaten Bandung Barat, yang bertanda tangan di bawah ini :</p>
+
+                <p style="margin: 2px 0 2px 0;"><strong>1.</strong></p>
+                <table style="margin-left: 20px; font-size: 12px; line-height: 1.2;"><tr><td style="width: 180px;">Nama</td><td>:</td><td>${kepalaNama}</td></tr>
+                <tr><td>Tempat, tanggal lahir</td><td>:</td><td>${kepalaTtl}</td></tr>
+                <tr><td>NIP</td><td>:</td><td>${kepalaNip}</td></tr>
+                <tr><td>Jabatan</td><td>:</td><td>Kepala Sekolah</td></tr></table>
+                <p style="margin: 2px 0 4px 20px; line-height: 1.2;">Berbuat dan bertindak secara hukum untuk dan atas nama ${schoolData.name}, untuk selanjutnya disebut <strong>PIHAK KESATU</strong></p>
+
+                <p style="margin: 4px 0 2px 0;"><strong>2.</strong></p>
+                <table style="margin-left: 20px; font-size: 12px; line-height: 1.2;"><tr><td style="width: 180px;">Nama</td><td>:</td><td>${guruNama}</td></tr>
+                <tr><td>Tempat, tanggal lahir</td><td>:</td><td>${guruTtl}</td></tr>
+                <tr><td>Pendidikan Terakhir</td><td>:</td><td>${guruPendidikan}</td></tr>
+                <tr><td>Alamat</td><td>:</td><td>${guruAlamat}</td></tr></table>
+                <p style="margin: 2px 0 6px 20px; line-height: 1.2;">Berbuat dan bertindak secara hukum untuk dan atas nama pribadi untuk selanjutnya disebut <strong>PIHAK KEDUA</strong>.</p>
+
+                <p style="text-align: justify; line-height: 1.2; margin-bottom: 4px;">Para pihak masing-masing telah mempelajari, memahami dan sepakat untuk mengikat diri dalam Surat Perjanjian Kerja dengan ketentuan sebagai berikut :</p>
+
+                <p style="margin-top: 5px;"><strong>Pasal 1<br>Pertimbangan Perjanjian Kerja</strong></p>
+                <p style="text-align: justify; line-height: 1.3;">PIHAK KESATU mengangkat PIHAK KEDUA dengan mempertimbangkan, (1) Kebutuhan Sekolah untuk memenuhi Standar Pelayanan Minimal (SPM) PIHAK KESATU; (2) Kompetensi PIHAK KEDUA; (3) Kemampuan anggaran/keuangan sekolah.</p>
+
+                <p style="margin-top: 5px;"><strong>Pasal 2<br>Hak dan Kewajiban</strong></p>
+                <p style="line-height: 1.3;">(1) PIHAK KEDUA mempunyai hak : a. Mengembangkan diri sesuai dengan pekerjaannya; b. Memperoleh imbalan jasa (honor) dan/atau keuangan lain sesuai dengan peraturan yang berlaku dan kemampuan keuangan sekolah; c. Imbalan jasa (honor) yang diterima sebesar Rp ${honorNum.toLocaleString('id-ID')} (${honorTerbilang}); d. Mendapat ijin tidak masuk sekolah dan/atau cuti sesuai dengan Surat Permohonan dan Surat Keterangan pihak lain yang bersangkutan; e. Berbuat dan bertindak secara hukum untuk dan atas nama sekolah sesuai dengan tugas dan/atau ijin Kepala Sekolah.</p>
+                <p style="line-height: 1.3;">(2) PIHAK KEDUA mempunyai kewajiban : a. Melaksanakan tugas mengajar sebagai ${tugas}; b. Mematuhi Peraturan Sekolah baik tertulis maupun tidak tertulis; c. Melaksanakan tugas dari Kepala Sekolah; d. Menjaga nama baik Sekolah dan Dinas Pendidikan Kabupaten Bandung Barat.</p>
+
+                <p style="margin-top: 5px;"><strong>Pasal 3<br>Tupoksi Guru</strong></p>
+                <p style="text-align: justify; line-height: 1.3;">(1) Menyusun kurikulum pembelajaran pada satuan pendidikan; (2) Menyusun silabus pembelajaran; (3) Menyusun Rencana Pelaksanaan Pembelajaran (RPP); (4) Melaksanakan kegiatan pembelajaran; (5) Menyusun alat ukur/soal sesuai mata pelajaran; (6) Menilai dan mengevaluasi proses dan hasil belajar pada mata pelajaran di kelasnya; (7) Menganalisis hasil penilaian pembelajaran; (8) Melaksanakan pembelajaran/perbaikan dan pengayaan dengan memanfaatkan hasil penilaian dan evaluasi; (9) Melaksanakan bimbingan dan konseling di kelas yang menjadi tanggungjawabnya (khusus guru kelas); (10) Membimbing siswa dalam kegiatan ekstrakurikuler proses pembelajaran; (11) Melaksanakan pengembangan diri; (12) Melaksanakan publikasi ilmiah dan/atau karya inovatif; and (13) Melakukan presentasi ilmiah.</p>
+
+                <p style="margin-top: 5px;"><strong>Pasal 4<br>Beban Kerja Guru</strong></p>
+                <p style="line-height: 1.3;">Beban kerja Guru untuk melaksanakan pembelajaran paling sedikit 24 (dua puluh empat) jam tatap muka dan paling banyak 40 (empat puluh) jam tatap muka dalam 1 (satu) minggu.</p>
+            </div>
+            <!-- PAGE_BREAK -->
+            <div style="${baseStyle}">
+                <p style="margin-top: 8px;"><strong>Pasal 5<br>Masa Berlaku Surat Perjanjian Kerja</strong></p>
+                <p style="line-height: 1.4;">(1) Surat Perjanjian Kerja ini berlaku 1 tahun semenjak ditandatangani oleh PIHAK KESATU dan PIHAK KEDUA pada awal tahun anggaran sampai dengan akhir tahun anggaran; (2) Perpanjangan Perjanjian Kerja dapat dilaksanakan oleh Kepala Sekolah sesuai dengan Pasal 1 (satu) huruf (1) (2) (3).</p>
+
+                <p style="margin-top: 8px;"><strong>Pasal 6<br>Perselisihan</strong></p>
+                <p style="line-height: 1.4;">(1) Apabila terjadi perselisihan antara PIHAK KESATU dengan PIHAK KEDUA dapat diselesaikan secara musyawarah mufakat di unit kerja, dan; (2) Apabila sebagaimana dimaksud pada ayat 1 (satu) tidak terlaksana, maka penyelesaian tersebut dapat difasilitasi oleh Dinas Pendidikan Kabupaten Bandung Barat.</p>
+
+                <p style="margin-top: 8px;"><strong>Pasal 7<br>Lain – lain</strong></p>
+                <p style="line-height: 1.4;">(1) Surat Perjanjian Kerja : a. Surat Perjanjian Kerja dilampiri oleh Surat Keputusan Pembagian Tugas Pendidik dan Tenaga Kependidikan. (2) Hal–hal yang belum diatur dari/atau terdapat kekeliruan dalam Surat Perjanjian Kerja ini dapat dimusyawarahkan kembali oleh kedua belah pihak.</p>
+
+                <p style="margin-top: 8px;"><strong>Pasal 8<br>Penutup</strong></p>
+                <p style="line-height: 1.4;">Surat Perjanjian Kerja ini dibuat dengan sebenarnya dan bersifat mengikat serta untuk selanjutnya dapat dijadikan kekuatan hukum kembali oleh kedua belah pihak.</p>
+
+                <div style="margin-top: 40px; margin-left: auto; width: 280px; text-align: center;">
+                    <table style="width: 100%; font-size: 12px; margin-bottom: 20px;">
+                        <tr><td style="width: 100px; text-align: left;">Dibuat di</td><td style="width: 10px;">:</td><td style="text-align: left;">${tempatDibuat}</td></tr>
+                        <tr><td style="text-align: left;">Pada tanggal</td><td>:</td><td style="text-align: left;">${tglDibuat}</td></tr>
+                    </table>
+                    <p style="margin-top: 5px; margin-bottom: 60px;">Ditandatangani oleh :<br><strong>Kepala ${sekolahShort},</strong></p>
+                    <p style="font-weight: bold; text-decoration: underline; margin: 0; line-height: 1;">${kepalaNama}</p>
+                    <p style="margin: 0;">NIP. ${kepalaNip}</p>
+                </div>
+            </div>`;
+    }
+</script>

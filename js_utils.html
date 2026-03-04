@@ -1,63 +1,54 @@
 <script>
-    // --- Utility Functions ---
+        // Fungsi Terbilang untuk Rupiah
+        function terbilang(nilai) {
+            nilai = Math.abs(nilai);
+            var simpanNilaiBagi = 0;
+            var huruf = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+            var temp = "";
 
-    // Fungsi Terbilang untuk Rupiah
-    function terbilang(nilai) {
-        nilai = Math.abs(nilai);
-        var simpanNilaiBagi = 0;
-        var huruf = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
-        var temp = "";
-
-        if (nilai < 12) {
-            temp = " " + huruf[nilai];
-        } else if (nilai < 20) {
-            temp = terbilang(nilai - 10) + " Belas";
-        } else if (nilai < 100) {
-            simpanNilaiBagi = Math.floor(nilai / 10);
-            temp = terbilang(simpanNilaiBagi) + " Puluh" + terbilang(nilai % 10);
-        } else if (nilai < 200) {
-            temp = " Seratus" + terbilang(nilai - 100);
-        } else if (nilai < 1000) {
-            simpanNilaiBagi = Math.floor(nilai / 100);
-            temp = terbilang(simpanNilaiBagi) + " Ratus" + terbilang(nilai % 100);
-        } else if (nilai < 2000) {
-            temp = " Seribu" + terbilang(nilai - 1000);
-        } else if (nilai < 1000000) {
-            simpanNilaiBagi = Math.floor(nilai / 1000);
-            temp = terbilang(simpanNilaiBagi) + " Ribu" + terbilang(nilai % 1000);
-        } else if (nilai < 1000000000) {
-            simpanNilaiBagi = Math.floor(nilai / 1000000);
-            temp = terbilang(simpanNilaiBagi) + " Juta" + terbilang(nilai % 1000000);
+            if (nilai < 12) {
+                temp = " " + huruf[nilai];
+            } else if (nilai < 20) {
+                temp = terbilang(nilai - 10) + " Belas";
+            } else if (nilai < 100) {
+                simpanNilaiBagi = Math.floor(nilai / 10);
+                temp = terbilang(simpanNilaiBagi) + " Puluh" + terbilang(nilai % 10);
+            } else if (nilai < 200) {
+                temp = " Seratus" + terbilang(nilai - 100);
+            } else if (nilai < 1000) {
+                simpanNilaiBagi = Math.floor(nilai / 100);
+                temp = terbilang(simpanNilaiBagi) + " Ratus" + terbilang(nilai % 100);
+            } else if (nilai < 2000) {
+                temp = " Seribu" + terbilang(nilai - 1000);
+            } else if (nilai < 1000000) {
+                simpanNilaiBagi = Math.floor(nilai / 1000);
+                temp = terbilang(simpanNilaiBagi) + " Ribu" + terbilang(nilai % 1000);
+            } else if (nilai < 1000000000) {
+                simpanNilaiBagi = Math.floor(nilai / 1000000);
+                temp = terbilang(simpanNilaiBagi) + " Juta" + terbilang(nilai % 1000000);
+            }
+            return temp;
         }
-        return temp;
-    }
 
-    // Helper untuk format tanggal teks (Contoh: Senin, 20 Mei 2025)
-    function getDateText(dateStr) {
-        // Asumsi format dd/mm/yyyy
-        const parts = dateStr.split('/');
-        if (parts.length !== 3) return { dayName: '...', fullDate: dateStr, dateTerbilang: dateStr };
+        // Helper untuk format tanggal teks (Contoh: Senin, 20 Mei 2025)
+        function getDateText(dateStr) {
+            // Asumsi format dd/mm/yyyy
+            const parts = dateStr.split('/');
+            if (parts.length !== 3) return { dayName: '...', fullDate: dateStr, dateTerbilang: dateStr };
 
-        const d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-        const dayName = days[d.getDay()];
-        const monthName = months[parseInt(parts[1]) - 1];
-        const fullDate = `${parts[0]} ${monthName} ${parts[2]}`;
-        
-        // Untuk SPK: "lima belas bulan Juli tahun dua ribu dua puluh empat"
-        const dayNum = parseInt(parts[0], 10);
-        const yearNum = parseInt(parts[2], 10);
-        const dayWords = (!isNaN(dayNum) && dayNum >= 1 && dayNum <= 31) ? terbilang(dayNum).toLowerCase().replace(/^\s+/, '') : parts[0];
-        const yearWords = (!isNaN(yearNum) && yearNum >= 1000 && yearNum <= 9999) ? terbilang(yearNum).toLowerCase().replace(/^\s+/, '') : parts[2];
-        const dateTerbilang = `${dayWords} bulan ${monthName} tahun ${yearWords}`;
-        
-        return { dayName: dayName, fullDate: fullDate, dateTerbilang: dateTerbilang };
-    }
-
-    // Format Rupiah
-    function formatRupiah(angka) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
-    }
+            const dayName = days[d.getDay()];
+            const monthName = months[parseInt(parts[1]) - 1];
+            const fullDate = `${parts[0]} ${monthName} ${parts[2]}`;
+            // Untuk SPK: "lima belas bulan Juli tahun dua ribu dua puluh empat"
+            const dayNum = parseInt(parts[0], 10);
+            const yearNum = parseInt(parts[2], 10);
+            const dayWords = (!isNaN(dayNum) && dayNum >= 1 && dayNum <= 31) ? terbilang(dayNum).toLowerCase().replace(/^\s+/, '') : parts[0];
+            const yearWords = (!isNaN(yearNum) && yearNum >= 1000 && yearNum <= 9999) ? terbilang(yearNum).toLowerCase().replace(/^\s+/, '') : parts[2];
+            const dateTerbilang = `${dayWords} bulan ${monthName} tahun ${yearWords}`;
+            return { dayName: dayName, fullDate: fullDate, dateTerbilang: dateTerbilang };
+        }
 </script>

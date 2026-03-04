@@ -1,0 +1,284 @@
+<script>
+    // --- Data Management (Backup, Templates, Transactions) ---
+    function backupData() {
+        const data = {
+            settings: localStorage.getItem('spj_school_data'),
+            templates: localStorage.getItem('spj_saved_templates'),
+            transactions: allTransactions
+        };
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup_spj_bos_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        showToast("Backup data berhasil diunduh.");
+    }
+
+    function restoreData(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.settings) localStorage.setItem('spj_school_data', data.settings);
+                if (data.templates) localStorage.setItem('spj_saved_templates', data.templates);
+                if (data.transactions) {
+                    allTransactions = data.transactions;
+                    renderTransactions(allTransactions);
+                }
+                showToast("Data berhasil dipulihkan! Me-refresh halaman...");
+                setTimeout(() => window.location.reload(), 1500);
+            } catch (err) {
+                showToast("Format file tidak valid!", "error");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function saveCustomTemplate() {
+        const name = document.getElementById('newTemplateName').value;
+        if (!name) return showToast("Nama template harus diisi", "error");
+
+        const template = {
+            id: 'TPL_' + Date.now(),
+            name: name,
+            vendorName: document.getElementById('custVendorName').value,
+            vendorAddress: document.getElementById('custVendorAddress').value,
+            vendorStyle: document.getElementById('vendorStyle').value,
+            headerTitle: document.getElementById('custHeaderTitle').value,
+            headerSub: document.getElementById('custHeaderSub').value
+        };
+
+        let saved = JSON.parse(localStorage.getItem('spj_saved_templates') || '[]');
+        saved.push(template);
+        localStorage.setItem('spj_saved_templates', JSON.stringify(saved));
+
+        showToast("Template berhasil disimpan!");
+        document.getElementById('newTemplateName').value = '';
+        renderSavedTemplatesList();
+    }
+
+    function loadCustomTemplates() {
+        const saved = JSON.parse(localStorage.getItem('spj_saved_templates') || '[]');
+        const select = document.getElementById('vendorStyle');
+        // Clear previous custom
+        const options = select.querySelectorAll('option[data-custom="true"]');
+        options.forEach(o => o.remove());
+
+        saved.forEach(tpl => {
+            const opt = document.createElement('option');
+            opt.value = 'CUSTOM_' + tpl.id;
+            opt.innerText = '⭐ ' + tpl.name;
+            opt.dataset.custom = "true";
+            select.appendChild(opt);
+        });
+    }
+
+    function renderSavedTemplatesList() {
+        const saved = JSON.parse(localStorage.getItem('spj_saved_templates') || '[]');
+        const container = document.getElementById('savedTemplatesList');
+        if (!container) return;
+
+        if (saved.length === 0) {
+            container.innerHTML = '<p style="color: #94a3b8; font-style: italic; font-size: 13px;">Belum ada template tersimpan.</p>';
+            return;
+        }
+
+        container.innerHTML = saved.map(tpl => `
+            <div class="template-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f8fafc; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0;">
+                <span style="font-weight: 600; font-size: 13px;">${tpl.name}</span>
+                <button onclick="deleteCustomTemplate('${tpl.id}')" style="color: #ef4444; background: none; border: none; cursor: pointer;" title="Hapus">
+                    <i data-lucide="trash-2" size="14"></i>
+                </button>
+            </div>
+        `).join('');
+        lucide.createIcons();
+        loadCustomTemplates(); // Refresh the select options
+    }
+
+    function deleteCustomTemplate(key) {
+        showConfirm("Hapus template ini?", () => {
+            let saved = JSON.parse(localStorage.getItem('spj_saved_templates') || '[]');
+            saved = saved.filter(t => t.id !== key);
+            localStorage.setItem('spj_saved_templates', JSON.stringify(saved));
+            showToast("Template dihapus");
+            renderSavedTemplatesList();
+        });
+    }
+
+    // --- Manual Transaction Logic ---
+    function openAddModal() {
+        // Set default date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('addDate').value = today;
+        document.getElementById('addNoBukti').value = '';
+        document.getElementById('addUraian').value = '';
+        document.getElementById('addPenerima').value = '';
+        document.getElementById('addJumlah').value = '';
+
+        document.getElementById('addModal').style.display = 'flex';
+        lucide.createIcons();
+    }
+
+    function closeAddModal() {
+        document.getElementById('addModal').style.display = 'none';
+    }
+
+    function saveManualTransaction() {
+        const dateVal = document.getElementById('addDate').value;
+        const noBukti = document.getElementById('addNoBukti').value;
+        const uraian = document.getElementById('addUraian').value;
+        const penerima = document.getElementById('addPenerima').value;
+        const jumlah = parseFloat(document.getElementById('addJumlah').value);
+
+        if (!dateVal || !noBukti || !uraian || !jumlah) {
+            showToast("Mohon lengkapi Tanggal, No Bukti, Uraian, dan Jumlah.", "error");
+            return;
+        }
+
+        // Format date dd/mm/yyyy
+        const d = new Date(dateVal);
+        const formattedDate = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+
+        // Determine type automatically based on keywords
+        let type = 'nota';
+        let vendorStyle = 'standard';
+        const uLow = uraian.toLowerCase();
+        if (uLow.includes('honor') || uLow.includes('transport')) type = 'kwitansi';
+        if (uLow.includes('makan') || uLow.includes('snack')) vendorStyle = 'rm-family';
+
+        const newTx = {
+            id: 'MANUAL_' + Date.now(),
+            tanggal: formattedDate,
+            noBukti: noBukti,
+            uraian: uraian,
+            pengeluaran: jumlah,
+            penerima: penerima || uraian,
+            type: type,
+            vendorStyle: vendorStyle
+        };
+
+        allTransactions.push(newTx);
+        renderTransactions(allTransactions);
+        closeAddModal();
+
+        // Show feedback
+        document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi (Termasuk manual)`;
+    }
+
+    function removeTransaction(id) {
+        showConfirm("Apakah Anda yakin ingin menghapus transaksi ini?", () => {
+            allTransactions = allTransactions.filter(tx => tx.id !== id);
+            renderTransactions(allTransactions);
+            document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
+            showToast("Transaksi berhasil dihapus");
+        });
+    }
+
+    // --- Drive Picker Logic ---
+    function openDrivePicker() {
+        document.getElementById('driveModal').style.display = 'flex';
+        document.getElementById('driveFileList').innerHTML = `
+                                <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                    <i data-lucide="loader-2" class="spin" size="32" style="margin-bottom: 10px;"></i>
+                                    <p>Mencari file di Drive Anda...</p>
+                                </div>
+                                `;
+        lucide.createIcons();
+
+        google.script.run
+            .withSuccessHandler((response) => {
+                const listDiv = document.getElementById('driveFileList');
+                if (response.success && response.files && response.files.length > 0) {
+                    listDiv.innerHTML = response.files.map(file => `
+                        <div class="drive-file-item" onclick="processDriveFile('${file.id}', '${file.name}')">
+                            <div class="file-icon">
+                                <i data-lucide="${file.name.toLowerCase().endsWith('.pdf') ? 'file-text' : 'file-spreadsheet'}" size="24"></i>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-date">${file.date}</div>
+                            </div>
+                            <div class="file-action">
+                                <i data-lucide="arrow-right" size="18"></i>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    listDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            <i data-lucide="search-x" size="48" style="margin-bottom: 10px; opacity: 0.3;"></i>
+                            <p>Tidak ditemukan file PDF dengan nama "BKU" di Drive Anda.</p>
+                            <button class="btn-primary" style="margin: 20px auto; font-size: 12px;" onclick="closeDrivePicker()">Tutup</button>
+                        </div>
+                    `;
+                }
+                lucide.createIcons();
+            })
+            .getBkuFilesFromDrive();
+    }
+
+    function closeDrivePicker() {
+        document.getElementById('driveModal').style.display = 'none';
+    }
+
+    function processDriveFile(fileId, fileName) {
+        // Show loading in the modal
+        const listDiv = document.getElementById('driveFileList');
+        listDiv.innerHTML = `
+            <div style="text-align: center; padding: 60px; color: #2563eb;">
+                <i data-lucide="loader-2" class="spin" size="48" style="margin-bottom: 20px;"></i>
+                <h4 style="font-weight: 800; color: #0f172a; font-size: 18px; margin-bottom: 8px;">Mengekstrak Data...</h4>
+                <p style="font-size: 14px; color: #64748b; line-height: 1.6;">Harap tunggu sebentar, sistem sedang memproses <br><span style="color: #2563eb; font-weight: 600;">${fileName}</span></p>
+            </div>
+        `;
+        lucide.createIcons();
+
+        // Visual feedback on the main button card
+        const driveCard = document.querySelector('.upload-card-new');
+        const originalContent = driveCard.innerHTML;
+        driveCard.innerHTML = `
+                                <div class="upload-icon-wrapper" style="background: #22c55e; color: white; width: 80px; height: 80px;">
+                                    <i data-lucide="loader-2" class="spin" size="40"></i>
+                                </div>
+                                <h3 style="color: #166534;">Membaca File dari Drive...</h3>
+                                <p style="color: #166534;">${fileName}</p>
+                                `;
+        lucide.createIcons();
+
+        google.script.run
+            .withSuccessHandler((response) => {
+                closeDrivePicker(); // Close modal on success
+                if (driveCard) {
+                    driveCard.innerHTML = originalContent;
+                }
+                lucide.createIcons();
+
+                if (response.success) {
+                    if (response.data && response.data.length > 0) {
+                        renderTransactions(response.data);
+                        document.getElementById('extractionInfo').innerText = `Ditemukan ${response.data.length} transaksi dari Excel: ${fileName}`;
+                        showView('manage-view', document.querySelector('.nav-item[onclick*="manage-view"]'));
+                        showToast("Berhasil memproses " + response.data.length + " transaksi.");
+                    } else {
+                        showToast("File berhasil dibaca, namun tidak ditemukan data transaksi yang valid.", "warning");
+                    }
+                } else {
+                    showToast("Gagal memproses file: " + (response.error || "Terjadi kesalahan sistem"), "error");
+                    console.error("Drive Processing Error:", response.error);
+                }
+            })
+            .withFailureHandler((err) => {
+                if (driveCard) {
+                    driveCard.innerHTML = originalContent;
+                }
+                lucide.createIcons();
+                showToast("Koneksi gagal atau sesi habis. Silakan coba lagi.", "error");
+                console.error("Script Run Failure:", err);
+            })
+            .processExcelByFileId(fileId);
+    }
+</script>

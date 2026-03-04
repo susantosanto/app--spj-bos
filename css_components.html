@@ -1,148 +1,76 @@
 <style>
-    /* --- Buttons --- */
-    .btn-primary {
+    /* --- Upload View Styles --- */
+    .header-center {
+        text-align: center;
+        margin-bottom: 48px;
+    }
+
+    .header-center h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #1e293b;
+    }
+
+    .header-center p {
+        color: var(--text-muted);
+        font-size: 16px;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .upload-card {
+        background: var(--white);
+        border: 2px dashed #cbd5e1;
+        border-radius: 20px;
+        padding: 80px 40px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-bottom: 60px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upload-card:hover {
+        border-color: var(--primary);
+        background: rgba(37, 99, 235, 0.02);
+        transform: scale(1.01);
+    }
+
+    .upload-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        background: #eff6ff;
+        color: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        transition: var(--transition);
+    }
+
+    .upload-card:hover .upload-icon-wrapper {
         background: var(--primary);
         color: var(--white);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
+    }
+
+    .upload-card h3 {
+        font-size: 18px;
         font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    .btn-primary:hover {
-        background: var(--primary-dark);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-    }
-
-    .btn-danger {
-        background: #ef4444;
-        color: var(--white);
-        border: none;
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .btn-danger:hover {
-        background: #dc2626;
-    }
-
-    /* --- Form Elements --- */
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    label {
-        display: block;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--text-muted);
         margin-bottom: 8px;
     }
 
-    input {
-        width: 100%;
-        padding: 12px 16px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        font-size: 15px;
-        transition: var(--transition);
-    }
-
-    input:focus {
-        outline: none;
-        border-color: var(--primary);
-        background: var(--white);
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-    }
-
-    /* --- Transaction Table --- */
-    tr.hover-row:hover {
-        background-color: #f8fafc;
-    }
-
-    .empty-state {
-        background: var(--white);
-        border: 2px dashed #e2e8f0;
-        border-radius: 16px;
-        padding: 100px 40px;
-        text-align: center;
+    .upload-card p {
+        font-size: 12px;
         color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
 
-    .empty-icon {
-        font-size: 48px;
-        opacity: 0.2;
-        margin-bottom: 16px;
-    }
-
-    /* --- Data Sekolah (Settings) Styles --- */
-    .settings-container {
-        max-width: 800px;
-        margin: 0 auto;
-        background: var(--white);
-        border-radius: 24px;
-        padding: 40px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-    }
-
-    .settings-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 32px;
-    }
-
-    .settings-icon {
-        background: #eff6ff;
-        color: var(--primary);
-        padding: 12px;
-        border-radius: 12px;
-    }
-
-    .settings-title h3 {
-        font-size: 20px;
-        font-weight: 700;
-    }
-
-    .settings-title p {
-        font-size: 14px;
-        color: var(--text-muted);
-    }
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-
-    .form-group.full-width {
-        grid-column: span 2;
-    }
-
-    .btn-submit {
-        grid-column: span 2;
-        margin-top: 20px;
-        width: 100%;
-        justify-content: center;
-        padding: 14px;
-        font-size: 16px;
-    }
-
-    /* --- Saved Templates List --- */
+    /* Saved Templates List */
     .saved-template-item {
         display: flex;
         justify-content: space-between;
@@ -206,7 +134,7 @@
         line-height: 1.5;
     }
 
-    /* --- View Header --- */
+    /* --- Transaction View Styles --- */
     .view-header {
         display: flex;
         justify-content: space-between;
@@ -225,17 +153,229 @@
         font-size: 14px;
     }
 
-    /* --- Upload Container Premium --- */
-    .upload-container-premium {
-        max-width: 600px;
+    .btn-primary {
+        background: var(--primary);
+        color: var(--white);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-danger {
+        background: #ef4444;
+        color: var(--white);
+        border: none;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .btn-danger:hover {
+        background: #dc2626;
+    }
+
+    tr.hover-row:hover {
+        background-color: #f8fafc;
+    }
+
+    .empty-state {
+        background: var(--white);
+        border: 2px dashed #e2e8f0;
+        border-radius: 16px;
+        padding: 100px 40px;
+        text-align: center;
+        color: var(--text-muted);
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        opacity: 0.2;
+        margin-bottom: 16px;
+    }
+
+    /* --- Data Sekolah (Settings) Styles --- */
+    .settings-container {
+        max-width: 800px;
         margin: 0 auto;
+        background: var(--white);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
     }
 
-    .upload-card-new {
-        transition: all 0.4s ease;
+    .settings-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 32px;
     }
 
-    .upload-icon-premium {
-        transition: all 0.3s ease;
+    .settings-icon {
+        background: #eff6ff;
+        color: var(--primary);
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    .settings-title h3 {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .settings-title p {
+        font-size: 14px;
+        color: var(--text-muted);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group.full-width {
+        grid-column: span 2;
+    }
+
+    label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 15px;
+        transition: var(--transition);
+    }
+
+    input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--white);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-submit {
+        grid-column: span 2;
+        margin-top: 20px;
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+        font-size: 16px;
+    }
+
+    /* --- Doc Picker Styles (Preview Modal) --- */
+    .doc-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .doc-type-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .doc-type-card:hover {
+        border-color: #2563eb;
+        background: #eff6ff;
+        transform: translateX(4px);
+    }
+
+    .doc-type-card.active {
+        border-color: #2563eb;
+        background: #2563eb;
+        color: white;
+    }
+
+    .doc-type-icon {
+        width: 40px;
+        height: 40px;
+        background: #eff6ff;
+        color: #3b82f6;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .doc-type-card:hover .doc-type-icon {
+        background: #2563eb;
+        color: white;
+    }
+
+    .doc-type-card.active .doc-type-icon {
+        background: white;
+        color: #2563eb;
+    }
+
+    .doc-type-info {
+        flex-grow: 1;
+    }
+
+    .doc-type-name {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #1e293b;
+        transition: color 0.2s ease;
+    }
+
+    .doc-type-card:hover .doc-type-name {
+        color: #2563eb;
+    }
+
+    .doc-type-card.active .doc-type-name {
+        color: white;
+    }
+
+    .doc-type-card i {
+        color: #94a3b8;
+        transition: color 0.2s ease;
+    }
+
+    .doc-type-card:hover i {
+        color: #2563eb;
+    }
+
+    .doc-type-card.active i {
+        color: white;
     }
 </style>

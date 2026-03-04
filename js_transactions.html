@@ -1,153 +1,192 @@
 <script>
-    // --- Transaction Management Functions ---
-
-    // Make functions globally available
-    window.renderTransactions = renderTransactions;
-    window.openAddModal = openAddModal;
-    window.closeAddModal = closeAddModal;
-    window.saveManualTransaction = saveManualTransaction;
-    window.removeTransaction = removeTransaction;
-    window.openPreviewForTransaction = openPreviewForTransaction;
-    window.generateSpj = generateSpj;
-
-    // Render transactions to table
-    function renderTransactions(transactions) {
-        const tbody = document.getElementById('transactionTbody');
-        const emptyState = document.getElementById('emptyState');
-        const tableContainer = document.getElementById('transactionTableContainer');
-
-        if (!transactions || transactions.length === 0) {
-            emptyState.style.display = 'block';
-            tableContainer.style.display = 'none';
-            return;
+            const confirmOverlay = document.getElementById('confirmOverlay');
+            confirmOverlay.style.display = 'none';
+            if (confirmed && confirmCallback) {
+                confirmCallback();
+            }
+            confirmCallback = null; // Reset callback
         }
 
-        emptyState.style.display = 'none';
-        tableContainer.style.display = 'block';
 
-        tbody.innerHTML = transactions.map((tx, index) => `
-            <tr class="hover-row" style="border-bottom: 1px solid #e2e8f0;">
-                <td style="padding: 12px;">${tx.tanggal}</td>
-                <td style="padding: 12px;">${tx.noBukti}</td>
-                <td style="padding: 12px;">${tx.uraian}</td>
-                <td style="padding: 12px; text-align: right;">Rp ${tx.pengeluaran.toLocaleString('id-ID')}</td>
-                <td style="padding: 12px;">
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn-primary" onclick="openPreviewForTransaction(${index})" style="padding: 6px 12px; font-size: 12px;">
-                            <i data-lucide="eye" size="14"></i> Preview
+        // Action: Save School Data
+        function saveData() {
+            const formData = {
+                schoolName: document.getElementById('schoolName').value,
+                schoolAddress: document.getElementById('schoolAddress').value,
+                npsn: document.getElementById('npsn').value,
+                kecamatan: document.getElementById('kecamatan').value,
+                principalName: document.getElementById('principalName').value,
+                principalNip: document.getElementById('principalNip').value,
+                treasurerName: document.getElementById('treasurerName').value,
+                treasurerNip: document.getElementById('treasurerNip').value
+            };
+
+            const btn = document.querySelector('.btn-submit');
+            const originalText = btn.innerHTML;
+
+            // Visual feedback
+            btn.innerHTML = '<i data-lucide="loader-2" class="spin" size="18"></i> Menyimpan...';
+            lucide.createIcons();
+            btn.disabled = true;
+
+            // Save to LocalStorage instead of Google Script Properties
+            localStorage.setItem('spj_school_data', JSON.stringify(formData));
+
+            setTimeout(() => {
+                showToast("Data Berhasil Disimpan di Browser!");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
+            }, 500);
+        }
+
+        let allTransactions = [];
+
+        function renderTransactions(data) {
+            allTransactions = data;
+            const tbody = document.getElementById('transactionTbody');
+            const container = document.getElementById('transactionTableContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (data.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'block';
+            emptyState.style.display = 'none';
+
+            tbody.innerHTML = data.map(tx => `
+                <tr class="hover-row" style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 16px; font-size: 14px;">${tx.tanggal}</td>
+                    <td style="padding: 16px; font-size: 14px;"><span style="background: #eff6ff; color: #2563eb; padding: 4px 8px; border-radius: 4px; font-weight: 600;">${tx.noBukti}</span></td>
+                    <td style="padding: 16px; font-size: 14px; max-width: 300px;">${tx.uraian}</td>
+                    <td style="padding: 16px; font-size: 14px; font-weight: 600;">Rp ${tx.pengeluaran.toLocaleString('id-ID')}</td>
+                    <td style="padding: 16px; display: flex; gap: 8px;">
+                        <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="generateSpj('${tx.id}')" title="Cetak">
+                            <i data-lucide="printer" size="14"></i>
                         </button>
-                        <button class="btn-danger" onclick="removeTransaction(${index})" style="padding: 6px 12px; font-size: 12px;">
+                        <button class="btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="removeTransaction('${tx.id}')" title="Hapus">
                             <i data-lucide="trash-2" size="14"></i>
                         </button>
-                    </div>
-                </td>
-            </tr>
-        `).join('');
-
-        lucide.createIcons();
-    }
-
-    // Open Add Modal
-    function openAddModal() {
-        document.getElementById('addTanggal').valueAsDate = new Date();
-        document.getElementById('addModal').style.display = 'flex';
-    }
-
-    function closeAddModal() {
-        document.getElementById('addModal').style.display = 'none';
-        document.getElementById('addTransactionForm').reset();
-    }
-
-    // Save manual transaction
-    function saveManualTransaction(e) {
-        e.preventDefault();
-
-        const newTx = {
-            id: 'manual_' + Date.now(),
-            tanggal: document.getElementById('addTanggal').value.replace(/-/g, '/'),
-            noBukti: document.getElementById('addNoBukti').value,
-            uraian: document.getElementById('addUraian').value,
-            pengeluaran: parseFloat(document.getElementById('addJumlah').value) || 0,
-            penerima: document.getElementById('addPenerima').value,
-            type: document.getElementById('addJenis').value,
-            vendorStyle: document.getElementById('addJenis').value === 'nota' ? 'standard' : 'standard'
-        };
-
-        allTransactions.push(newTx);
-        renderTransactions(allTransactions);
-        closeAddModal();
-        showToast("Transaksi berhasil ditambahkan!");
-
-        // Update extraction info
-        document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
-    }
-
-    // Remove transaction
-    function removeTransaction(index) {
-        showConfirm("Apakah Anda yakin ingin menghapus transaksi ini?", () => {
-            allTransactions.splice(index, 1);
-            renderTransactions(allTransactions);
-            document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
-            showToast("Transaksi dihapus");
-        }, "Konfirmasi Hapus", "Ya, Hapus");
-    }
-
-    // Open preview for specific transaction
-    function openPreviewForTransaction(index) {
-        const tx = allTransactions[index];
-        if (!tx) {
-            console.error('Transaction not found at index:', index);
-            return;
-        }
-
-        // Populate form with transaction data
-        document.getElementById('custVendorName').value = tx.penerima || '';
-        document.getElementById('custVendorAddress').value = "Alamat " + (tx.penerima || '');
-        document.getElementById('custUraian').value = tx.uraian || '';
-        document.getElementById('custJumlah').value = tx.pengeluaran || 0;
-        document.getElementById('custTanggal').value = tx.tanggal ? tx.tanggal.replace(/\//g, '-') : '';
-        document.getElementById('custTanggalPesan').value = tx.tanggal ? tx.tanggal.replace(/\//g, '-') : '';
-        document.getElementById('custTanggalKegiatan').value = tx.tanggal ? tx.tanggal.replace(/\//g, '-') : '';
-        document.getElementById('custNomorSurat').value = "020/SD-BOS/" + new Date().getFullYear();
-
-        document.getElementById('custPerihal').value = (tx.type === 'konsumsi' ? "Belanja Konsumsi" : "Pesanan Barang/Jasa");
-        document.getElementById('custTempatKegiatan').value = document.getElementById('schoolName').value || "Sekolah";
-        document.getElementById('custWaktuKegiatan').value = "08.00 sd Selesai";
-        document.getElementById('custTembusan').value = "1. Pengawas Pembina\n2. K3S Kecamatan " + (document.getElementById('kecamatan').value || "");
-
-        const docTypeSelect = document.getElementById('docType');
-        if (tx.type === 'konsumsi' || tx.type === 'nota') {
-            docTypeSelect.value = 'nota';
-            document.getElementById('vendorStyle').value = tx.vendorStyle || 'standard';
-        } else if (tx.type === 'jasa') {
-            docTypeSelect.value = 'nota';
-            document.getElementById('vendorStyle').value = 'toko-prima';
-        } else {
-            docTypeSelect.value = 'kwitansi';
-        }
-
-        // Populate Nota Items if needed
-        if (docTypeSelect.value === 'nota') {
-            document.getElementById('notaItemsList').innerHTML = '';
-            addNotaItem(tx.uraian, 1, tx.pengeluaran);
-        }
-
-        // Show modal FIRST before initializing
-        document.getElementById('previewModal').style.display = 'flex';
-
-        // Initialize doc picker and update preview
-        setTimeout(() => {
-            initDocPicker();
-            handleDocTypeChange();
-            updateRincianSections();
-            updatePreview();
-            switchPreviewTab('form');
+                    </td>
+                </tr>
+            `).join('');
             lucide.createIcons();
-        }, 100);
-    }
+        }
 
-    // Generate SPJ (placeholder for future implementation)
-    function generateSpj() {
-        showToast("Fitur generate SPJ akan segera hadir!", "info");
-    }
+        // --- Manual Transaction Logic ---
+        function openAddModal() {
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('addDate').value = today;
+            document.getElementById('addNoBukti').value = '';
+            document.getElementById('addUraian').value = '';
+            document.getElementById('addPenerima').value = '';
+            document.getElementById('addJumlah').value = '';
+
+            document.getElementById('addModal').style.display = 'flex';
+            lucide.createIcons();
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+
+        function saveManualTransaction() {
+            const dateVal = document.getElementById('addDate').value;
+            const noBukti = document.getElementById('addNoBukti').value;
+            const uraian = document.getElementById('addUraian').value;
+            const penerima = document.getElementById('addPenerima').value;
+            const jumlah = parseFloat(document.getElementById('addJumlah').value);
+
+            if (!dateVal || !noBukti || !uraian || !jumlah) {
+                showToast("Mohon lengkapi Tanggal, No Bukti, Uraian, dan Jumlah.", "error");
+                return;
+            }
+
+            // Format date dd/mm/yyyy
+            const d = new Date(dateVal);
+            const formattedDate = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+
+            // Determine type automatically based on keywords
+            let type = 'nota';
+            let vendorStyle = 'standard';
+            const uLow = uraian.toLowerCase();
+            if (uLow.includes('honor') || uLow.includes('transport')) type = 'kwitansi';
+            if (uLow.includes('makan') || uLow.includes('snack')) vendorStyle = 'rm-family';
+
+            const newTx = {
+                id: 'MANUAL_' + Date.now(),
+                tanggal: formattedDate,
+                noBukti: noBukti,
+                uraian: uraian,
+                pengeluaran: jumlah,
+                penerima: penerima || uraian,
+                type: type,
+                vendorStyle: vendorStyle
+            };
+
+            allTransactions.push(newTx);
+            renderTransactions(allTransactions);
+            closeAddModal();
+
+            // Show feedback
+            document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi (Termasuk manual)`;
+        }
+
+        function removeTransaction(id) {
+            showConfirm("Apakah Anda yakin ingin menghapus transaksi ini?", () => {
+                allTransactions = allTransactions.filter(tx => tx.id !== id);
+                renderTransactions(allTransactions);
+                document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
+                showToast("Transaksi berhasil dihapus");
+            });
+        }
+
+        function generateSpj(txId) {
+            const tx = allTransactions.find(t => t.id === txId);
+            if (!tx) return;
+
+            // Pre-fill the customizer - (Redundant school fields removed from UI)
+
+            document.getElementById('custVendorName').value = tx.penerima;
+            document.getElementById('custVendorAddress').value = "Alamat " + tx.penerima;
+            document.getElementById('custUraian').value = tx.uraian;
+            document.getElementById('custJumlah').value = tx.pengeluaran;
+            document.getElementById('custTanggal').value = tx.tanggal;
+            document.getElementById('custTanggalPesan').value = tx.tanggal;
+            document.getElementById('custTanggalKegiatan').value = tx.tanggal;
+            document.getElementById('custNomorSurat').value = "020/SD-BOS/" + new Date().getFullYear();
+
+            document.getElementById('custPerihal').value = (tx.type === 'konsumsi' ? "Belanja Konsumsi" : "Pesanan Barang/Jasa");
+            document.getElementById('custTempatKegiatan').value = document.getElementById('schoolName').value || "Sekolah";
+            document.getElementById('custWaktuKegiatan').value = "08.00 sd Selesai";
+            document.getElementById('custTembusan').value = "1. Pengawas Pembina\n2. K3S Kecamatan " + (document.getElementById('kecamatan').value || "");
+
+            const docTypeSelect = document.getElementById('docType');
+            if (tx.type === 'konsumsi') {
+                docTypeSelect.value = 'nota';
+                document.getElementById('vendorStyle').value = tx.vendorStyle || 'standard';
+            } else if (tx.type === 'jasa') {
+                docTypeSelect.value = 'nota';
+                document.getElementById('vendorStyle').value = 'toko-prima';
+            } else {
+                docTypeSelect.value = 'kwitansi';
+            }
+
+            // Populate Nota Items if needed to preserve total
+            if (docTypeSelect.value === 'nota') {
+                document.getElementById('notaItemsList').innerHTML = '';
+                addNotaItem(tx.uraian.replace(/"/g, '&quot;'), 1, tx.pengeluaran);
+            }
+
+            initDocPicker(); // Ensure the doc list is populated
+            handleDocTypeChange();
+            switchPreviewTab('form'); // Go straight to form since transaction is selected
+            document.getElementById('previewModal').style.display = 'flex';
+            lucide.createIcons();
+        }
+
 </script>

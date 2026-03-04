@@ -175,6 +175,7 @@
         background: white;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         padding: 40px;
+        /* Standar Margin */
         box-sizing: border-box;
         transition: var(--transition);
         position: relative;
@@ -228,7 +229,7 @@
         margin: 0 auto;
     }
 
-    /* --- Document Dropdown --- */
+    /* --- Crucial Document Dropdown (Fixed) --- */
     .doc-selector-wrapper {
         margin-bottom: 24px;
         position: relative;
@@ -292,7 +293,7 @@
         padding: 10px;
     }
 
-    /* --- Drive File Item List --- */
+    /* Drive File Item List */
     .drive-file-item {
         display: flex;
         align-items: center;
@@ -374,85 +375,5 @@
         .form-full-width {
             grid-column: span 1;
         }
-    }
-
-    /* --- Add Transaction Modal --- */
-    #addModal .modal-container {
-        max-width: 500px;
-        width: 90%;
-    }
-
-    #addModal .modal-content {
-        padding: 24px;
-    }
-
-    #addModal .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    #addModal .modal-header h3 {
-        font-size: 18px;
-        font-weight: 700;
-    }
-
-    #addModal .btn-close {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 8px;
-        transition: var(--transition);
-    }
-
-    #addModal .btn-close:hover {
-        background: #f1f5f9;
-    }
-
-    /* --- Drive Modal --- */
-    #driveModal .modal-container {
-        max-width: 600px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-
-    #driveModal .modal-content {
-        padding: 24px;
-    }
-
-    #driveModal .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    #driveModal .modal-header h3 {
-        font-size: 18px;
-        font-weight: 700;
-    }
-
-    #driveModal .btn-close {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 8px;
-        transition: var(--transition);
-    }
-
-    #driveModal .btn-close:hover {
-        background: #f1f5f9;
-    }
-
-    #driveFileList {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        max-height: 400px;
-        overflow-y: auto;
     }
 </style>

@@ -1,19 +1,26 @@
 <script>
-    // --- Google Drive Picker Functions ---
-
+    // --- Drive Picker Logic ---
     function openDrivePicker() {
-        document.getElementById('driveModal').style.display = 'flex';
-        document.getElementById('driveFileList').innerHTML = `
-            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-                <i data-lucide="loader-2" class="spin" size="32" style="margin-bottom: 10px;"></i>
-                <p>Mencari file di Drive Anda...</p>
-            </div>
-        `;
+        const driveModal = document.getElementById('driveModal');
+        if (!driveModal) return;
+        driveModal.style.display = 'flex';
+
+        const listDiv = document.getElementById('driveFileList');
+        if (listDiv) {
+            listDiv.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                    <i data-lucide="loader-2" class="spin" size="32" style="margin-bottom: 10px;"></i>
+                    <p>Mencari file di Drive Anda...</p>
+                </div>
+            `;
+        }
         lucide.createIcons();
 
         google.script.run
             .withSuccessHandler((response) => {
                 const listDiv = document.getElementById('driveFileList');
+                if (!listDiv) return;
+
                 if (response.success && response.files && response.files.length > 0) {
                     listDiv.innerHTML = response.files.map(file => `
                         <div class="drive-file-item" onclick="processDriveFile('${file.id}', '${file.name}')">
@@ -44,28 +51,52 @@
     }
 
     function closeDrivePicker() {
-        document.getElementById('driveModal').style.display = 'none';
+        const modal = document.getElementById('driveModal');
+        if (modal) modal.style.display = 'none';
     }
 
     function processDriveFile(fileId, fileName) {
         // Show loading in the modal
         const listDiv = document.getElementById('driveFileList');
-        listDiv.innerHTML = `
-            <div style="text-align: center; padding: 60px; color: #2563eb;">
-                <i data-lucide="loader-2" class="spin" size="48" style="margin-bottom: 20px;"></i>
-                <h4 style="font-weight: 800; color: #0f172a; font-size: 18px; margin-bottom: 8px;">Mengekstrak Data...</h4>
-                <p style="font-size: 14px; color: #64748b; line-height: 1.6;">Harap tunggu sebentar, sistem sedang memproses <br><span style="color: #2563eb; font-weight: 600;">${fileName}</span></p>
-            </div>
-        `;
+        if (listDiv) {
+            listDiv.innerHTML = `
+                <div style="text-align: center; padding: 60px; color: #2563eb;">
+                    <i data-lucide="loader-2" class="spin" size="48" style="margin-bottom: 20px;"></i>
+                    <h4 style="font-weight: 800; color: #0f172a; font-size: 18px; margin-bottom: 8px;">Mengekstrak Data...</h4>
+                    <p style="font-size: 14px; color: #64748b; line-height: 1.6;">Harap tunggu sebentar, sistem sedang memproses <br><span style="color: #2563eb; font-weight: 600;">${fileName}</span></p>
+                </div>
+            `;
+        }
         lucide.createIcons();
+
+        // Visual feedback on the main button card
+        const driveCard = document.querySelector('.upload-card-new');
+        let originalContent = '';
+        if (driveCard) {
+            originalContent = driveCard.innerHTML;
+            driveCard.innerHTML = `
+                <div class="upload-icon-wrapper" style="background: #22c55e; color: white; width: 80px; height: 80px;">
+                    <i data-lucide="loader-2" class="spin" size="40"></i>
+                </div>
+                <h3 style="color: #166534;">Membaca File dari Drive...</h3>
+                <p style="color: #166534;">${fileName}</p>
+            `;
+            lucide.createIcons();
+        }
 
         google.script.run
             .withSuccessHandler((response) => {
                 closeDrivePicker(); // Close modal on success
+                if (driveCard) {
+                    driveCard.innerHTML = originalContent;
+                }
+                lucide.createIcons();
+
                 if (response.success) {
                     if (response.data && response.data.length > 0) {
                         renderTransactions(response.data);
-                        document.getElementById('extractionInfo').innerText = `Ditemukan ${response.data.length} transaksi dari Excel: ${fileName}`;
+                        const info = document.getElementById('extractionInfo');
+                        if (info) info.innerText = `Ditemukan ${response.data.length} transaksi dari Excel: ${fileName}`;
                         showView('manage-view', document.querySelector('.nav-item[onclick*="manage-view"]'));
                         showToast("Berhasil memproses " + response.data.length + " transaksi.");
                     } else {
@@ -77,6 +108,10 @@
                 }
             })
             .withFailureHandler((err) => {
+                if (driveCard) {
+                    driveCard.innerHTML = originalContent;
+                }
+                lucide.createIcons();
                 showToast("Koneksi gagal atau sesi habis. Silakan coba lagi.", "error");
                 console.error("Script Run Failure:", err);
             })

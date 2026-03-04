@@ -1,75 +1,42 @@
 <script>
-    // --- Preview Functions ---
-
-    // Make functions globally available
-    window.openPreview = openPreview;
-    window.closePreview = closePreview;
-    window.zoomPreview = zoomPreview;
-    window.changeLayout = changeLayout;
-    window.handleLogoUpload = handleLogoUpload;
-    window.handleStampUpload = handleStampUpload;
-    window.handleDocPhotoUpload = handleDocPhotoUpload;
-    window.updatePhotoInputs = updatePhotoInputs;
-    window.switchPreviewTab = switchPreviewTab;
-    window.updatePreview = updatePreview;
-    window.collectFormData = collectFormData;
+    // --- Preview & Modal Logic ---
 
     function openPreview() {
-        console.log('openPreview() called');
-
-        // Check if modal exists
         const modal = document.getElementById('previewModal');
-        if (!modal) {
-            console.error('Preview modal not found!');
-            alert('Error: Preview modal tidak ditemukan. Pastikan FrontEnd_v2.html sudah di-load.');
-            return;
-        }
-
-        // Initialize customizer with global school data
-        const perihalEl = document.getElementById('custPerihal');
-        if (perihalEl) perihalEl.value = "Permohonan Belanja";
-
-        const tempatKegiatanEl = document.getElementById('custTempatKegiatan');
-        if (tempatKegiatanEl) tempatKegiatanEl.value = document.getElementById('schoolName')?.value || "Sekolah";
-
-        const waktuKegiatanEl = document.getElementById('custWaktuKegiatan');
-        if (waktuKegiatanEl) waktuKegiatanEl.value = "08.00 sd Selesai";
-
-        const tembusanEl = document.getElementById('custTembusan');
-        if (tembusanEl) tembusanEl.value = "1. Pengawas Pembina\n2. Arsip";
-
-        // Show modal
         modal.style.display = 'flex';
-        console.log('Modal displayed');
+        document.body.style.overflow = 'hidden';
 
-        // Initialize for Option B (New Sidebar UI)
-        if (typeof initDocPicker === 'function') {
-            initDocPicker();
-        }
+        // Initialize Doc Picker list
+        initDocPicker();
 
-        if (typeof switchPreviewTab === 'function') {
-            switchPreviewTab('select'); // Start with the type picker
-        }
+        // Switch to the first tab by default
+        switchPreviewTab('tab-select');
 
-        if (typeof updatePreview === 'function') {
-            updatePreview();
-        }
-
-        if (typeof lucide !== 'undefined' && lucide.createIcons) {
-            lucide.createIcons();
-        }
-
-        console.log('openPreview() completed');
+        lucide.createIcons();
     }
 
     function closePreview() {
-        document.getElementById('previewModal').style.display = 'none';
+        const modal = document.getElementById('previewModal');
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
     }
 
     function zoomPreview(val) {
         currentScale = val / 100;
-        document.getElementById('printArea').style.transform = `scale(${currentScale})`;
-        document.getElementById('zoomLevel').innerText = `Scale: ${val}%`;
+        const zoomLevel = document.getElementById('zoomLevel');
+        if (zoomLevel) zoomLevel.innerText = 'Scale: ' + val + '%';
+        const paper = document.getElementById('paper');
+        if (paper) {
+            paper.style.transform = `scale(${currentScale})`;
+        }
+    }
+
+    function updatePhotoInputs() {
+        const count = parseInt(document.getElementById('docPhotoCount').value);
+        for (let i = 1; i <= 5; i++) {
+            const row = document.getElementById('ph-' + i);
+            if (row) row.style.display = (i <= count) ? 'block' : 'none';
+        }
     }
 
     function changeLayout(layout) {
@@ -80,7 +47,7 @@
     function handleLogoUpload(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = e => {
                 logoBase64 = e.target.result;
                 updatePreview();
             };
@@ -91,7 +58,7 @@
     function handleStampUpload(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = e => {
                 stampBase64 = e.target.result;
                 updatePreview();
             };
@@ -99,10 +66,10 @@
         }
     }
 
-    function handleDocPhotoUpload(input, index = 1) {
+    function handleDocPhotoUpload(input, index) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = e => {
                 docPhotos[index] = e.target.result;
                 updatePreview();
             };
@@ -110,116 +77,234 @@
         }
     }
 
-    function updatePhotoInputs() {
-        const count = parseInt(document.getElementById('docPhotoCount').value);
-        for (let i = 1; i <= 5; i++) {
-            const el = document.getElementById('ph-' + i);
-            if (el) el.style.display = (i <= count) ? 'block' : 'none';
-        }
-        updatePreview();
-    }
-
     function switchPreviewTab(tabId) {
-        document.querySelectorAll('.preview-tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.preview-tab-content').forEach(content => content.classList.remove('active'));
+        const tabs = document.querySelectorAll('.preview-tab-btn');
+        const contents = document.querySelectorAll('.preview-tab-content');
 
-        const activeBtn = document.querySelector(`.preview-tab-btn[onclick*="${tabId}"]`);
-        if (activeBtn) activeBtn.classList.add('active');
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.style.display = 'none');
 
-        const activeContent = document.getElementById(`tab-${tabId}`);
-        if (activeContent) activeContent.classList.add('active');
+        const activeTab = document.querySelector(`[onclick="switchPreviewTab('${tabId}')"]`);
+        if (activeTab) activeTab.classList.add('active');
+
+        const content = document.getElementById(tabId);
+        if (content) content.style.display = 'block';
+
+        lucide.createIcons();
     }
 
-    // Collect form data for preview
     function collectFormData() {
+        const getVal = (id) => document.getElementById(id)?.value || "";
+
         return {
-            docType: document.getElementById('docType').value,
-            vendorStyle: document.getElementById('vendorStyle').value,
-            vendorName: document.getElementById('custVendorName').value || "",
-            vendorAddress: document.getElementById('custVendorAddress').value || "",
-            uraian: document.getElementById('custUraian').value || "Belanja Barang",
-            jumlah: parseFloat(document.getElementById('custJumlah').value) || 0,
-            tanggal: document.getElementById('custTanggal').value || "01/01/2025",
-            tanggalKegiatan: document.getElementById('custTanggalKegiatan').value || "",
-            nomorSurat: document.getElementById('custNomorSurat').value || "",
-            perihal: document.getElementById('custPerihal').value || "",
-            waktu: document.getElementById('custWaktuKegiatan').value || "",
-            tempat: document.getElementById('custTempatKegiatan').value || "",
-            hari: document.getElementById('custHari')?.value || "",
-            tembusan: document.getElementById('custTembusan')?.value || "",
-            hasil: document.getElementById('custHasil')?.value || "",
-            kesimpulan: document.getElementById('custKesimpulan')?.value || "",
-            kategori: document.getElementById('custKategori')?.value || "",
-            jumlahBarang: document.getElementById('custJumlahBarang')?.value || "1",
-            spesifikasi: document.getElementById('custSpesifikasi')?.value || "",
-            schoolData: getSchoolData(),
-            logoBase64: logoBase64,
-            stampBase64: stampBase64,
-            logoKBBBase64: logoKBBBase64
+            docType: getVal('docType'),
+            vendorStyle: getVal('vendorStyle'),
+            fontStyle: getVal('fontStyle'),
+            fontSize: getVal('fontSize') || "16",
+            vendorName: getVal('custVendorName'),
+            vendorAddress: getVal('custVendorAddress'),
+            uraian: getVal('custUraian'),
+            jumlah: parseFloat(getVal('custJumlah')) || 0,
+            tanggal: getVal('custTanggal'),
+            nomorSurat: getVal('custNomorSurat'),
+            tanggalPesan: getVal('custTanggalPesan'),
+            tanggalKegiatan: getVal('custTanggalKegiatan'),
+            perihal: getVal('custPerihal'),
+            tempatKegiatan: getVal('custTempatKegiatan'),
+            waktuKegiatan: getVal('custWaktuKegiatan'),
+            tembusan: getVal('custTembusan'),
+            custTempatTanggalKwitansi: getVal('custTempatTanggalKwitansi'),
+            jumlahPesanan: getVal('custJumlahPesanan'),
+            jenisKegiatanPesanan: getVal('custJenisKegiatanPesanan'),
+            hari: getVal('custHari'),
+            docPhotoCount: getVal('docPhotoCount')
         };
     }
 
-    // Main update preview function
     function updatePreview() {
-        console.log('updatePreview() called');
+        const docType = document.getElementById('docType').value;
 
-        // Update rincian sections first
-        if (typeof updateRincianSections === 'function') {
-            updateRincianSections();
-        }
+        // Update rincian sections visibility based on uraian for pesanan
+        updateRincianSections();
 
-        const data = collectFormData();
-        console.log('Collected data:', data);
+        const vendorStyle = document.getElementById('vendorStyle').value;
+        const vendorName = document.getElementById('custVendorName').value || "";
+        const vendorAddress = document.getElementById('custVendorAddress').value || "Jl. Raya KM 10, Kota Pendidikan";
+        const uraian = document.getElementById('custUraian').value || "Belanja Barang Jasa";
+        let jumlah = parseFloat(document.getElementById('custJumlah').value) || 0;
+        const tanggal = document.getElementById('custTanggal').value || "01/01/2025";
+        const nomorSurat = document.getElementById('custNomorSurat').value || "020/SD-BOS/2025";
+        const tanggalPesan = document.getElementById('custTanggalPesan').value || tanggal;
+        const tanggalKegiatan = document.getElementById('custTanggalKegiatan').value || tanggal;
+        const fontStyle = document.getElementById('fontStyle').value;
+        const fontSize = document.getElementById('fontSize').value || "16";
+        const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+        if (fontSizeDisplay) fontSizeDisplay.innerText = fontSize + "px";
 
-        // Template map
-        const templateMap = {
-            'kwitansi': getHtml_kwitansi,
-            'nota': getHtml_nota,
-            'pesanan': getHtml_pesanan,
-            'berita_acara': getHtml_beritaAcara,
-            'undangan': getHtml_undangan,
-            'notulen': getHtml_notulen,
-            'daftar_hadir': getHtml_daftarHadir,
-            'dokumentasi': getHtml_dokumentasi,
-            'rencana': getHtml_rencana,
-            'spk': getHtml_spk,
-            'spk_guru_honorer': getHtml_spkGuru,
-            'spk_tenaga_honorer': getHtml_spkTenaga,
-            'sk_pembagian_tugas': getHtml_skTugas,
-            'daftar_penerima_honor': getHtml_daftarHonor,
+        let terbilangText = terbilang(jumlah) + " Rupiah";
+        const dateInfo = getDateText(tanggal);
+        const datePesanInfo = getDateText(tanggalPesan);
+        const dateKegiatanInfo = getDateText(tanggalKegiatan);
+
+        // Versi Uraian Bersih (Hanya Nama Kegiatan) untuk Surat Pesanan & Undangan
+        const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "")
+            .replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
+
+        const schoolData = {
+            name: document.getElementById('schoolName').value || "SD NEGERI 01 CONTOH",
+            address: document.getElementById('schoolAddress').value || "Jl. Pendidikan No. 123",
+            kecamatan: document.getElementById('kecamatan').value || "Cikalongwetan",
+            npsn: document.getElementById('npsn').value || "12345678",
+            principal: document.getElementById('principalName').value || "NAMA KEPALA SEKOLAH",
+            principalNip: document.getElementById('principalNip').value || "19XXXXXXXX XXXXXX X XXX",
+            treasurer: document.getElementById('treasurerName').value || "NAMA BENDAHARA",
+            treasurerNip: document.getElementById('treasurerNip').value || "19XXXXXXXX XXXXXX X XXX"
         };
 
-        const generator = templateMap[data.docType];
-        console.log('Template generator for', data.docType, ':', generator);
+        const perihal = document.getElementById('custPerihal').value || "Surat Pesanan";
+        const tempatKegiatan = document.getElementById('custTempatKegiatan').value || "Sekolah";
+        const waktuKegiatan = document.getElementById('custWaktuKegiatan').value || "08.00 sd Selesai";
+        const tembusan = document.getElementById('custTembusan').value || "";
+        const custTempatTanggalKwitansi = document.getElementById('custTempatTanggalKwitansi')?.value || "";
 
-        if (generator) {
-            try {
-                const html = generator(data);
-                console.log('Generated HTML length:', html?.length);
-                document.getElementById('paperContent').innerHTML = html;
-            } catch (e) {
-                console.error('Error generating template:', e);
-                document.getElementById('paperContent').innerHTML = '<p style="padding: 20px; color: red;">Error generating preview: ' + e.message + '</p>';
-            }
-        } else {
-            console.warn('No template found for docType:', data.docType);
-            document.getElementById('paperContent').innerHTML = '<p style="padding: 20px; color: #666;">Select a document type to preview</p>';
-        }
+        let html = '';
 
-        // Update paper class based on docType
-        const paper = document.getElementById('paperContent');
-        if (paper) {
-            paper.className = 'paper';
-            if (data.docType === 'kwitansi') {
-                paper.classList.add('kwitansi');
-            } else if (data.docType === 'nota') {
-                paper.classList.add('nota-kecil');
-                if (currentLayout === 'landscape') paper.classList.add('landscape');
+        // --- TEMPLATE KOP SURAT SEKOLAH ---
+        const schoolKop = `
+            <div style="display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 6px; margin-bottom: 10px; font-family: 'Times New Roman', serif;">
+                <div style="width: 70px;">
+                    ${logoKBBBase64 ? `<img src="${logoKBBBase64}" style="width: 60px;">` : ''}
+                </div>
+                <div style="flex-grow: 1; text-align: center; margin-right: 70px;">
+                    <h3 style="margin:0; font-size: 14px; text-transform: uppercase;">PEMERINTAH KABUPATEN BANDUNG BARAT</h3>
+                    <h3 style="margin:0; font-size: 14px; text-transform: uppercase;">DINAS PENDIDIKAN</h3>
+                    <h2 style="margin:0; font-size: 16px; text-transform: uppercase; font-weight: bold;">${schoolData.name}</h2>
+                    <h3 style="margin:0; font-size: 12px; text-transform: uppercase;">KECAMATAN ${schoolData.kecamatan}</h3>
+                    <p style="margin:0; font-size: 10px; font-style: italic;">${schoolData.address} - Kabupaten Bandung Barat</p>
+                </div>
+            </div>
+        `;
+
+        if (docType === 'nota') {
+            const hwStyle = fontStyle || '';
+            const hwAttr = (fontStyle ? 'font-family:' + fontStyle + ';' : '') + 'font-size:' + fontSize + 'px;';
+
+            const itemRows = document.querySelectorAll('.nota-item-row');
+            let itemsHtml = '';
+            let itemsHtmlSwapped = '';
+            let totalManual = 0;
+
+            if (itemRows.length > 0) {
+                itemRows.forEach((row, index) => {
+                    const inputs = row.querySelectorAll('input');
+                    const name = inputs[0].value || "-";
+                    const rawQty = inputs[1].value;
+                    const rawPrice = inputs[2].value;
+
+                    const qty = parseFloat(rawQty) || 0;
+                    const price = parseFloat(rawPrice) || 0;
+                    const sub = qty * price;
+                    totalManual += sub;
+
+                    if (vendorStyle === 'rm-family' && (!rawQty || qty === 0) && (!rawPrice || price === 0)) {
+                        itemsHtml += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000; padding: 0 8px 0 30px; font-style: italic;">${name}</td><td style="border-right: 2px solid #000; text-align: center; width: 60px;"></td><td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;"></td><td style="text-align: right; padding-right: 8px; width: 120px;"></td></tr>`;
+                        itemsHtmlSwapped += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000; text-align: center; width: 60px;"></td><td style="border-right: 2px solid #000; padding: 0 8px 0 30px; font-style: italic;">${name}</td><td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px;"></td><td style="text-align: right; padding-right: 8px; width: 120px;"></td></tr>`;
+                    } else {
+                        itemsHtml += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${name}</td><td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">${qty || ""}</td><td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${price ? price.toLocaleString('id-ID') : ""}</td><td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${price ? sub.toLocaleString('id-ID') : ""}</td></tr>`;
+                        itemsHtmlSwapped += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">${qty || ""}</td><td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${name}</td><td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${price ? price.toLocaleString('id-ID') : ""}</td><td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${price ? sub.toLocaleString('id-ID') : ""}</td></tr>`;
+                    }
+                });
+
+                const remaining = 12 - itemRows.length;
+                for (let i = 0; i < remaining; i++) {
+                    itemsHtml += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>`;
+                    itemsHtmlSwapped += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>`;
+                }
             } else {
-                paper.classList.add('a4');
+                itemsHtml = '';
+                itemsHtmlSwapped = '';
             }
+
+            if (itemRows.length > 0 && document.getElementById('manualTotal').checked) {
+                jumlah = totalManual;
+                document.getElementById('custJumlah').value = jumlah;
+                terbilangText = terbilang(jumlah) + " Rupiah";
+            }
+
+            if (itemRows.length === 0) {
+                itemsHtml = `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${uraian}</td><td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">1</td><td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td><td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td></tr>` + Array(11).fill('<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>').join('');
+                itemsHtmlSwapped = `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">1</td><td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${uraian}</td><td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td><td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td></tr>` + Array(11).fill('<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>').join('');
+            }
+
+            if (vendorStyle === 'rm-family') {
+                html = getNotaRmFamilyHtml(schoolData, vendorAddress, tanggal, nomorSurat, hwAttr, itemsHtml, jumlah);
+            } else if (vendorStyle === 'cahya-cellular') {
+                html = getNotaCahyaCellularHtml(schoolData, vendorAddress, tanggal, hwAttr, itemsHtmlSwapped, jumlah);
+            } else if (vendorStyle === 'media-komputer') {
+                html = getNotaMediaKomputerHtml(schoolData, vendorAddress, tanggal, hwAttr, itemsHtml, jumlah);
+            } else if (vendorStyle === 'toko-prima') {
+                html = getNotaTokoPrimaHtml(schoolData, vendorAddress, tanggal, hwAttr, itemsHtml, jumlah);
+            } else if (vendorStyle === 'standard') {
+                html = getNotaStandardHtml(schoolData, vendorName, vendorAddress, tanggal, hwAttr, jumlah, uraian);
+            } else if (vendorStyle === 'plain') {
+                html = getNotaPlainHtml(schoolData, vendorAddress, tanggal, dateInfo, hwAttr, jumlah, uraian, terbilangText);
+            } else if (vendorStyle.startsWith('custom_')) {
+                html = getNotaCustomHtml(vendorStyle, vendorName, vendorAddress, tanggal, schoolData, nomorSurat, jumlah, terbilangText, hwAttr);
+            }
+        } else if (docType === 'pesanan') {
+            html = getPesananHtml(schoolData, schoolKop, uraian, cleanUraian, tanggalPesan, tanggalKegiatan, datePesanInfo, dateKegiatanInfo, perihal, tempatKegiatan, waktuKegiatan, tembusan);
+        } else if (docType === 'kwitansi') {
+            html = getKwitansiHtml(schoolData, nomorSurat, uraian, terbilangText, jumlah, vendorName, custTempatTanggalKwitansi, stampBase64);
+        } else if (docType === 'berita_acara') {
+            html = getBeritaAcaraHtml(schoolData, schoolKop, vendorName, uraian, jumlah, tanggal, dateInfo);
+        } else if (docType === 'undangan') {
+            html = getUndanganHtml(schoolData, schoolKop, nomorSurat, perihal, cleanUraian, tanggalPesan, datePesanInfo, tanggalKegiatan, dateKegiatanInfo, hari, tempatKegiatan, waktuKegiatan, tembusan);
+        } else if (docType === 'notulen') {
+            html = getNotulenHtml(uraian, dateInfo, schoolData, schoolKop);
+        } else if (docType === 'daftar_hadir') {
+            html = getDaftarHadirHtml(uraian, schoolData, schoolKop);
+        } else if (docType === 'dokumentasi') {
+            html = getDokumentasiHtml(uraian, dateInfo, schoolData, schoolKop);
+        } else if (docType === 'rencana') {
+            html = getRencanaHtml(uraian, schoolData, schoolKop);
+        } else if (docType === 'spk') {
+            html = getSpkHtml(uraian, schoolData, schoolKop);
+        } else if (docType === 'spk_guru_honorer') {
+            try { html = getSpkGuruHonorerHtml(schoolData, schoolKop); } catch (e) { html = `<div style="color:red; padding:20px;">Error: ${e.message}</div>`; }
+        } else if (docType === 'spk_tenaga_honorer') {
+            try { html = getSpkTenagaHonorerHtml(schoolData, schoolKop); } catch (e) { html = `<div style="color:red; padding:20px;">Error: ${e.message}</div>`; }
+        } else if (docType === 'daftar_penerima_honor') {
+            html = getDaftarPenerimaHonorHtml(schoolData, schoolKop);
+        } else if (docType === 'sk_pembagian_tugas') {
+            html = getSkPembagianTugasHtml(schoolData, schoolKop);
         }
 
-        console.log('updatePreview() completed');
+        const printArea = document.getElementById('printArea');
+
+        if (html && html.includes('<!-- PAGE_BREAK -->')) {
+            const parts = html.split('<!-- PAGE_BREAK -->');
+            let combinedHtml = '';
+            parts.forEach((part, index) => {
+                const pageClass = currentLayout === 'landscape' ? 'a5-landscape' : 'a4';
+                combinedHtml += `<div class="paper ${pageClass}">${part.trim()}</div>`;
+            });
+            printArea.innerHTML = combinedHtml;
+        } else {
+            let paperClass = 'a4';
+            if (docType === 'nota') {
+                paperClass = 'nota-kecil';
+            } else if (docType === 'kwitansi') {
+                paperClass = 'kwitansi';
+            }
+
+            printArea.innerHTML = `<div id="paper" class="paper ${paperClass} ${currentLayout === 'landscape' ? 'landscape' : ''}"><div id="paperContent">${html || ''}</div></div>`;
+        }
+
+        lucide.createIcons();
+    }
+
+    // Helper function to initialize preview with default values
+    function initPreview() {
+        updatePreview();
     }
 </script>

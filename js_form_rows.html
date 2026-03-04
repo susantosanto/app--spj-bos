@@ -1,166 +1,170 @@
 <script>
-    // --- Form Row Management Functions ---
+    // --- Dynamic Form Row Management ---
 
-    // Nota Items
-    function addNotaItem(name = '', qty = 1, price = 0) {
-        const list = document.getElementById('notaItemsList');
-        const row = document.createElement('div');
-        row.className = 'nota-item-row';
-        row.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; align-items: center;';
-        row.innerHTML = `
-            <input type="text" placeholder="Nama barang" value="${name}" oninput="updatePreview()">
-            <input type="number" placeholder="Qty" value="${qty}" oninput="updatePreview()">
-            <input type="number" placeholder="Harga" value="${price}" oninput="updatePreview()">
-            <button type="button" class="btn-danger" onclick="this.parentElement.remove(); updatePreview();" style="padding: 8px;">
-                <i data-lucide="trash-2" size="16"></i>
-            </button>
-        `;
-        list.appendChild(row);
-        lucide.createIcons();
-        updatePreview();
-    }
-
-    // Attendance Rows
-    function addAttendanceRow(nama = '', jabatan = '') {
+    function addAttendanceRow(nama = "", jabatan = "") {
         const list = document.getElementById('attendanceList');
-        const row = document.createElement('div');
-        row.className = 'attendance-row';
-        row.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; align-items: center;';
-        row.innerHTML = `
-            <input type="text" placeholder="Nama peserta" value="${nama}" oninput="updatePreview()">
+        if (!list) return;
+        const div = document.createElement('div');
+        div.className = 'dynamic-row attendance-row';
+        div.innerHTML = `
+            <input type="text" placeholder="Nama" value="${nama}" oninput="updatePreview()">
             <input type="text" placeholder="Jabatan" value="${jabatan}" oninput="updatePreview()">
-            <button type="button" class="btn-danger" onclick="this.parentElement.remove(); updatePreview();" style="padding: 8px;">
-                <i data-lucide="trash-2" size="16"></i>
+            <button class="btn-icon-danger" style="color: #ef4444; background: none; border: none; cursor: pointer; padding: 4px;" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="14"></i>
             </button>
         `;
-        list.appendChild(row);
+        list.appendChild(div);
         lucide.createIcons();
         updatePreview();
     }
 
     function loadDefaultAttendance() {
         const list = document.getElementById('attendanceList');
+        if (!list) return;
         list.innerHTML = '';
         const defaults = [
-            { nama: 'Kepala Sekolah', jabatan: 'Ketua Panitia' },
-            { nama: 'Bendahara', jabatan: 'Anggota' },
-            { nama: 'Guru Senior', jabatan: 'Anggota' },
-            { nama: 'Operator Sekolah', jabatan: 'Sekretaris' }
+            { n: 'DRS. H. DEDI SUMARDI, M.MPd', j: 'Pengarah' },
+            { n: 'H. ADE RAHMAT, S.Pd', j: 'Ketua' },
+            { n: 'DEDI SURYADI, S.Pd', j: 'Sekretaris' },
+            { n: 'CICIH, S.Pd', j: 'Bendahara' }
         ];
-        defaults.forEach(d => addAttendanceRow(d.nama, d.jabatan));
+        defaults.forEach(d => addAttendanceRow(d.n, d.j));
     }
 
-    // Honor Rows
-    function addHonorRow(nama = '', nip = '', jabatan = '', honor = '') {
+    function addHonorRow(nama = "", jabatan = "", jumlah = 0) {
         const list = document.getElementById('honorList');
         if (!list) return;
-        
-        const row = document.createElement('div');
-        row.className = 'honor-row';
-        row.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 8px; align-items: center;';
-        row.innerHTML = `
-            <input type="text" placeholder="Nama" value="${nama}" oninput="updatePreview()">
-            <input type="text" placeholder="NIP" value="${nip}" oninput="updatePreview()">
-            <input type="text" placeholder="Jabatan" value="${jabatan}" oninput="updatePreview()">
-            <input type="number" placeholder="Honor" value="${honor}" oninput="updatePreview()">
-            <button type="button" class="btn-danger" onclick="this.parentElement.remove(); updatePreview();" style="padding: 8px;">
-                <i data-lucide="trash-2" size="16"></i>
-            </button>
+        const div = document.createElement('div');
+        div.className = 'dynamic-row honor-row';
+        div.style.padding = "10px";
+        div.style.border = "1px solid #e2e8f0";
+        div.style.borderRadius = "8px";
+        div.style.background = "#fff";
+        div.style.marginBottom = "8px";
+
+        div.innerHTML = `
+            <div style="display: grid; grid-template-columns: 35px 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <input type="text" placeholder="No" value="${document.querySelectorAll('.honor-row').length + 1}" style="text-align: center;">
+                <input type="text" placeholder="Nama PTK" value="${nama}" oninput="updatePreview()">
+                <input type="text" placeholder="Jabatan/Tugas" value="${jabatan}" oninput="updatePreview()">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                 <input type="text" placeholder="Gol" value="-" oninput="updatePreview()">
+                 <input type="text" placeholder="Vol" value="1 Bln" oninput="updatePreview()">
+                 <input type="number" placeholder="Unit Cost" value="${jumlah}" oninput="updatePreview()">
+                 <input type="number" placeholder="Bruto" value="${jumlah}" oninput="updatePreview()">
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                 <input type="number" placeholder="Pajak" value="0" style="flex: 1;" oninput="updatePreview()">
+                 <input type="number" placeholder="Netto" value="${jumlah}" style="flex: 1; font-weight: bold; background: #f0fdf4;" oninput="updatePreview()">
+                 <button class="btn-icon-danger" style="color: #ef4444; background: none; border: none; padding: 8px;" onclick="this.parentElement.parentElement.remove(); updatePreview();">
+                    <i data-lucide="trash-2" size="16"></i>
+                </button>
+            </div>
         `;
-        list.appendChild(row);
+        list.appendChild(div);
         lucide.createIcons();
         updatePreview();
     }
 
-    // Rincian Sections Visibility
+    function addNotaItem(name = "", qty = 1, price = 0) {
+        const list = document.getElementById('notaItemsList');
+        if (!list) return;
+        const div = document.createElement('div');
+        div.className = 'dynamic-row nota-item-row';
+        div.style.display = "flex";
+        div.style.gap = "8px";
+        div.style.marginBottom = "8px";
+        div.innerHTML = `
+            <input type="text" placeholder="Nama Item" value="${name}" style="flex: 2;" oninput="updatePreview()">
+            <input type="number" placeholder="Qty" value="${qty}" style="width: 50px;" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" style="flex: 1;" oninput="updatePreview()">
+            <button class="btn-icon-danger" style="color: #ef4444; background: none; border: none; padding: 4px;" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="14"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function addMakananRow(menu = "", vol = 1, unit = "Box", price = 0) {
+        const list = document.getElementById('makananList');
+        if (!list) return;
+        const div = document.createElement('div');
+        div.className = 'dynamic-row makanan-row';
+        div.style.display = "flex";
+        div.style.gap = "4px";
+        div.style.marginBottom = "4px";
+        div.innerHTML = `
+            <input type="text" placeholder="Menu" value="${menu}" style="flex: 2; font-size: 11px;" oninput="updatePreview()">
+            <input type="number" placeholder="Vol" value="${vol}" style="width: 40px; font-size: 11px;" oninput="updatePreview()">
+            <input type="text" placeholder="Sat" value="${unit}" style="width: 40px; font-size: 11px;" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" style="flex: 1; font-size: 11px;" oninput="updatePreview()">
+            <button class="btn-icon-danger" style="color: #ef4444; background: none; border: none; padding: 2px;" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="12"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function addBarangRow(no = "", nama = "", spek = "", vol = 1, unit = "Unit", price = 0) {
+        const list = document.getElementById('barangList');
+        if (!list) return;
+        const div = document.createElement('div');
+        div.className = 'dynamic-row barang-row';
+        div.style.display = "flex";
+        div.style.gap = "4px";
+        div.style.marginBottom = "4px";
+        div.innerHTML = `
+            <input type="text" placeholder="No" value="${no || document.querySelectorAll('.barang-row').length + 1}" style="width: 25px; font-size: 11px;" oninput="updatePreview()">
+            <input type="text" placeholder="Nama" value="${nama}" style="flex: 1.5; font-size: 11px;" oninput="updatePreview()">
+            <input type="text" placeholder="Spek" value="${spek}" style="flex: 1; font-size: 11px;" oninput="updatePreview()">
+            <input type="number" placeholder="Vol" value="${vol}" style="width: 35px; font-size: 11px;" oninput="updatePreview()">
+            <input type="text" placeholder="Sat" value="${unit}" style="width: 35px; font-size: 11px;" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" style="flex: 1; font-size: 11px;" oninput="updatePreview()">
+            <button class="btn-icon-danger" style="color: #ef4444; background: none; border: none; padding: 2px;" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="12"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function addJasaRow(no = "", jenis = "", vol = 1, unit = "Kgt", price = 0) {
+        const list = document.getElementById('jasaList');
+        if (!list) return;
+        const div = document.createElement('div');
+        div.className = 'dynamic-row jasa-row';
+        div.style.display = "flex";
+        div.style.gap = "4px";
+        div.style.marginBottom = "4px";
+        div.innerHTML = `
+            <input type="text" placeholder="No" value="${no || document.querySelectorAll('.jasa-row').length + 1}" style="width: 25px; font-size: 11px;" oninput="updatePreview()">
+            <input type="text" placeholder="Jenis" value="${jenis}" style="flex: 2; font-size: 11px;" oninput="updatePreview()">
+            <input type="number" placeholder="Vol" value="${vol}" style="width: 40px; font-size: 11px;" oninput="updatePreview()">
+            <input type="text" placeholder="Sat" value="${unit}" style="width: 40px; font-size: 11px;" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" style="flex: 1; font-size: 11px;" oninput="updatePreview()">
+            <button class="btn-icon-danger" style="color: #ef4444; background: none; border: none; padding: 2px;" onclick="this.parentElement.remove(); updatePreview();">
+                <i data-lucide="trash-2" size="12"></i>
+            </button>
+        `;
+        list.appendChild(div);
+        lucide.createIcons();
+        updatePreview();
+    }
+
     function updateRincianSections() {
-        const docType = document.getElementById('docType').value;
+        const type = document.getElementById('custJenisKegiatanPesanan').value;
+        const makanan = document.getElementById('rincianMakananSection');
+        const barang = document.getElementById('rincianBarangSection');
+        const jasa = document.getElementById('rincianJasaSection');
 
-        // Hide all sections first
-        const sections = [
-            'notaItemsSection',
-            'notulenSection',
-            'attendanceSection',
-            'documentationSection',
-            'rencanaExtraSection',
-            'spkExtraSection',
-            'rincianMakananSection',
-            'rincianBarangSection',
-            'rincianJasaSection',
-            'spkGuruHonorerSection',
-            'spkTenagaHonorerSection',
-            'skPembagianTugasSection',
-            'daftarPenerimaHonorSection',
-            'daftarHonorExtraSection'
-        ];
-
-        sections.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = 'none';
-        });
-
-        // Show relevant sections based on docType
-        if (docType === 'nota') {
-            const el = document.getElementById('notaItemsSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'notulen') {
-            const el = document.getElementById('notulenSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'daftar_hadir') {
-            const el = document.getElementById('attendanceSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'dokumentasi') {
-            const el = document.getElementById('documentationSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'rencana') {
-            const el = document.getElementById('rencanaExtraSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'spk') {
-            const el = document.getElementById('spkExtraSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'pesanan') {
-            // Show appropriate rincian based on jenis pesanan
-            const jenisPesanan = document.getElementById('custJenisKegiatanPesanan')?.value || 'makanan';
-            if (jenisPesanan === 'makanan') {
-                const rm = document.getElementById('rincianMakananSection');
-                if (rm) rm.style.display = 'block';
-            } else if (jenisPesanan === 'barang') {
-                const rb = document.getElementById('rincianBarangSection');
-                if (rb) rb.style.display = 'block';
-            } else if (jenisPesanan === 'jasa') {
-                const rj = document.getElementById('rincianJasaSection');
-                if (rj) rj.style.display = 'block';
-            }
-        } else if (docType === 'spk_guru_honorer') {
-            const el = document.getElementById('spkGuruHonorerSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'spk_tenaga_honorer') {
-            const el = document.getElementById('spkTenagaHonorerSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'sk_pembagian_tugas') {
-            const el = document.getElementById('skPembagianTugasSection');
-            if (el) el.style.display = 'block';
-        } else if (docType === 'daftar_penerima_honor') {
-            const el1 = document.getElementById('daftarPenerimaHonorSection');
-            const el2 = document.getElementById('daftarHonorExtraSection');
-            if (el1) el1.style.display = 'block';
-            if (el2) el2.style.display = 'block';
-        }
-    }
-
-    // Add Makanan Row (for pesanan)
-    function addMakananRow() {
-        // Implementation for pesanan document
-        addNotaItem(); // Reuse nota item structure
-    }
-
-    // Add Barang Row
-    function addBarangRow() {
-        addNotaItem(); // Reuse nota item structure
-    }
-
-    // Add Jasa Row
-    function addJasaRow() {
-        addNotaItem(); // Reuse nota item structure
+        if (makanan) makanan.style.display = (type === 'makanan') ? 'block' : 'none';
+        if (barang) barang.style.display = (type === 'barang') ? 'block' : 'none';
+        if (jasa) jasa.style.display = (type === 'jasa') ? 'block' : 'none';
     }
 </script>

@@ -1,0 +1,72 @@
+<script>
+    // --- Preview Modal & Layout Logic ---
+    function openPreview() {
+        const modal = document.getElementById('previewModal');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        initDocPicker();
+        switchPreviewTab('doc-list');
+        lucide.createIcons();
+    }
+
+    function closePreview() {
+        const modal = document.getElementById('previewModal');
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function zoomPreview(val) {
+        currentScale = Math.max(0.3, Math.min(1.5, currentScale + val));
+        const paper = document.getElementById('paper');
+        if (paper) paper.style.transform = `scale(${currentScale})`;
+    }
+
+    function changeLayout(layout) {
+        currentLayout = layout;
+        updatePreview();
+    }
+
+    function handleLogoUpload(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                logoBase64 = e.target.result;
+                updatePreview();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function handleStampUpload(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                stampBase64 = e.target.result;
+                updatePreview();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function handleDocPhotoUpload(input, index) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                docPhotos[index] = e.target.result;
+                updatePreview();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function switchPreviewTab(tabId) {
+        const tabs = document.querySelectorAll('.preview-tab-btn');
+        const contents = document.querySelectorAll('.preview-tab-content');
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.style.display = 'none');
+        const activeTab = document.querySelector(`[onclick="switchPreviewTab('${tabId}')"]`);
+        if (activeTab) activeTab.classList.add('active');
+        const activeContent = document.getElementById(tabId);
+        if (activeContent) activeContent.style.display = 'block';
+    }
+</script>

@@ -1,103 +1,112 @@
 <script>
-    // --- Document Picker & Type Selection Functions ---
+    // --- Document Picker Management ---
 
     function initDocPicker() {
-        const grid = document.getElementById('docPickerGrid');
-        const select = document.getElementById('docType');
-        const docs = [
-            { val: 'kwitansi', name: 'Kwitansi SPJ', icon: 'banknote', color: '#10b981', desc: 'Tanda terima pembayaran sah' },
-            { val: 'nota', name: 'Nota Toko / Invoice', icon: 'shopping-bag', color: '#3b82f6', desc: 'Rincian belanja dari penyedia' },
-            { val: 'pesanan', name: 'Surat Pesanan', icon: 'file-signature', color: '#f59e0b', desc: 'Pemesanan barang formal' },
-            { val: 'berita_acara', name: 'BAST', icon: 'clipboard-check', color: '#8b5cf6', desc: 'Berita Acara Serah Terima' },
-            { val: 'undangan', name: 'Surat Undangan', icon: 'mail', color: '#ec4899', desc: 'Undangan rapat atau kegiatan' },
-            { val: 'notulen', name: 'Notulen Kegiatan', icon: 'file-text', color: '#64748b', desc: 'Catatan hasil rapat' },
-            { val: 'daftar_hadir', name: 'Daftar Hadir', icon: 'users', color: '#06b6d4', desc: 'Bukti kehadiran peserta' },
-            { val: 'dokumentasi', name: 'Dokumentasi', icon: 'camera', color: '#f43f5e', desc: 'Foto-foto kegiatan' },
-            { val: 'rencana', name: 'Dok. Perencanaan', icon: 'map', color: '#14b8a6', desc: 'Kebutuhan & spesifikasi' },
-            { val: 'spk', name: 'SPK (Konstruksi/Jasa/Barang)', icon: 'briefcase', color: '#4f46e5', desc: 'Surat Perintah Kerja Umum' },
-            { val: 'spk_guru_honorer', name: 'PKS Guru Honorer', icon: 'user-check', color: '#2563eb', desc: 'Perjanjian kerja tahunan guru' },
-            { val: 'spk_tenaga_honorer', name: 'PKS Tenaga Honorer', icon: 'user-cog', color: '#2563eb', desc: 'Perjanjian kerja staf/penjaga' },
-            { val: 'sk_pembagian_tugas', name: 'SK Pembagian Tugas', icon: 'award', color: '#ef4444', desc: 'Lampiran PKS Guru' },
-            { val: 'daftar_penerima_honor', name: 'Daftar Terima Honor', icon: 'receipt', color: '#16a34a', desc: 'Tabel honorarium multi-penerima' }
+        const docTypes = [
+            { id: 'nota', name: 'Nota / Kwitansi Toko', icon: 'shopping-cart' },
+            { id: 'kwitansi', name: 'Kuitansi Bendahara', icon: 'file-text' },
+            { id: 'pesanan', name: 'Surat Pesanan', icon: 'send' },
+            { id: 'berita_acara', name: 'BA Serah Terima', icon: 'clipboard-check' },
+            { id: 'undangan', name: 'Surat Undangan', icon: 'mail' },
+            { id: 'notulen', name: 'Notulen Kegiatan', icon: 'book-open' },
+            { id: 'daftar_hadir', name: 'Daftar Hadir', icon: 'users' },
+            { id: 'dokumentasi', name: 'Lembar Dokumentasi', icon: 'camera' },
+            { id: 'rencana', name: 'Dokumen Perencanaan', icon: 'calendar' },
+            { id: 'spk', name: 'Surat Perintah Kerja (SPK)', icon: 'briefcase' },
+            { id: 'spk_guru_honorer', name: 'PKS Guru Honorer', icon: 'user-check' },
+            { id: 'spk_tenaga_honorer', name: 'PKS Tenaga Honorer', icon: 'user' },
+            { id: 'daftar_penerima_honor', name: 'Daftar Penerima Honor', icon: 'award' },
+            { id: 'sk_pembagian_tugas', name: 'SK Pembagian Tugas', icon: 'file-edit' }
         ];
 
-        grid.innerHTML = docs.map(doc => `
-            <div class="doc-card ${select.value === doc.val ? 'active' : ''}" onclick="selectDocType('${doc.val}')">
-                <i data-lucide="${doc.icon}" size="22"></i>
-                <div class="doc-card-info">
-                    <h4>${doc.name}</h4>
-                    <p>${doc.desc}</p>
+        const grid = document.getElementById('docPickerGrid');
+        if (!grid) return;
+
+        grid.innerHTML = docTypes.map(doc => `
+            <div class="doc-type-card" onclick="selectDocType('${doc.id}')">
+                <div class="doc-type-icon">
+                    <i data-lucide="${doc.icon}" size="20"></i>
                 </div>
+                <div class="doc-type-info">
+                    <span class="doc-type-name">${doc.name}</span>
+                </div>
+                <i data-lucide="chevron-right" size="14" style="opacity: 0.3;"></i>
             </div>
         `).join('');
+
         lucide.createIcons();
     }
 
     function selectDocType(val) {
-        const select = document.getElementById('docType');
-        select.value = val;
-
-        // Update UI
-        document.getElementById('currentDocTitle').innerText = select.options[select.selectedIndex].text;
-
-        // Re-render picker grid to show active
-        initDocPicker();
-
-        // Switch to form tab
-        switchPreviewTab('form');
-
-        // Call existing logic
+        document.getElementById('docType').value = val;
         handleDocTypeChange();
+        switchPreviewTab('tab-form');
     }
 
     function handleDocTypeChange() {
         const docType = document.getElementById('docType').value;
 
-        // Update current doc title
-        const select = document.getElementById('docType');
-        const selectedOption = select.options[select.selectedIndex];
+        // Update Current Title
+        const titles = {
+            'kwitansi': 'Kwitansi SPJ',
+            'nota': 'Nota Toko / Invoice',
+            'pesanan': 'Surat Pesanan',
+            'berita_acara': 'Berita Acara Serah Terima',
+            'undangan': 'Surat Undangan',
+            'notulen': 'Notulen Kegiatan',
+            'daftar_hadir': 'Daftar Hadir',
+            'dokumentasi': 'Lembar Dokumentasi',
+            'rencana': 'Dokumen Perencanaan',
+            'spk': 'Surat Perintah Kerja',
+            'spk_guru_honorer': 'PKS Guru Honorer',
+            'spk_tenaga_honorer': 'PKS Tenaga Honorer',
+            'sk_pembagian_tugas': 'SK Pembagian Tugas',
+            'daftar_penerima_honor': 'Daftar Penerima Honor'
+        };
         const titleEl = document.getElementById('currentDocTitle');
-        if (titleEl) {
-            titleEl.innerText = selectedOption.text;
-        }
+        if (titleEl) titleEl.innerText = titles[docType] || 'Kwitansi SPJ';
 
-        // Get all special sections
-        const notaSection = document.getElementById('notaItemsSection');
-        const notulenSection = document.getElementById('notulenSection');
-        const attendanceSection = document.getElementById('attendanceSection');
-        const documentationSection = document.getElementById('documentationSection');
+        // Sections
         const rencanaSection = document.getElementById('rencanaExtraSection');
         const spkSection = document.getElementById('spkExtraSection');
+        const notaSection = document.getElementById('notaItemsSection');
+        const documentationSection = document.getElementById('documentationSection');
+        const notulenSection = document.getElementById('notulenSection');
+        const attendanceSection = document.getElementById('attendanceSection');
         const spkGuruSection = document.getElementById('spkGuruHonorerSection');
         const spkTenagaSection = document.getElementById('spkTenagaHonorerSection');
-        const daftarHonorSection = document.getElementById('daftarPenerimaHonorSection');
         const skPembagianSection = document.getElementById('skPembagianTugasSection');
+        const daftarHonorSection = document.getElementById('daftarPenerimaHonorSection');
+
+        // Hide all first
+        if (rencanaSection) rencanaSection.style.display = 'none';
+        if (spkSection) spkSection.style.display = 'none';
+        if (notaSection) notaSection.style.display = 'none';
+        if (documentationSection) documentationSection.style.display = 'none';
+        if (notulenSection) notulenSection.style.display = 'none';
+        if (attendanceSection) attendanceSection.style.display = 'none';
+        if (spkGuruSection) spkGuruSection.style.display = 'none';
+        if (spkTenagaSection) spkTenagaSection.style.display = 'none';
+        if (skPembagianSection) skPembagianSection.style.display = 'none';
+        if (daftarHonorSection) daftarHonorSection.style.display = 'none';
+
+        // Hide rincian sections for pesanan
         const rincianMakananSection = document.getElementById('rincianMakananSection');
         const rincianBarangSection = document.getElementById('rincianBarangSection');
         const rincianJasaSection = document.getElementById('rincianJasaSection');
-
-        // Hide all special sections
-        if (notaSection) notaSection.style.display = 'none';
-        if (notulenSection) notulenSection.style.display = 'none';
-        if (attendanceSection) attendanceSection.style.display = 'none';
-        if (documentationSection) documentationSection.style.display = 'none';
-        if (rencanaSection) rencanaSection.style.display = 'none';
-        if (spkSection) spkSection.style.display = 'none';
-        if (spkGuruSection) spkGuruSection.style.display = 'none';
-        if (spkTenagaSection) spkTenagaSection.style.display = 'none';
-        if (daftarHonorSection) daftarHonorSection.style.display = 'none';
-        if (skPembagianSection) skPembagianSection.style.display = 'none';
         if (rincianMakananSection) rincianMakananSection.style.display = 'none';
         if (rincianBarangSection) rincianBarangSection.style.display = 'none';
         if (rincianJasaSection) rincianJasaSection.style.display = 'none';
 
-        // Reset visibility of all form fields first
-        const allFields = ['fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
+        // Reset visibility of all grouped fields first
+        const groupedFields = [
+            'fg-nomor', 'fg-perihal', 'fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah',
             'fg-tanggal', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-hari', 'fg-tempat', 'fg-waktu-kegiatan', 'fg-jumlah-pesanan',
             'fg-jenis-kegiatan-pesanan', 'fg-tempat-tanggal-kwitansi',
-            'fg-vendor-address', 'fg-tembusan', 'fg-logo-upload', 'fg-stamp-upload'];
+            'fg-vendor-address', 'fg-tembusan', 'fg-logo-upload', 'fg-stamp-upload'
+        ];
 
-        allFields.forEach(id => {
+        groupedFields.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
         });
@@ -108,20 +117,17 @@
             if (el) el.style.display = 'block';
         });
 
-        // Show fields based on document type
         if (docType === 'kwitansi') {
             showFields(['fg-nomor', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-name', 'fg-stamp-upload', 'fg-tempat-tanggal-kwitansi']);
         } else if (docType === 'nota') {
             showFields(['fg-vendor-style', 'fg-font-style', 'fg-font-size', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-stamp-upload']);
-            if (notaSection) {
-                notaSection.style.display = 'block';
-                if (document.getElementById('notaItemsList').children.length === 0) {
-                    addNotaItem();
-                }
+            if (notaSection) notaSection.style.display = 'block';
+            if (document.getElementById('notaItemsList') && document.getElementById('notaItemsList').children.length === 0) {
+                if (typeof addNotaItem === 'function') addNotaItem();
             }
         } else if (docType === 'pesanan') {
             showFields(['fg-nomor', 'fg-perihal', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah-pesanan', 'fg-jenis-kegiatan-pesanan', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan']);
-            updateRincianSections();
+            if (typeof updateRincianSections === 'function') updateRincianSections();
         } else if (docType === 'berita_acara') {
             showFields(['fg-nomor', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address']);
         } else if (docType === 'undangan') {
@@ -131,11 +137,9 @@
             if (notulenSection) notulenSection.style.display = 'block';
         } else if (docType === 'daftar_hadir') {
             showFields(['fg-uraian']);
-            if (attendanceSection) {
-                attendanceSection.style.display = 'block';
-                if (document.getElementById('attendanceList').children.length === 0) {
-                    loadDefaultAttendance();
-                }
+            if (attendanceSection) attendanceSection.style.display = 'block';
+            if (document.getElementById('attendanceList') && document.getElementById('attendanceList').children.length === 0) {
+                if (typeof loadDefaultAttendance === 'function') loadDefaultAttendance();
             }
         } else if (docType === 'dokumentasi') {
             showFields(['fg-uraian', 'fg-tanggal']);
@@ -150,25 +154,15 @@
         } else if (docType === 'spk_guru_honorer') {
             showFields(['fg-nomor', 'fg-tanggal']);
             if (spkGuruSection) spkGuruSection.style.display = 'block';
-            const p = document.getElementById('principalName');
-            const pn = document.getElementById('principalNip');
-            const gk = document.getElementById('custSpkGuruKepalaNama');
-            const gkn = document.getElementById('custSpkGuruKepalaNip');
-            if (p && pn && gk && gkn && !gk.value) {
-                gk.value = p.value || '';
-                gkn.value = pn.value || '';
-            }
+            const p = document.getElementById('principalName'); const pn = document.getElementById('principalNip');
+            const gk = document.getElementById('custSpkGuruKepalaNama'); const gkn = document.getElementById('custSpkGuruKepalaNip');
+            if (p && pn && gk && gkn && !gk.value) { gk.value = p.value || ''; gkn.value = pn.value || ''; }
         } else if (docType === 'spk_tenaga_honorer') {
             showFields(['fg-nomor', 'fg-tanggal']);
             if (spkTenagaSection) spkTenagaSection.style.display = 'block';
-            const p2 = document.getElementById('principalName');
-            const pn2 = document.getElementById('principalNip');
-            const tk = document.getElementById('custSpkTenagaKepalaNama');
-            const tkn = document.getElementById('custSpkTenagaKepalaNip');
-            if (p2 && pn2 && tk && tkn && !tk.value) {
-                tk.value = p2.value || '';
-                tkn.value = pn2.value || '';
-            }
+            const p2 = document.getElementById('principalName'); const pn2 = document.getElementById('principalNip');
+            const tk = document.getElementById('custSpkTenagaKepalaNama'); const tkn = document.getElementById('custSpkTenagaKepalaNip');
+            if (p2 && pn2 && tk && tkn && !tk.value) { tk.value = p2.value || ''; tkn.value = pn2.value || ''; }
         } else if (docType === 'sk_pembagian_tugas') {
             showFields(['fg-nomor', 'fg-tanggal']);
             if (skPembagianSection) skPembagianSection.style.display = 'block';
@@ -176,14 +170,10 @@
             showFields([]);
             if (daftarHonorSection) daftarHonorSection.style.display = 'block';
             if (document.getElementById('honorList') && document.getElementById('honorList').children.length === 0) {
-                addHonorRow();
+                if (typeof addHonorRow === 'function') addHonorRow();
             }
         }
 
-        // Re-render doc picker grid to update active state
-        initDocPicker();
-
-        // Update preview
         updatePreview();
     }
 </script>

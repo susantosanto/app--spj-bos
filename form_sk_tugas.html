@@ -1,20 +1,33 @@
-<!-- SK Pembagian Tugas Section -->
-<div id="skPembagianTugasSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Detail SK Pembagian Tugas</h4>
+<div id="skPembagianTugasSection"
+    style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+    <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Data Guru (Pihak
+        Kedua)</label>
     <div class="form-group">
         <label>Nama Guru</label>
-        <input type="text" id="custSkGuruName" placeholder="Nama guru" oninput="updatePreview()">
+        <input type="text" id="custSkGuruNama" oninput="updatePreview()" placeholder="SITI AISAH NUR FITRI, S.Pd">
     </div>
     <div class="form-group">
-        <label>NIP</label>
-        <input type="text" id="custSkGuruNip" placeholder="NIP" oninput="updatePreview()">
+        <label>NIP Guru</label>
+        <input type="text" id="custSkGuruNip" oninput="updatePreview()" placeholder="-">
     </div>
     <div class="form-group">
-        <label>Tugas Tambahan</label>
-        <input type="text" id="custSkTugas" placeholder="Contoh: Wali Kelas 6" oninput="updatePreview()">
+        <label>Pangkat, Gol/Ruang</label>
+        <input type="text" id="custSkGuruPangkat" oninput="updatePreview()" placeholder="-">
     </div>
     <div class="form-group">
-        <label>Tahun Ajaran</label>
-        <input type="text" id="custSkTahun" placeholder="2025/2026" oninput="updatePreview()">
+        <label>Jabatan</label>
+        <input type="text" id="custSkGuruJabatan" oninput="updatePreview()" placeholder="Guru Kelas">
+    </div>
+    <div class="form-group">
+        <label>Tugas Mengajar</label>
+        <input type="text" id="custSkGuruTugas" oninput="updatePreview()" placeholder="Mengajar Kelas IV">
+    </div>
+    <div class="form-group">
+        <label>Jumlah Jam</label>
+        <input type="text" id="custSkGuruJam" oninput="updatePreview()" placeholder="24 Jam/Minggu">
+    </div>
+    <div class="form-group">
+        <label>Tahun Pelajaran</label>
+        <input type="text" id="custSkTahunAjar" oninput="updatePreview()" placeholder="2025/2026">
     </div>
 </div>

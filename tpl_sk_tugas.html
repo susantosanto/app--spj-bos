@@ -1,21 +1,92 @@
-<!-- Template: SK Pembagian Tugas -->
-<!-- Usage: getHtml_skTugas(data) -->
-<div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
-    ${getSchoolKop(data.schoolData)}
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="margin: 0; font-size: 16px; text-decoration: underline; font-weight: bold;">SURAT KETERANGAN</h2>
-        <p style="margin: 5px 0 0 0; font-size: 13px;">Nomor: ${data.nomorSurat}</p>
-    </div>
-    <div style="margin: 20px 0; line-height: 1.8; font-size: 13px;">
-        <p style="margin: 0;">Kepala Sekolah <strong>${data.schoolData.name}</strong> menerangkan bahwa:</p>
-        <table style="margin: 15px 0 15px 20px; font-size: 13px;">
-            <tr><td style="width: 150px;">Nama</td><td>: ${data.vendorName}</td></tr>
-            <tr><td>NIP</td><td>: ${data.nip || "-"}</td></tr>
-            <tr><td>Jabatan</td><td>: Guru Kelas</td></tr>
-        </table>
-        <p style="margin: 15px 0 0 0;">Diberi tugas untuk: <strong>${data.uraian}</strong></p>
-    </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
-        <div style="text-align: center; width: 250px;"><p style="margin-bottom: 5px;">${getDateText(data.tanggal).fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p><p style="font-weight: bold; text-decoration: underline; margin:0;">${data.schoolData.principal}</p></div>
-    </div>
-</div>
+<script>
+    // --- SK PEMBAGIAN TUGAS TEMPLATE ---
+    function getSkPembagianTugasHtml(schoolData, schoolKop) {
+        const nomor = document.getElementById('custNomorSurat')?.value || "954/100/VII -SD/2025";
+        const tanggalStr = document.getElementById('custTanggal')?.value || "15/07/2025";
+        const tahunAjar = document.getElementById('custSkTahunAjar')?.value || "2025/2026";
+
+        const kepSek = schoolData.principal;
+        const kepNip = schoolData.principalNip;
+        const kepPangkat = "Pembina Tk.I, IV.b";
+
+        const guruNama = document.getElementById('custSkGuruNama')?.value || "SITI AISAH NUR FITRI, S.Pd";
+        const guruNip = document.getElementById('custSkGuruNip')?.value || "-";
+        const guruPangkat = document.getElementById('custSkGuruPangkat')?.value || "-";
+        const guruJabatan = document.getElementById('custSkGuruJabatan')?.value || "Guru Kelas";
+        const guruTugas = document.getElementById('custSkGuruTugas')?.value || "Mengajar Kelas IV";
+        const guruJam = document.getElementById('custSkGuruJam')?.value || "24 Jam/Minggu";
+
+        const sekolahShort = schoolData.name.replace(/SEKOLAH\s+/, '').replace(/NEGERI\s+/, 'SDN ');
+
+        return `
+            <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; font-size: 12px; width: 100%; box-sizing: border-box;">
+                ${schoolKop}
+
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-weight: bold; font-size: 14px; text-decoration: underline;">SK Kepala ${schoolData.name}</div>
+                    <div style="font-weight: bold;">Tentang Pembagian Tugas Guru</div>
+                    <div style="font-weight: bold;">Dalam Proses Belajar Mengajar</div>
+                    <div style="margin-top: 5px;">Nomor : ${nomor}</div>
+                </div>
+
+                <div style="text-align: center; font-weight: bold; margin-bottom: 20px;">
+                    <div style="text-decoration: underline;">SURAT TUGAS MELAKSANAKAN KEGIATAN</div>
+                    <div>PROSES BELAJAR MENGAJAR ATAU PRAKTEK *)</div>
+                </div>
+
+                <p>Yang bertandatangan di bawah ini :</p>
+                <table style="width: 100%; margin-left: 20px; margin-bottom: 15px;">
+                    <tr><td style="width: 150px;">Nama</td><td>:</td><td>${kepSek}</td></tr>
+                    <tr><td>NIP</td><td>:</td><td>${kepNip}</td></tr>
+                    <tr><td>Pangkat, Gol/Ruang</td><td>:</td><td>${kepPangkat}</td></tr>
+                    <tr><td>Jabatan</td><td>:</td><td>Kepala Sekolah</td></tr>
+                    <tr><td>Nama Unit Kerja</td><td>:</td><td>${schoolData.name}</td></tr>
+                    <tr><td style="vertical-align: top;">Alamat Unit Kerja</td><td style="vertical-align: top;">:</td><td>${schoolData.address}<br>Kec. ${schoolData.kecamatan} Kab. Bandung Barat</td></tr>
+                </table>
+
+                <p>Dengan ini menugaskan kepada :</p>
+                <table style="width: 100%; margin-left: 20px; margin-bottom: 15px;">
+                    <tr><td style="width: 150px;">Nama</td><td>:</td><td>${guruNama}</td></tr>
+                    <tr><td>NIP</td><td>:</td><td>${guruNip}</td></tr>
+                    <tr><td>Pangkat, Gol/Ruang</td><td>:</td><td>${guruPangkat}</td></tr>
+                    <tr><td>Jabatan</td><td>:</td><td>${guruJabatan}</td></tr>
+                    <tr><td>Nama dan Alamat Sekolah</td><td>:</td><td>${schoolData.name}<br>${schoolData.address}<br>Kec. ${schoolData.kecamatan} Kab. Bandung Barat</td></tr>
+                    <tr><td>Tugas</td><td>:</td><td>${guruTugas}</td></tr>
+                    <tr><td>Jumlah Jam Mengajar</td><td>:</td><td>${guruJam}</td></tr>
+                </table>
+
+                <p style="text-align: justify;">Untuk melaksanakan kegiatan proses belajar mengajar atau praktek *) di ${schoolData.name} pada Tahun Pelajaran ${tahunAjar}</p>
+
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 20px; text-align: center;">
+                    <thead>
+                        <tr style="background: #f0f0f0; font-weight: bold;">
+                            <th style="border: 1px solid #000; padding: 5px; width: 30px;">No</th>
+                            <th style="border: 1px solid #000; padding: 5px;">Kegiatan</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 80px;">Semester I</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 80px;">Semester II</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="border: 1px solid #000; padding: 5px;">1.</td><td style="border: 1px solid #000; padding: 5px; text-align: left;">Melaksanakan dengan bimbingan/melaksanakan *) Penyusunan program pengajaran atau praktek *)</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td></tr>
+                        <tr><td style="border: 1px solid #000; padding: 5px;">2.</td><td style="border: 1px solid #000; padding: 5px; text-align: left;">Melaksanakan dengan bimbingan/melaksanakan *) Penyajian program pengajaran atau praktek *)</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td></tr>
+                        <tr><td style="border: 1px solid #000; padding: 5px;">3.</td><td style="border: 1px solid #000; padding: 5px; text-align: left;">Melaksanakan dengan bimbingan/melaksanakan *) Evaluasi belajar atau praktek *)</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td></tr>
+                        <tr><td style="border: 1px solid #000; padding: 5px;">4.</td><td style="border: 1px solid #000; padding: 5px; text-align: left;">Melaksanakan dengan bimbingan/melaksanakan *) Analisis hasil evaluasi belajar atau praktek *)</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td></tr>
+                        <tr><td style="border: 1px solid #000; padding: 5px;">5.</td><td style="border: 1px solid #000; padding: 5px; text-align: left;">Melaksanakan dengan bimbingan/melaksanakan *) Penyusunan dan pelaksanaan program perbaikan dan pengayaan.</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td></tr>
+                        <tr><td style="border: 1px solid #000; padding: 5px;">6.</td><td style="border: 1px solid #000; padding: 5px; text-align: left;">Melaksanakan dengan bimbingan/melaksanakan *) Penyusunan dan pelaksanaan program bimbingan dan konseling di kelas yang menjadi tanggung jawabnya. (Khusus guru di kelas)</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td><td style="border: 1px solid #000; padding: 5px;">24 jam</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Demikian Surat Tugas ini dibuat untuk dilaksanakan sebagaimana mestinya.</p>
+
+                <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 5px;">Ditetapkan di : ${sekolahShort}</p>
+                        <p style="margin-bottom: 5px;">Pada Tanggal : ${getDateText(tanggalStr).fullDate}</p>
+                        <p style="font-weight: bold; margin-bottom: 70px;">Kepala Sekolah</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin: 0;">${kepSek}</p>
+                        <p style="margin: 0;">NIP. ${kepNip}</p>
+                    </div>
+                </div>
+            </div>`;
+    }
+</script>

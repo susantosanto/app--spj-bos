@@ -1,20 +1,43 @@
-<!-- SPK Tenaga Honorer Section -->
-<div id="spkTenagaHonorerSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Detail PKS Tenaga Honorer</h4>
+<div id="spkTenagaHonorerSection"
+    style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+    <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Isian Surat Perjanjian Kerja
+        Tenaga Honorer</label>
     <div class="form-group">
-        <label>Nama Tenaga Honorer</label>
-        <input type="text" id="custSpkTenagaName" placeholder="Nama tenaga honorer" oninput="updatePreview()">
+        <label>Pihak Kesatu - Nama Kepala Sekolah</label>
+        <input type="text" id="custSpkTenagaKepalaNama" oninput="updatePreview()" placeholder="Yuniarti, S.Pd">
     </div>
     <div class="form-group">
-        <label>Jabatan</label>
-        <input type="text" id="custSpkTenagaJabatan" placeholder="Contoh: Penjaga Sekolah" oninput="updatePreview()">
+        <label>Pihak Kesatu - Tempat, Tanggal Lahir</label>
+        <input type="text" id="custSpkTenagaKepalaTtl" oninput="updatePreview()" placeholder="Bandung, 07 Juli 1966">
     </div>
     <div class="form-group">
-        <label>Tugas Utama</label>
-        <input type="text" id="custSpkTenagaTugas" placeholder="Tugas utama" oninput="updatePreview()">
+        <label>Pihak Kesatu - NIP</label>
+        <input type="text" id="custSpkTenagaKepalaNip" oninput="updatePreview()" placeholder="196607071986102005">
     </div>
-    <div class="form-group full-width">
-        <label>Honor per Bulan</label>
-        <input type="number" id="custSpkTenagaHonor" placeholder="500000" oninput="updatePreview()">
+    <div class="form-group">
+        <label>Pihak Kedua - Nama Tenaga Honorer</label>
+        <input type="text" id="custSpkTenagaNama" oninput="updatePreview()" placeholder="Herman">
+    </div>
+    <div class="form-group">
+        <label>Pihak Kedua - Tempat, Tanggal Lahir</label>
+        <input type="text" id="custSpkTenagaTtl" oninput="updatePreview()" placeholder="Bandung, 06 Agustus 1982">
+    </div>
+    <div class="form-group">
+        <label>Pihak Kedua - Pendidikan Terakhir</label>
+        <input type="text" id="custSpkTenagaPendidikan" oninput="updatePreview()" placeholder="SD">
+    </div>
+    <div class="form-group">
+        <label>Pihak Kedua - Alamat</label>
+        <textarea id="custSpkTenagaAlamat" oninput="updatePreview()" rows="2"
+            style="width:100%; padding:8px; border-radius:6px; border:1px solid #e2e8f0;"
+            placeholder="Kp. Pasirhalang RT 03/014 Ds. Mandalamukti&#10;Kecamatan Cikalongwetan Kabupaten Bandung Barat"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Tugas (contoh: penjaga sekolah)</label>
+        <input type="text" id="custSpkTenagaTugas" oninput="updatePreview()" placeholder="penjaga sekolah">
+    </div>
+    <div class="form-group">
+        <label>Imbalan Jasa / Honor (Rp)</label>
+        <input type="number" id="custSpkTenagaHonor" oninput="updatePreview()" placeholder="1000000">
     </div>
 </div>

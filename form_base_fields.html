@@ -1,104 +1,73 @@
-<!-- Base Fields for Document Generator -->
-<div class="form-grid-modal">
-    <!-- Nomor Surat & Perihal -->
-    <div class="form-group">
-        <label>Nomor Surat</label>
-        <input type="text" id="custNomorSurat" placeholder="Nomor surat" oninput="updatePreview()">
-    </div>
-    <div class="form-group">
-        <label>Perihal / Uraian</label>
-        <input type="text" id="custPerihal" placeholder="Perihal" oninput="updatePreview()">
-    </div>
+<div class="form-group" id="fg-nomor">
+    <label>Nomor Surat / Berita Acara / SPK</label>
+    <input type="text" id="custNomorSurat" oninput="updatePreview()" placeholder="Contoh: 001/SD/2025">
+</div>
 
-    <!-- Vendor Style -->
-    <div class="form-group full-width">
-        <label>Vendor Style (untuk Nota)</label>
-        <select id="vendorStyle" onchange="updatePreview()" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
-            <option value="standard">Standard (Hitam)</option>
-            <option value="rm-family">RM. Family</option>
-            <option value="cahya-cellular">Cahya Cellular</option>
-            <option value="media-komputer">Media Komputer</option>
-            <option value="mitra-photocopy">Mitra Photocopy</option>
-            <option value="sinar-abadi">Sinar Abadi</option>
-            <option value="toko-prima">Toko Prima</option>
-            <option value="bunga-mandiri">Bunga Mandiri</option>
-            <option value="sentosa">Sentosa</option>
-            <option value="mandiri">Mandiri</option>
-            <option value="sejahtera">Sejahtera</option>
-            <option value="rezeki">Rezeki</option>
-            <option value="agung">Agung</option>
-        </select>
-    </div>
+<div class="form-group" id="fg-perihal">
+    <label>Perihal / Subject</label>
+    <input type="text" id="custPerihal" oninput="updatePreview()" placeholder="Contoh: Undangan Lomba">
+</div>
 
-    <!-- Vendor Info -->
-    <div class="form-group full-width">
-        <label>Nama Vendor / Toko</label>
-        <input type="text" id="custVendorName" placeholder="Nama vendor/toko" oninput="updatePreview()">
-    </div>
+<div class="form-group" id="fg-vendor-style">
+    <label>Template Vendor</label>
+    <select id="vendorStyle" onchange="updatePreview()"
+        style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+        <option value="standard">Standard / Modern</option>
+        <option value="plain">Grosir / Polos</option>
+        <option value="rm-family">RM Family (Landscape)</option>
+        <option value="cahya-cellular">Cahya Cellular (Blue)</option>
+        <option value="media-komputer">Media Komputer (Media)</option>
+        <option value="mitra-photocopy">Mitra Photocopy (Service)</option>
+        <option value="sinar-abadi">Sinar Abadi (Classic Red)</option>
+        <!-- Custom templates will be appended here -->
+    </select>
+</div>
 
-    <!-- Uraian -->
-    <div class="form-group full-width">
-        <label>Uraian Kegiatan</label>
-        <textarea id="custUraian" placeholder="Uraian lengkap" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 80px;" oninput="updatePreview()"></textarea>
-    </div>
+<div class="form-group" id="fg-font-style">
+    <label>Jenis Font (Tulisan Tangan)</label>
+    <select id="fontStyle" onchange="updatePreview()"
+        style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+        <option value="">Default (Arial/System)</option>
+        <option value="'Caveat', cursive">Tulisan Tangan 1 (Caveat)</option>
+        <option value="'Kalam', cursive">Tulisan Tangan 2 (Kalam)</option>
+        <option value="'Patrick Hand', cursive">Tulisan Tangan 3 (Patrick Hand - Natural)</option>
+        <option value="'Indie Flower', cursive">Tulisan Tangan 4 (Indie Flower - Santai)</option>
+        <option value="'Reenie Beanie', cursive">Tulisan Tangan 5 (Kasar/Reenie)</option>
+        <option value="'Shadows Into Light', cursive">Tulisan Tangan 6 (Rapi/Shadows)</option>
+        <option value="'Nothing You Could Do', cursive">Tulisan Tangan 7 (Realistis/Nothing)</option>
+        <option value="'Cedarville Cursive', cursive">Tulisan Tangan 8 (Sangat Natural)</option>
+        <option value="'Zeyada', cursive">Tulisan Tangan 9 (Berantakan)</option>
+        <option value="'La Belle Aurore', cursive">Tulisan Tangan 10 (Cepat/Kasar)</option>
+        <option value="'Homemade Apple', cursive">Tulisan Tangan 11 (Miring/Jelek)</option>
+        <option value="'Just Me Again Down Here', cursive">Tulisan Tangan 12 (Kurus/Tinggi)</option>
+    </select>
+</div>
 
-    <!-- Jumlah & Tanggal -->
-    <div class="form-group">
-        <label>Jumlah (Rp)</label>
-        <input type="number" id="custJumlah" placeholder="0" oninput="updatePreview()">
+<div class="form-group" id="fg-font-size">
+    <label>Ukuran Tulisan (px)</label>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="range" id="fontSize" min="12" max="36" value="16" oninput="updatePreview()" style="flex-grow: 1;">
+        <span id="fontSizeDisplay" style="font-size: 12px; width: 30px;">16px</span>
     </div>
-    <div class="form-group">
-        <label>Tanggal</label>
-        <input type="date" id="custTanggal" onchange="updatePreview()">
-    </div>
+</div>
 
-    <!-- Tanggal Pesan & Kegiatan -->
-    <div class="form-group">
-        <label>Tanggal Pesan</label>
-        <input type="date" id="custTanggalPesan" onchange="updatePreview()">
-    </div>
-    <div class="form-group">
-        <label>Tanggal Kegiatan</label>
-        <input type="date" id="custTanggalKegiatan" onchange="updatePreview()">
-    </div>
+<div class="form-group" id="fg-vendor-name">
+    <label>Nama Vendor / Toko / Penerima</label>
+    <input type="text" id="custVendorName" oninput="updatePreview()" placeholder="NAMA TOKO">
+</div>
 
-    <!-- Hari & Tempat -->
-    <div class="form-group">
-        <label>Hari</label>
-        <input type="text" id="custHari" placeholder="Senin, Selasa, ..." oninput="updatePreview()">
-    </div>
-    <div class="form-group">
-        <label>Tempat</label>
-        <input type="text" id="custTempat" placeholder="Tempat kegiatan" oninput="updatePreview()">
-    </div>
+<div class="form-group" id="fg-uraian">
+    <label>Uraian Belanja / Kegiatan</label>
+    <textarea id="custUraian" oninput="updatePreview()" rows="3"
+        style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;"></textarea>
+</div>
 
-    <!-- Waktu & Alamat Vendor -->
-    <div class="form-group">
-        <label>Waktu</label>
-        <input type="text" id="custWaktu" placeholder="Waktu kegiatan" oninput="updatePreview()">
+<div class="form-group" id="fg-jumlah">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <label>Nominal / Anggaran / Total (Rp)</label>
+        <label style="font-size: 11px; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" id="manualTotal" onchange="updatePreview()"> Hitung Otomatis
+        </label>
     </div>
-    <div class="form-group">
-        <label>Alamat Vendor</label>
-        <input type="text" id="custVendorAddress" placeholder="Alamat vendor" oninput="updatePreview()">
-    </div>
-
-    <!-- Tempat Tanggal & Tembusan -->
-    <div class="form-group full-width">
-        <label>Tempat & Tanggal Kwitansi</label>
-        <input type="text" id="custTempatTanggalKwitansi" placeholder="Cikalongwetan, ..." oninput="updatePreview()">
-    </div>
-    <div class="form-group full-width">
-        <label>Tembusan</label>
-        <textarea id="custTembusan" placeholder="1. Pengawas Pembina&#10;2. Arsip" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 60px;" oninput="updatePreview()"></textarea>
-    </div>
-
-    <!-- Logo & Cap Upload -->
-    <div class="form-group">
-        <label>Logo Sekolah</label>
-        <input type="file" id="custLogoUpload" accept="image/*" onchange="handleLogoUpload(this)" style="font-size: 12px;">
-    </div>
-    <div class="form-group">
-        <label>Cap Sekolah</label>
-        <input type="file" id="custStampUpload" accept="image/*" onchange="handleStampUpload(this)" style="font-size: 12px;">
-    </div>
+    <input type="number" id="custJumlah" oninput="updatePreview()">
 </div>

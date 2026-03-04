@@ -1,21 +1,86 @@
-<!-- Template: Dokumen Perencanaan -->
-<!-- Usage: getHtml_rencana(data) -->
-<div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
-    ${getSchoolKop(data.schoolData)}
-    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">DOKUMEN PERENCANAAN</div>
-    <table style="width: 100%; font-weight: bold; margin-bottom: 20px;">
-        <tr><td style="width: 200px;">Nama Satuan Pendidikan</td><td>: ${data.schoolData.name}</td></tr>
-        <tr><td>Kategori</td><td>: ${data.kategori}</td></tr>
-    </table>
-    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 20px;">
-        <thead><tr><th style="border: 1px solid #000; padding: 8px; width: 40px;">NO</th><th style="border: 1px solid #000; padding: 8px;">JENIS</th><th style="border: 1px solid #000; padding: 8px;">KETERANGAN</th></tr></thead>
-        <tbody>
-            <tr><td style="border: 1px solid #000; padding: 8px; text-align: center;">1</td><td style="border: 1px solid #000; padding: 8px;">Jumlah barang</td><td style="border: 1px solid #000; padding: 8px; text-align: center;">${data.jumlahBarang}</td></tr>
-            <tr><td style="border: 1px solid #000; padding: 8px; text-align: center;">2</td><td style="border: 1px solid #000; padding: 8px;">Spesifikasi</td><td style="border: 1px solid #000; padding: 8px;">${data.spesifikasi}</td></tr>
-            <tr><td style="border: 1px solid #000; padding: 8px; text-align: center;">3</td><td style="border: 1px solid #000; padding: 8px;">Anggaran</td><td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${data.jumlah.toLocaleString('id-ID')}</td></tr>
-        </tbody>
-    </table>
-    <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
-        <div style="text-align: center; width: 250px;"><p style="margin-bottom: 5px;">${getDateText(data.tanggal).fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Pelaksana</p><p style="font-weight: bold; text-decoration: underline; margin:0;">${data.schoolData.principal}</p></div>
-    </div>
-</div>
+<script>
+    // --- RENCANA TEMPLATE ---
+    function getRencanaHtml(uraian, schoolData, schoolKop) {
+        const kategori = document.getElementById('custKategori')?.value || "-";
+        const jumlahBarang = document.getElementById('custJumlahBarang')?.value || "1";
+        const spesifikasi = document.getElementById('custSpesifikasi')?.value || uraian;
+        const waktuSerah = document.getElementById('custTanggal')?.value || "-";
+        const lokasi = document.getElementById('custTempatKegiatan')?.value || schoolData.name;
+        const anggaran = document.getElementById('custJumlah')?.value || "0";
+        const persyaratan = (document.getElementById('custPersyaratan')?.value || "").replace(/\n/g, '<br>');
+        const tanggal = document.getElementById('custTanggal')?.value || "";
+
+        const pelaksanaName = document.getElementById('custPelaksanaNameRencana')?.value || schoolData.principal;
+        const pelaksanaNip = document.getElementById('custPelaksanaNipRencana')?.value || schoolData.principalNip;
+
+        let anggaranFmt = "0";
+        try { anggaranFmt = parseInt(anggaran).toLocaleString('id-ID'); } catch (e) { }
+
+        return `
+            <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
+                ${schoolKop}
+                <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">DOKUMEN PERENCANAAN</div>
+
+                <table style="width: 100%; font-weight: bold; margin-bottom: 20px;">
+                    <tr><td style="width: 200px;">Nama Satuan Pendidikan</td><td>: ${schoolData.name}</td></tr>
+                    <tr><td>Alamat Satuan Pendidikan</td><td>: ${schoolData.address}</td></tr>
+                    <tr><td>Kategori Barang/Jasa</td><td>: ${kategori}</td></tr>
+                </table>
+
+                 <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #000; padding: 5px; text-align: center; width: 40px;">NO.</th>
+                            <th style="border: 1px solid #000; padding: 5px; text-align: center;">JENIS</th>
+                            <th style="border: 1px solid #000; padding: 5px; text-align: center;">KETERANGAN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         <tr>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">1</td>
+                            <td style="border: 1px solid #000; padding: 5px;">Jumlah barang/jasa</td>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">${jumlahBarang}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">2</td>
+                            <td style="border: 1px solid #000; padding: 5px;">Spesifikasi/ruang lingkup barang/jasa</td>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">${spesifikasi}</td>
+                        </tr>
+                         <tr>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">3</td>
+                            <td style="border: 1px solid #000; padding: 5px;">Waktu serah terima</td>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">${waktuSerah}</td>
+                        </tr>
+                         <tr>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">4</td>
+                            <td style="border: 1px solid #000; padding: 5px;">Lokasi serah terima</td>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">${lokasi}</td>
+                        </tr>
+                         <tr>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center;">5</td>
+                            <td style="border: 1px solid #000; padding: 5px;">Alokasi anggaran</td>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: right;">Rp <span style="float:right;">${anggaranFmt}</span></td>
+                        </tr>
+                         <tr>
+                            <td style="border: 1px solid #000; padding: 5px; text-align: center; vertical-align: top;">6</td>
+                            <td style="border: 1px solid #000; padding: 5px; vertical-align: top;">Persyaratan Penyedia</td>
+                            <td style="border: 1px solid #000; padding: 5px;">${persyaratan}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                 <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${getDateText(tanggal).fullDate}</p>
+                        <p style="font-weight: bold; margin-bottom: 80px;">Pelaksana</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin:0;">${pelaksanaName}</p>
+                        <p style="margin:0;">NIP. ${pelaksanaNip}</p>
+                    </div>
+                </div>
+                 <div style="margin-top: 20px; font-size: 11px;">
+                    (*) Misalnya Buku Teks Utama/Buku Teks Pendamping/Buku Nonteks/Kebutuhan dan Perlengkapan Satuan Pendidikan/Alat Peraga Pendidikan/Komputer dan Aksesoris/Elektronik/Jasa lainnya.
+                </div>
+            </div>
+        `;
+    }
+</script>

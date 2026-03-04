@@ -1,18 +1,22 @@
-<!-- Drive File Picker Modal -->
+<!-- Drive Picker Modal -->
 <div id="driveModal" class="modal-overlay">
-    <div class="modal-container">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Pilih File BKU dari Google Drive</h3>
-                <button class="btn-close" onclick="closeDrivePicker()">
-                    <i data-lucide="x" size="20"></i>
-                </button>
-            </div>
-            <div id="driveFileList">
-                <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-                    <i data-lucide="loader-2" class="spin" size="32" style="margin-bottom: 10px;"></i>
-                    <p>Mencari file di Drive Anda...</p>
-                </div>
+    <div class="modal-container" style="width: 100%; max-width: 600px; padding: 32px;">
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;">
+            <h3 style="font-size: 20px; font-weight: 800; color: #0f172a;">File BKU di Google Drive</h3>
+            <button onclick="closeDrivePicker()"
+                style="background: #f8fafc; border: none; cursor: pointer; color: #64748b; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                <i data-lucide="x" size="20"></i>
+            </button>
+        </div>
+        <p style="font-size: 14px; color: #64748b; margin-bottom: 24px;">Menampilkan file Excel terbaru yang
+            mengandung kata "BKU" di Drive Anda.</p>
+
+        <div id="driveFileList"
+            style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <i data-lucide="loader-2" class="spin" size="32" style="margin-bottom: 10px;"></i>
+                <p>Mencari file...</p>
             </div>
         </div>
     </div>

@@ -1,8 +1,11 @@
-<!-- Nota Items Section -->
-<div id="notaItemsSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Rincian Barang</h4>
-    <div id="notaItemsList" style="display: flex; flex-direction: column; gap: 8px;"></div>
-    <button type="button" class="btn-primary" onclick="addNotaItem()" style="margin-top: 12px; width: 100%; justify-content: center;">
-        <i data-lucide="plus" size="16"></i> Tambah Item
+<div id="notaItemsSection" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+    <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Rincian Barang (Khusus
+        Nota)</label>
+    <div id="notaItemsList" style="display: flex; flex-direction: column; gap: 8px;">
+        <!-- Items will be added here -->
+    </div>
+    <button onclick="addNotaItem()" class="btn-primary"
+        style="margin-top: 10px; padding: 5px 10px; font-size: 12px; background: #22c55e;">
+        <i data-lucide="plus" size="14"></i> Tambah Item
     </button>
 </div>

@@ -1,25 +1,42 @@
-<!-- Template: Notulen Kegiatan -->
-<!-- Usage: getHtml_notulen(data) -->
-<div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
-    ${getSchoolKop(data.schoolData)}
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="margin: 0; font-size: 16px; text-decoration: underline; font-weight: bold;">NOTULEN KEGIATAN</h2>
-        <h3 style="margin: 5px 0 0 0; font-size: 14px;">${data.uraian}</h3>
-    </div>
-    <div style="margin: 20px 0; line-height: 1.8; font-size: 13px;">
-        <table style="width: 100%; font-size: 13px; margin-bottom: 20px;">
-            <tr><td style="width: 120px;">Hari/Tanggal</td><td>: ${getDateText(data.tanggal).dayName}, ${getDateText(data.tanggal).fullDate}</td></tr>
-            <tr><td>Waktu</td><td>: ${data.waktu}</td></tr>
-            <tr><td>Tempat</td><td>: ${data.tempat}</td></tr>
-        </table>
-        <div style="border: 1px solid #000; min-height: 200px; padding: 15px; font-size: 13px;">
-            <p style="margin: 0; font-weight: bold;">Hasil:</p>
-            <p style="margin: 10px 0;">${data.hasil}</p>
-            <p style="margin: 15px 0 5px 0; font-weight: bold;">Kesimpulan:</p>
-            <p style="margin: 0;">${data.kesimpulan}</p>
-        </div>
-    </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
-        <div style="text-align: center; width: 250px;"><p style="margin-bottom: 5px;">${getDateText(data.tanggal).fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Notulis,</p><p style="font-weight: bold; text-decoration: underline; margin:0;">( ........................ )</p></div>
-    </div>
-</div>
+<script>
+    // --- NOTULEN TEMPLATE ---
+    function getNotulenHtml(uraian, dateInfo, schoolData, schoolKop) {
+        const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "").replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
+        const tglKegiatanRaw = document.getElementById('custTanggalKegiatan')?.value;
+        const tglKegiatanText = tglKegiatanRaw ? getDateText(tglKegiatanRaw).fullDate : dateInfo.fullDate;
+        const hariKegiatan = document.getElementById('custHari')?.value || (tglKegiatanRaw ? getDateText(tglKegiatanRaw).dayName : dateInfo.dayName);
+        const waktu = document.getElementById('custWaktuKegiatan')?.value || "08.00 s.d Selesai";
+        const tempat = document.getElementById('custTempatKegiatan')?.value || "Ruang Kelas";
+
+        return `
+            <div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
+                ${schoolKop}
+                <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">NOTULEN KEGIATAN</div>
+                <table style="width: 100%; margin-bottom: 20px;">
+                    <tr><td style="width: 150px;">Hari / Tanggal</td><td>: ${hariKegiatan} / ${tglKegiatanText}</td></tr>
+                    <tr><td>Waktu</td><td>: ${waktu}</td></tr>
+                    <tr><td>Tempat</td><td>: ${tempat}</td></tr>
+                    <tr><td>Acara</td><td>: ${cleanUraian}</td></tr>
+                </table>
+                <div style="text-align: justify; margin-bottom: 20px;">
+                    Pada hari ini <strong>${hariKegiatan}</strong> tanggal <strong>${tglKegiatanText}</strong>, bertempat di <strong>${tempat}</strong>, telah dilaksanakan kegiatan <strong>${cleanUraian}</strong>.
+                    <br><br>
+                    Adapun hasil kegiatan tersebut adalah sebagai berikut:
+                    <br>
+                    <div style="border: 1px solid #000; min-height: 300px; margin-top: 10px; padding: 15px; font-size: 14px; line-height: 1.8;">
+                        ${(document.getElementById('custHasil')?.value || "1. Pembahasan rencana kegiatan...\n2. Penentuan jadwal pimpinan...").replace(/\n/g, '<br>')}
+                        <br><br>
+                        <strong>Kesimpulan:</strong><br>
+                        ${document.getElementById('custKesimpulan')?.value || "Kegiatan berjalan lancar dan sesuai rencana."}
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${tglKegiatanText}</p>
+                        <p style="font-weight: bold; margin-bottom: 80px;">Ketua Panitia / Notulen,</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin:0;">( .................................... )</p>
+                    </div>
+                </div>
+            </div>`;
+    }
+</script>

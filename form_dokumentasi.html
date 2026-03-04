@@ -1,9 +1,9 @@
-<!-- Documentation Section -->
-<div id="documentationSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Foto Dokumentasi</h4>
+<div id="documentationSection" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+    <label style="font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block;">Foto Kegiatan</label>
     <div class="form-group">
-        <label>Jumlah Foto (1-5)</label>
-        <select id="docPhotoCount" onchange="updatePhotoInputs()" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+        <label>Jumlah Foto</label>
+        <select id="docPhotoCount" onchange="updatePhotoInputs()"
+            style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
             <option value="1">1 Foto</option>
             <option value="2">2 Foto</option>
             <option value="3">3 Foto</option>
@@ -11,26 +11,32 @@
             <option value="5">5 Foto</option>
         </select>
     </div>
-    <div id="photoUploads">
-        <div id="ph-1" class="form-group">
-            <label>Foto 1</label>
-            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 1)" style="font-size: 12px;">
+    <div id="docPhotoInputsContainer">
+        <!-- Inputs will be handled dynamically or just pre-rendered -->
+        <div class="form-group" id="ph-1">
+            <label style="font-size:11px;">Foto 1</label>
+            <input type="file" onchange="handleDocPhotoUpload(this, 1)" accept="image/*"
+                style="font-size: 11px; width: 100%;">
         </div>
-        <div id="ph-2" class="form-group" style="display: none;">
-            <label>Foto 2</label>
-            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 2)" style="font-size: 12px;">
+        <div class="form-group" id="ph-2" style="display:none;">
+            <label style="font-size:11px;">Foto 2</label>
+            <input type="file" onchange="handleDocPhotoUpload(this, 2)" accept="image/*"
+                style="font-size: 11px; width: 100%;">
         </div>
-        <div id="ph-3" class="form-group" style="display: none;">
-            <label>Foto 3</label>
-            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 3)" style="font-size: 12px;">
+        <div class="form-group" id="ph-3" style="display:none;">
+            <label style="font-size:11px;">Foto 3</label>
+            <input type="file" onchange="handleDocPhotoUpload(this, 3)" accept="image/*"
+                style="font-size: 11px; width: 100%;">
         </div>
-        <div id="ph-4" class="form-group" style="display: none;">
-            <label>Foto 4</label>
-            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 4)" style="font-size: 12px;">
+        <div class="form-group" id="ph-4" style="display:none;">
+            <label style="font-size:11px;">Foto 4</label>
+            <input type="file" onchange="handleDocPhotoUpload(this, 4)" accept="image/*"
+                style="font-size: 11px; width: 100%;">
         </div>
-        <div id="ph-5" class="form-group" style="display: none;">
-            <label>Foto 5</label>
-            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 5)" style="font-size: 12px;">
+        <div class="form-group" id="ph-5" style="display:none;">
+            <label style="font-size:11px;">Foto 5</label>
+            <input type="file" onchange="handleDocPhotoUpload(this, 5)" accept="image/*"
+                style="font-size: 11px; width: 100%;">
         </div>
     </div>
 </div>

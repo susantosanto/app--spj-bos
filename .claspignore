@@ -1,11 +1,14 @@
-# Ignore Node.js extraction scripts
-extract-templates.js
-extract-templates-auto.js
+# Ignore Node.js development scripts (NOT Code.js)
+extract.js
+extract-*.js
+split*.js
+create*.js
 
-# Ignore development files
+# Ignore documentation
 *.md
-.gitignore
-.claspignore
 
-# Ignore template reference files (not needed in production)
-tpl_*.html
+# Ignore git files
+.gitignore
+
+# DO NOT IGNORE tpl_*.html - these are active template files
+# tpl_*.html

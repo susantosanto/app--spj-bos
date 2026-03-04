@@ -1,31 +1,111 @@
-<!-- Template: Daftar Penerima Honor -->
-<!-- Usage: getHtml_daftarHonor(data) -->
-<div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
-    ${getSchoolKop(data.schoolData)}
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="margin: 0; font-size: 16px; text-decoration: underline; font-weight: bold;">DAFTAR PENERIMA HONOR</h2>
-        <p style="margin: 5px 0 0 0; font-size: 13px;">Nomor: ${data.nomorSurat}</p>
-    </div>
-    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 20px; font-size: 12px;">
-        <thead>
-            <tr style="background: #f0f0f0;">
-                <th style="border: 1px solid #000; padding: 10px; width: 40px;">NO</th>
-                <th style="border: 1px solid #000; padding: 10px;">NAMA</th>
-                <th style="border: 1px solid #000; padding: 10px;">JABATAN</th>
-                <th style="border: 1px solid #000; padding: 10px; width: 120px;">HONOR</th>
-                <th style="border: 1px solid #000; padding: 10px; width: 100px;">TTD</th>
+<script>
+    // --- DAFTAR PENERIMA HONOR TEMPLATE ---
+    function getDaftarPenerimaHonorHtml(schoolData, schoolKop) {
+        const judul = document.getElementById('custDaftarHonorJudul')?.value || "DAFTAR PENERIMA HONORARIUM JASA PEMATERI GURU KELAS AGUSTUS 2025";
+        const program = document.getElementById('custDaftarHonorProgram')?.value || "07 Pengembangan Standar Pembiayaan";
+        const kegiatan = document.getElementById('custDaftarHonorKegiatan')?.value || "9 Pembayaran Honor Guru";
+        const kodeRekening = document.getElementById('custDaftarHonorKodeRekening')?.value || "5.2.1.02.01";
+        const kodePenggunaan = document.getElementById('custDaftarHonorKodePenggunaan')?.value || "9";
+        const bulanTahun = document.getElementById('custDaftarHonorBulan')?.value || "Agustus 2025";
+
+        const rows = [];
+        let totalJumlah = 0, totalDiterima = 0;
+        document.querySelectorAll('.honor-row').forEach((row, i) => {
+            const inputs = row.querySelectorAll('input');
+            const no = inputs[0]?.value || (i + 1);
+            const namaPtk = inputs[1]?.value || "";
+            const jabatan = inputs[2]?.value || "";
+            const golRuang = inputs[3]?.value || "";
+            const volume = inputs[4]?.value || "";
+            const unitCost = parseInt(inputs[5]?.value || "0", 10);
+            const jumlah = parseInt(inputs[6]?.value || "0", 10);
+            const pph21 = inputs[7]?.value || "-";
+            const jumlahDiterima = parseInt(inputs[8]?.value || "0", 10);
+            totalJumlah += jumlah;
+            totalDiterima += jumlahDiterima;
+            rows.push({ no, namaPtk, jabatan, golRuang, volume, unitCost, jumlah, pph21, jumlahDiterima });
+        });
+
+        const rowsHtml = rows.length ? rows.map(r => `
+            <tr>
+                <td style="border: 1px solid #000; padding: 4px 6px; text-align: center;">${r.no}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px;">${r.namaPtk}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px;">${r.jabatan}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px; text-align: center;">${r.golRuang}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px;">${r.volume}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px; text-align: right;">${r.unitCost ? r.unitCost.toLocaleString('id-ID') : ''}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px; text-align: right;">${r.jumlah ? r.jumlah.toLocaleString('id-ID') : ''}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px;">${r.pph21}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px; text-align: right;">${r.jumlahDiterima ? r.jumlahDiterima.toLocaleString('id-ID') : ''}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px; text-align: center; width: 50px;">${rows.indexOf(r) + 1}</td>
             </tr>
-        </thead>
-        <tbody>
-            ${honorRows}
-            <tr style="font-weight: bold;">
-                <td colspan="3" style="border: 1px solid #000; padding: 10px; text-align: right;">TOTAL</td>
-                <td style="border: 1px solid #000; padding: 10px; text-align: right;">Rp ${totalHonor.toLocaleString('id-ID')}</td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
-        <div style="text-align: center; width: 250px;"><p style="margin-bottom: 5px;">${getDateText(data.tanggal).fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p><p style="font-weight: bold; text-decoration: underline; margin:0;">${data.schoolData.principal}</p></div>
-    </div>
-</div>
+        `).join('') : '<tr><td colspan="10" style="text-align:center; padding:16px;">Belum ada data penerima</td></tr>';
+
+        const emptyRows = Array(Math.max(0, 4 - rows.length)).fill(`
+            <tr><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td><td style="border:1px solid #000;"></td></tr>
+        `).join('');
+
+        return `
+            <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 24px; font-size: 11px; width: 100%; box-sizing: border-box;">
+                ${schoolKop}
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 8px;">
+                    <div>
+                        <table style="font-size: 11px;">
+                            <tr><td>Nomor</td><td></td><td></td></tr>
+                            <tr><td>Nama Sekolah</td><td></td><td><strong>${schoolData.name}</strong></td></tr>
+                            <tr><td>Kecamatan</td><td></td><td>${schoolData.kecamatan}</td></tr>
+                            <tr><td>Kabupaten</td><td></td><td>Bandung Barat</td></tr>
+                        </table>
+                    </div>
+                    <div style="text-align: right;">
+                        <table style="font-size: 11px;">
+                            <tr><td>Program</td><td></td><td>${program}</td></tr>
+                            <tr><td>Kegiatan</td><td></td><td>${kegiatan}</td></tr>
+                            <tr><td>Kode Rekening</td><td></td><td>${kodeRekening}</td></tr>
+                            <tr><td>Kode Penggunaan</td><td></td><td>${kodePenggunaan}</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div style="text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 12px;">${judul}</div>
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 16px;">
+                    <thead>
+                        <tr style="background: #f0f0f0; font-weight: bold;">
+                            <th style="border: 1px solid #000; padding: 6px; width: 28px;">NO</th>
+                            <th style="border: 1px solid #000; padding: 6px;">NAMA PTK</th>
+                            <th style="border: 1px solid #000; padding: 6px; width: 90px;">JABATAN</th>
+                            <th style="border: 1px solid #000; padding: 6px; width: 50px;">GOL./Ruang</th>
+                            <th style="border: 1px solid #000; padding: 6px; width: 70px;">VOLUME</th>
+                            <th style="border: 1px solid #000; padding: 6px; width: 85px;">UNIT COST (Rp)</th>
+                            <th style="border: 1px solid #000; padding: 6px; width: 85px;">JUMLAH (Rp)</th>
+                            <th style="border: 1px solid #000; padding: 6px; font-size: 9px;">PPh 21 (non pegawai)</th>
+                            <th style="border: 1px solid #000; padding: 6px; width: 90px;">JUMLAH YANG DITERIMA (Rp)</th>
+                            <th style="border: 1px solid #000; padding: 6px; width: 50px;">TANDA TANGAN</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rowsHtml}${emptyRows}
+                        <tr style="font-weight: bold;">
+                            <td colspan="6" style="border: 1px solid #000; padding: 6px; text-align: right;">JUMLAH</td>
+                            <td style="border: 1px solid #000; padding: 6px; text-align: right;">${totalJumlah.toLocaleString('id-ID')}</td>
+                            <td style="border: 1px solid #000; padding: 6px;"></td>
+                            <td style="border: 1px solid #000; padding: 6px; text-align: right;">${totalDiterima.toLocaleString('id-ID')}</td>
+                            <td style="border: 1px solid #000; padding: 6px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+                    <div style="text-align: center;">
+                        <p style="font-weight: bold; margin-bottom: 4px;">Mengetahui/Menyetujui</p>
+                        <p style="font-weight: bold; margin-bottom: 60px;">Kepala Sekolah,</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin: 0;">${schoolData.principal}</p>
+                        <p style="margin: 0;">NIP. ${schoolData.principalNip}</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <p style="font-weight: bold; margin-bottom: 4px;">Bandung Barat, ${bulanTahun}</p>
+                        <p style="font-weight: bold; margin-bottom: 60px;">Bendahara,</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin: 0;">${schoolData.treasurer}</p>
+                        <p style="margin: 0;">NIP. ${schoolData.treasurerNip}</p>
+                    </div>
+                </div>
+            </div>`;
+    }
+</script>
