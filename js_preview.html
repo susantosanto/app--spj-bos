@@ -1,0 +1,159 @@
+<script>
+    // --- Preview Functions ---
+
+    function openPreview() {
+        // Initialize customizer with global school data
+        document.getElementById('custPerihal').value = "Permohonan Belanja";
+        document.getElementById('custTempatKegiatan').value = document.getElementById('schoolName').value || "Sekolah";
+        document.getElementById('custWaktuKegiatan').value = "08.00 sd Selesai";
+        document.getElementById('custTembusan').value = "1. Pengawas Pembina\n2. Arsip";
+
+        document.getElementById('previewModal').style.display = 'flex';
+
+        // Initialize for Option B (New Sidebar UI)
+        initDocPicker();
+        switchPreviewTab('select'); // Start with the type picker
+
+        updatePreview();
+        lucide.createIcons();
+    }
+
+    function closePreview() {
+        document.getElementById('previewModal').style.display = 'none';
+    }
+
+    function zoomPreview(val) {
+        currentScale = val / 100;
+        document.getElementById('printArea').style.transform = `scale(${currentScale})`;
+        document.getElementById('zoomLevel').innerText = `Scale: ${val}%`;
+    }
+
+    function changeLayout(layout) {
+        currentLayout = layout;
+        updatePreview();
+    }
+
+    function handleLogoUpload(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                logoBase64 = e.target.result;
+                updatePreview();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function handleStampUpload(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                stampBase64 = e.target.result;
+                updatePreview();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function handleDocPhotoUpload(input, index = 1) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                docPhotos[index] = e.target.result;
+                updatePreview();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function updatePhotoInputs() {
+        const count = parseInt(document.getElementById('docPhotoCount').value);
+        for (let i = 1; i <= 5; i++) {
+            const el = document.getElementById('ph-' + i);
+            if (el) el.style.display = (i <= count) ? 'block' : 'none';
+        }
+        updatePreview();
+    }
+
+    function switchPreviewTab(tabId) {
+        document.querySelectorAll('.preview-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.preview-tab-content').forEach(content => content.classList.remove('active'));
+
+        const activeBtn = document.querySelector(`.preview-tab-btn[onclick*="${tabId}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        const activeContent = document.getElementById(`tab-${tabId}`);
+        if (activeContent) activeContent.classList.add('active');
+    }
+
+    // Collect form data for preview
+    function collectFormData() {
+        return {
+            docType: document.getElementById('docType').value,
+            vendorStyle: document.getElementById('vendorStyle').value,
+            vendorName: document.getElementById('custVendorName').value || "",
+            vendorAddress: document.getElementById('custVendorAddress').value || "",
+            uraian: document.getElementById('custUraian').value || "Belanja Barang",
+            jumlah: parseFloat(document.getElementById('custJumlah').value) || 0,
+            tanggal: document.getElementById('custTanggal').value || "01/01/2025",
+            tanggalKegiatan: document.getElementById('custTanggalKegiatan').value || "",
+            nomorSurat: document.getElementById('custNomorSurat').value || "",
+            perihal: document.getElementById('custPerihal').value || "",
+            waktu: document.getElementById('custWaktu').value || "",
+            tempat: document.getElementById('custTempat').value || "",
+            hari: document.getElementById('custHari').value || "",
+            tembusan: document.getElementById('custTembusan').value || "",
+            hasil: document.getElementById('custHasil').value || "",
+            kesimpulan: document.getElementById('custKesimpulan').value || "",
+            kategori: document.getElementById('custKategori').value || "",
+            jumlahBarang: document.getElementById('custJumlahBarang').value || "1",
+            spesifikasi: document.getElementById('custSpesifikasi').value || "",
+            schoolData: getSchoolData(),
+            logoBase64: logoBase64,
+            stampBase64: stampBase64,
+            logoKBBBase64: logoKBBBase64
+        };
+    }
+
+    // Main update preview function
+    function updatePreview() {
+        updateRincianSections();
+
+        const data = collectFormData();
+        
+        // Template map
+        const templateMap = {
+            'kwitansi': getHtml_kwitansi,
+            'nota': getHtml_nota,
+            'pesanan': getHtml_pesanan,
+            'berita_acara': getHtml_beritaAcara,
+            'undangan': getHtml_undangan,
+            'notulen': getHtml_notulen,
+            'daftar_hadir': getHtml_daftarHadir,
+            'dokumentasi': getHtml_dokumentasi,
+            'rencana': getHtml_rencana,
+            'spk': getHtml_spk,
+            'spk_guru_honorer': getHtml_spkGuru,
+            'spk_tenaga_honorer': getHtml_spkTenaga,
+            'sk_pembagian_tugas': getHtml_skTugas,
+            'daftar_penerima_honor': getHtml_daftarHonor,
+        };
+
+        const generator = templateMap[data.docType];
+        if (generator) {
+            document.getElementById('paperContent').innerHTML = generator(data);
+        }
+
+        // Update paper class based on docType
+        const paper = document.getElementById('paperContent');
+        paper.className = 'paper';
+        if (data.docType === 'kwitansi') {
+            paper.classList.add('kwitansi');
+        } else if (data.docType === 'nota') {
+            paper.classList.add('nota-kecil');
+            if (currentLayout === 'landscape') paper.classList.add('landscape');
+        } else {
+            paper.classList.add('a4');
+        }
+    }
+</script>

@@ -1,0 +1,97 @@
+<!-- View 0: Dashboard - Premium Redesign -->
+<section id="dashboard-view" class="view-section active">
+    <div class="dashboard-container">
+        <!-- Premium Hero Section -->
+        <div class="dashboard-hero">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i data-lucide="shield-check" size="14"></i>
+                    <span>Si-BOS Premium</span>
+                </div>
+                <div class="hero-text">
+                    <h1>Dashboard Administrasi</h1>
+                    <p>Sistem Manajemen Keuangan Sekolah Terpadu - Tahun Anggaran 2026</p>
+                </div>
+            </div>
+            <div class="clock-widget">
+                <div class="clock-time" id="clock">00:00:00</div>
+                <div class="clock-date">
+                    <i data-lucide="calendar" size="12"></i>
+                    <span id="date">...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="dashboard-content-grid">
+            <!-- Right: Ultra Minimalist Quick Access -->
+            <div class="quick-access-section" style="grid-column: 1 / -1;">
+                <div class="qa-grid">
+                    <!-- Unggah BKU Card -->
+                    <div class="qa-card-minimal"
+                        style="--card-bg: linear-gradient(135deg, #eff6ff, #dbeafe); --card-color: #3b82f6; --card-gradient: rgba(59, 130, 246, 0.08); --card-shadow: rgba(59, 130, 246, 0.25);"
+                        onclick="document.querySelector('.nav-item[onclick*=\'upload-view\']').click()">
+                        <div class="qa-arrow-minimal">
+                            <i data-lucide="arrow-right" size="16"></i>
+                        </div>
+                        <div class="qa-icon-minimal">
+                            <i data-lucide="upload-cloud" size="26"></i>
+                        </div>
+                        <div class="qa-content-minimal">
+                            <div class="qa-title-minimal">Unggah BKU</div>
+                            <div class="qa-desc-minimal">Import data Excel otomatis</div>
+                        </div>
+                    </div>
+
+                    <!-- Kelola Transaksi Card -->
+                    <div class="qa-card-minimal"
+                        style="--card-bg: linear-gradient(135deg, #f0fdf4, #dcfce7); --card-color: #22c55e; --card-gradient: rgba(34, 197, 94, 0.08); --card-shadow: rgba(34, 197, 94, 0.25);"
+                        onclick="document.querySelector('.nav-item[onclick*=\'manage-view\']').click()">
+                        <div class="qa-arrow-minimal">
+                            <i data-lucide="arrow-right" size="16"></i>
+                        </div>
+                        <div class="qa-icon-minimal">
+                            <i data-lucide="layout-grid" size="26"></i>
+                        </div>
+                        <div class="qa-content-minimal">
+                            <div class="qa-title-minimal">Kelola Transaksi</div>
+                            <div class="qa-desc-minimal">Edit & cetak SPJ</div>
+                        </div>
+                    </div>
+
+                    <!-- Data Sekolah Card -->
+                    <div class="qa-card-minimal"
+                        style="--card-bg: linear-gradient(135deg, #fefce8, #fef08a); --card-color: #eab308; --card-gradient: rgba(234, 179, 8, 0.08); --card-shadow: rgba(234, 179, 8, 0.25);"
+                        onclick="document.querySelector('.nav-item[onclick*=\'settings-view\']').click()">
+                        <div class="qa-arrow-minimal">
+                            <i data-lucide="arrow-right" size="16"></i>
+                        </div>
+                        <div class="qa-icon-minimal">
+                            <i data-lucide="school" size="26"></i>
+                        </div>
+                        <div class="qa-content-minimal">
+                            <div class="qa-title-minimal">Data Sekolah</div>
+                            <div class="qa-desc-minimal">Konfigurasi kop surat</div>
+                        </div>
+                    </div>
+
+                    <!-- Desain Nota Card -->
+                    <div class="qa-card-minimal"
+                        style="--card-bg: linear-gradient(135deg, #fdf2f8, #fce7f3); --card-color: #db2777; --card-gradient: rgba(219, 39, 119, 0.08); --card-shadow: rgba(219, 39, 119, 0.25);"
+                        onclick="document.querySelector('.nav-item[onclick*=\'designer-view\']').click()">
+                        <div class="qa-arrow-minimal">
+                            <i data-lucide="arrow-right" size="16"></i>
+                        </div>
+                        <div class="qa-icon-minimal">
+                            <i data-lucide="pen-tool" size="26"></i>
+                        </div>
+                        <div class="qa-content-minimal">
+                            <div class="qa-title-minimal">Desain Nota</div>
+                            <div class="qa-desc-minimal">Template kustom</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

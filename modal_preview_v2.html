@@ -1,0 +1,100 @@
+<!-- Preview Modal - Refactored with Form Partials -->
+<div id="previewModal" class="modal-overlay">
+    <div class="modal-container preview-modal-container">
+        <!-- Left Sidebar -->
+        <div class="preview-sidebar">
+            <div class="preview-sidebar-header">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Generator Dokumen</h3>
+                <p style="font-size: 12px; color: var(--text-muted);">Pilih jenis dokumen dan lengkapi data</p>
+
+                <div class="preview-tabs">
+                    <button class="preview-tab-btn" onclick="switchPreviewTab('select')">
+                        <i data-lucide="grid" size="16"></i> Pilih
+                    </button>
+                    <button class="preview-tab-btn" onclick="switchPreviewTab('form')">
+                        <i data-lucide="edit" size="16"></i> Form
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab: Select Document Type -->
+            <div id="tab-select" class="preview-tab-content active">
+                <div class="doc-selector-wrapper">
+                    <label class="doc-selector-label">
+                        <i data-lucide="file-text" size="16"></i>
+                        Jenis Dokumen
+                    </label>
+                    <select id="docType" onchange="handleDocTypeChange()">
+                        <option value="kwitansi">Kwitansi SPJ</option>
+                        <option value="nota">Nota Toko / Invoice</option>
+                        <option value="pesanan">Surat Pesanan</option>
+                        <option value="berita_acara">Berita Acara Serah Terima</option>
+                        <option value="undangan">Surat Undangan</option>
+                        <option value="notulen">Notulen Kegiatan</option>
+                        <option value="daftar_hadir">Daftar Hadir</option>
+                        <option value="dokumentasi">Dokumentasi</option>
+                        <option value="rencana">Dokumen Perencanaan</option>
+                        <option value="spk">SPK (Konstruksi/Jasa/Barang)</option>
+                        <option value="spk_guru_honorer">PKS Guru Honorer</option>
+                        <option value="spk_tenaga_honorer">PKS Tenaga Honorer</option>
+                        <option value="sk_pembagian_tugas">SK Pembagian Tugas</option>
+                        <option value="daftar_penerima_honor">Daftar Terima Honor</option>
+                    </select>
+                </div>
+
+                <div id="docPickerGrid" class="doc-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Tab: Form -->
+            <div id="tab-form" class="preview-tab-content">
+                <!-- Base Fields (always included) -->
+                <?!= include('form_base_fields') ?>
+
+                <!-- Dynamic Form Sections (included based on docType) -->
+                <?!= include('form_nota_items') ?>
+                <?!= include('form_notulen') ?>
+                <?!= include('form_attendance') ?>
+                <?!= include('form_dokumentasi') ?>
+                <?!= include('form_pesanan') ?>
+                <?!= include('form_rencana') ?>
+                <?!= include('form_spk') ?>
+                <?!= include('form_spk_guru') ?>
+                <?!= include('form_spk_tenaga') ?>
+                <?!= include('form_sk_tugas') ?>
+                <?!= include('form_daftar_honor') ?>
+            </div>
+        </div>
+
+        <!-- Main Preview Area -->
+        <div class="preview-main">
+            <div class="preview-toolbar">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="btn-primary" onclick="window.print()">
+                        <i data-lucide="printer" size="18"></i> Cetak
+                    </button>
+                    <button class="btn-danger" onclick="closePreview()">
+                        <i data-lucide="x" size="18"></i> Tutup
+                    </button>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span id="zoomLevel" style="font-size: 12px; color: var(--text-muted);">Scale: 80%</span>
+                    <input type="range" min="50" max="100" value="80" oninput="zoomPreview(this.value)" style="width: 100px;">
+                    <select onchange="changeLayout(this.value)" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <option value="portrait">Portrait</option>
+                        <option value="landscape">Landscape</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="paper-viewport">
+                <div id="printArea">
+                    <div id="paperContent" class="paper a4">
+                        <!-- Content injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

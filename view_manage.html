@@ -1,0 +1,41 @@
+<!-- View 2: Kelola Transaksi -->
+<section id="manage-view" class="view-section">
+    <div class="view-header">
+        <div class="view-header-text">
+            <h2>Kelola Transaksi BKU</h2>
+            <p id="extractionInfo">Daftar pengeluaran yang terdeteksi. Silakan periksa dan cetak dokumen.</p>
+        </div>
+        <button class="btn-primary" onclick="openAddModal()">
+            <i data-lucide="plus" size="18"></i>
+            Tambah Manual
+        </button>
+    </div>
+
+    <div id="emptyState" class="empty-state">
+        <div class="empty-icon">
+            <i data-lucide="alert-circle" size="64"></i>
+        </div>
+        <p>Belum ada data. Silakan unggah file BKU atau tambah manual.</p>
+        <div style="margin-top: 20px;">
+            <button class="btn-primary" style="margin: 0 auto;" onclick="openPreview()">Demo Preview</button>
+        </div>
+    </div>
+
+    <div id="transactionTableContainer" style="display: none;">
+        <table
+            style="width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow);">
+            <thead>
+                <tr style="background: #f1f5f9; text-align: left;">
+                    <th style="padding: 16px; font-size: 13px;">Tanggal</th>
+                    <th style="padding: 16px; font-size: 13px;">No Bukti</th>
+                    <th style="padding: 16px; font-size: 13px;">Uraian</th>
+                    <th style="padding: 16px; font-size: 13px;">Jumlah</th>
+                    <th style="padding: 16px; font-size: 13px;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTbody">
+                <!-- Items injected via JS -->
+            </tbody>
+        </table>
+    </div>
+</section>

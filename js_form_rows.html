@@ -1,0 +1,118 @@
+<script>
+    // --- Form Row Management Functions ---
+
+    // Nota Items
+    function addNotaItem(name = '', qty = 1, price = 0) {
+        const list = document.getElementById('notaItemsList');
+        const row = document.createElement('div');
+        row.className = 'nota-item-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; align-items: center;';
+        row.innerHTML = `
+            <input type="text" placeholder="Nama barang" value="${name}" oninput="updatePreview()">
+            <input type="number" placeholder="Qty" value="${qty}" oninput="updatePreview()">
+            <input type="number" placeholder="Harga" value="${price}" oninput="updatePreview()">
+            <button type="button" class="btn-danger" onclick="this.parentElement.remove(); updatePreview();" style="padding: 8px;">
+                <i data-lucide="trash-2" size="16"></i>
+            </button>
+        `;
+        list.appendChild(row);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    // Attendance Rows
+    function addAttendanceRow(nama = '', jabatan = '') {
+        const list = document.getElementById('attendanceList');
+        const row = document.createElement('div');
+        row.className = 'attendance-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; align-items: center;';
+        row.innerHTML = `
+            <input type="text" placeholder="Nama peserta" value="${nama}" oninput="updatePreview()">
+            <input type="text" placeholder="Jabatan" value="${jabatan}" oninput="updatePreview()">
+            <button type="button" class="btn-danger" onclick="this.parentElement.remove(); updatePreview();" style="padding: 8px;">
+                <i data-lucide="trash-2" size="16"></i>
+            </button>
+        `;
+        list.appendChild(row);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    function loadDefaultAttendance() {
+        const list = document.getElementById('attendanceList');
+        list.innerHTML = '';
+        const defaults = [
+            { nama: 'Kepala Sekolah', jabatan: 'Ketua Panitia' },
+            { nama: 'Bendahara', jabatan: 'Anggota' },
+            { nama: 'Guru Senior', jabatan: 'Anggota' },
+            { nama: 'Operator Sekolah', jabatan: 'Sekretaris' }
+        ];
+        defaults.forEach(d => addAttendanceRow(d.nama, d.jabatan));
+    }
+
+    // Honor Rows
+    function addHonorRow(nama = '', nip = '', jabatan = '', honor = '') {
+        const list = document.getElementById('honorList');
+        if (!list) return;
+        
+        const row = document.createElement('div');
+        row.className = 'honor-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 8px; align-items: center;';
+        row.innerHTML = `
+            <input type="text" placeholder="Nama" value="${nama}" oninput="updatePreview()">
+            <input type="text" placeholder="NIP" value="${nip}" oninput="updatePreview()">
+            <input type="text" placeholder="Jabatan" value="${jabatan}" oninput="updatePreview()">
+            <input type="number" placeholder="Honor" value="${honor}" oninput="updatePreview()">
+            <button type="button" class="btn-danger" onclick="this.parentElement.remove(); updatePreview();" style="padding: 8px;">
+                <i data-lucide="trash-2" size="16"></i>
+            </button>
+        `;
+        list.appendChild(row);
+        lucide.createIcons();
+        updatePreview();
+    }
+
+    // Rincian Sections Visibility
+    function updateRincianSections() {
+        const docType = document.getElementById('docType').value;
+        
+        // Hide all sections first
+        document.getElementById('notaItemsSection').style.display = 'none';
+        document.getElementById('notulenSection').style.display = 'none';
+        document.getElementById('attendanceSection').style.display = 'none';
+        document.getElementById('documentationSection').style.display = 'none';
+        document.getElementById('rencanaExtraSection').style.display = 'none';
+        document.getElementById('spkExtraSection').style.display = 'none';
+
+        // Show relevant sections based on docType
+        if (docType === 'nota') {
+            document.getElementById('notaItemsSection').style.display = 'block';
+        } else if (docType === 'notulen') {
+            document.getElementById('notulenSection').style.display = 'block';
+        } else if (docType === 'daftar_hadir') {
+            document.getElementById('attendanceSection').style.display = 'block';
+        } else if (docType === 'dokumentasi') {
+            document.getElementById('documentationSection').style.display = 'block';
+        } else if (docType === 'rencana') {
+            document.getElementById('rencanaExtraSection').style.display = 'block';
+        } else if (['spk', 'spk_guru_honorer', 'spk_tenaga_honorer'].includes(docType)) {
+            document.getElementById('spkExtraSection').style.display = 'block';
+        }
+    }
+
+    // Add Makanan Row (for pesanan)
+    function addMakananRow() {
+        // Implementation for pesanan document
+        addNotaItem(); // Reuse nota item structure
+    }
+
+    // Add Barang Row
+    function addBarangRow() {
+        addNotaItem(); // Reuse nota item structure
+    }
+
+    // Add Jasa Row
+    function addJasaRow() {
+        addNotaItem(); // Reuse nota item structure
+    }
+</script>

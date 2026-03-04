@@ -1,0 +1,28 @@
+<!-- Template: Surat Pesanan -->
+<!-- Usage: getHtml_pesanan(data) -->
+<div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
+    ${getSchoolKop(data.schoolData)}
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="margin: 0; font-size: 16px; text-decoration: underline; font-weight: bold;">SURAT PESANAN</h2>
+        <p style="margin: 5px 0 0 0; font-size: 13px;">Nomor: ${data.nomorSurat}</p>
+    </div>
+    <div style="margin: 20px 0; line-height: 1.8; font-size: 13px;">
+        <p style="margin: 0;">Yang bertanda tangan di bawah ini:</p>
+        <table style="margin: 10px 0 10px 20px; font-size: 13px;">
+            <tr><td style="width: 150px;">Nama</td><td>: ${data.schoolData.principal}</td></tr>
+            <tr><td>NIP</td><td>: ${data.schoolData.principalNip}</td></tr>
+            <tr><td>Jabatan</td><td>: Kepala Sekolah</td></tr>
+        </table>
+        <p style="margin: 10px 0 0 0;">Dengan ini memesan barang/jasa kepada:</p>
+        <table style="margin: 10px 0 10px 20px; font-size: 13px;">
+            <tr><td style="width: 150px;">Nama Vendor</td><td>: ${data.vendorName}</td></tr>
+            <tr><td>Alamat</td><td>: ${data.vendorAddress}</td></tr>
+        </table>
+        <p style="margin: 10px 0 0 0;">Untuk keperluan: <strong>${data.uraian}</strong></p>
+        <p style="margin: 5px 0 0 0;">Nilai pesanan: <strong>Rp ${data.jumlah.toLocaleString('id-ID')}</strong></p>
+    </div>
+    <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+        <div style="text-align: center;"><p style="margin-bottom: 5px;">Mengetahui,</p><p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p><p style="font-weight: bold; text-decoration: underline; margin:0;">${data.schoolData.principal}</p></div>
+        <div style="text-align: center;"><p style="margin-bottom: 5px;">${getDateText(data.tanggal).fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Vendor,</p><p style="font-weight: bold; text-decoration: underline; margin:0;">( ........................ )</p></div>
+    </div>
+</div>

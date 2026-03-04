@@ -1,0 +1,63 @@
+<!-- View 4: Desain Nota Custom -->
+<section id="designer-view" class="view-section">
+    <div class="settings-container">
+        <div class="settings-header">
+            <div class="settings-icon" style="background: #f0fdf4; color: #16a34a;">
+                <i data-lucide="pen-tool" size="32"></i>
+            </div>
+            <div class="settings-title">
+                <h3>Konfigurasi Nota Custom</h3>
+                <p>Buat template nota standar dengan identitas toko Anda sendiri.</p>
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label>Nama Template (Untuk disimpan di list)</label>
+                <input type="text" id="customTplName" placeholder="Contoh: Toko Bangunan Sejahtera">
+            </div>
+
+            <div class="form-group">
+                <label>Nama Toko / Vendor</label>
+                <input type="text" id="customStoreName" placeholder="Nama Toko">
+            </div>
+
+            <div class="form-group">
+                <label>Alamat Toko</label>
+                <input type="text" id="customStoreAddress" placeholder="Alamat Lengkap">
+            </div>
+
+            <div class="form-group">
+                <label>Warna Tema Nota</label>
+                <select id="customStoreColor"
+                    style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+                    <option value="#000000">Hitam (Standard)</option>
+                    <option value="#1e40af">Biru (Professional)</option>
+                    <option value="#b91c1c">Merah (Classic)</option>
+                    <option value="#15803d">Hijau (Fresh)</option>
+                    <option value="#d97706">Oranye (Modern)</option>
+                    <option value="#7e22ce">Ungu (Creative)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Logo Toko (Opsional, Max 500KB)</label>
+                <input type="file" id="customStoreLogo" accept="image/*" style="font-size: 12px;">
+            </div>
+
+            <button type="button" class="btn-primary btn-submit" onclick="saveCustomTemplate()">
+                <i data-lucide="plus-circle" size="18"></i>
+                Simpan & Buat Template
+            </button>
+        </div>
+
+        <!-- Saved Templates List -->
+        <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 30px;">
+            <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #1e293b;">Template
+                Tersimpan</h4>
+            <div id="savedTemplatesList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+</section>

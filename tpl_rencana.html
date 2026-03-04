@@ -1,0 +1,21 @@
+<!-- Template: Dokumen Perencanaan -->
+<!-- Usage: getHtml_rencana(data) -->
+<div style="font-family: Arial, sans-serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
+    ${getSchoolKop(data.schoolData)}
+    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">DOKUMEN PERENCANAAN</div>
+    <table style="width: 100%; font-weight: bold; margin-bottom: 20px;">
+        <tr><td style="width: 200px;">Nama Satuan Pendidikan</td><td>: ${data.schoolData.name}</td></tr>
+        <tr><td>Kategori</td><td>: ${data.kategori}</td></tr>
+    </table>
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 20px;">
+        <thead><tr><th style="border: 1px solid #000; padding: 8px; width: 40px;">NO</th><th style="border: 1px solid #000; padding: 8px;">JENIS</th><th style="border: 1px solid #000; padding: 8px;">KETERANGAN</th></tr></thead>
+        <tbody>
+            <tr><td style="border: 1px solid #000; padding: 8px; text-align: center;">1</td><td style="border: 1px solid #000; padding: 8px;">Jumlah barang</td><td style="border: 1px solid #000; padding: 8px; text-align: center;">${data.jumlahBarang}</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 8px; text-align: center;">2</td><td style="border: 1px solid #000; padding: 8px;">Spesifikasi</td><td style="border: 1px solid #000; padding: 8px;">${data.spesifikasi}</td></tr>
+            <tr><td style="border: 1px solid #000; padding: 8px; text-align: center;">3</td><td style="border: 1px solid #000; padding: 8px;">Anggaran</td><td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${data.jumlah.toLocaleString('id-ID')}</td></tr>
+        </tbody>
+    </table>
+    <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
+        <div style="text-align: center; width: 250px;"><p style="margin-bottom: 5px;">${getDateText(data.tanggal).fullDate}</p><p style="font-weight: bold; margin-bottom: 80px;">Pelaksana</p><p style="font-weight: bold; text-decoration: underline; margin:0;">${data.schoolData.principal}</p></div>
+    </div>
+</div>

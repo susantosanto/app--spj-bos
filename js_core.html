@@ -1,0 +1,144 @@
+<script>
+    // --- Core Application Functions ---
+
+    // Initialize Lucide Icons on load
+    lucide.createIcons();
+
+    // Load Initial Data on window load
+    window.addEventListener('load', () => {
+        // Load School Data from LocalStorage
+        const savedSchoolData = JSON.parse(localStorage.getItem('spj_school_data') || '{}');
+        if (savedSchoolData) {
+            document.getElementById('schoolName').value = savedSchoolData.schoolName || '';
+            document.getElementById('schoolAddress').value = savedSchoolData.schoolAddress || '';
+            document.getElementById('npsn').value = savedSchoolData.npsn || '';
+            document.getElementById('kecamatan').value = savedSchoolData.kecamatan || '';
+            document.getElementById('principalName').value = savedSchoolData.principalName || '';
+            document.getElementById('principalNip').value = savedSchoolData.principalNip || '';
+            document.getElementById('treasurerName').value = savedSchoolData.treasurerName || '';
+            document.getElementById('treasurerNip').value = savedSchoolData.treasurerNip || '';
+        }
+
+        loadCustomTemplates(); // Load saved custom templates
+        renderSavedTemplatesList(); // Render list in designer view
+        startRealtimeClock();
+
+        // Load KBB Logo
+        google.script.run.withSuccessHandler(res => {
+            if (res) logoKBBBase64 = res;
+        }).getLogoKBB();
+    });
+
+    // View Navigation Logic
+    function showView(viewId, element) {
+        // Remove active class from all sections
+        const sections = document.querySelectorAll('.view-section');
+        sections.forEach(sec => sec.classList.remove('active'));
+
+        // Show target section
+        document.getElementById(viewId).classList.add('active');
+
+        // Update sidebar UI
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => item.classList.remove('active'));
+        element.classList.add('active');
+
+        // Refresh icons in case any were hidden
+        lucide.createIcons();
+    }
+
+    function handleLogout() {
+        showConfirm("Anda yakin ingin keluar dari aplikasi?", () => {
+            showToast("Sedang keluar...", "info");
+            google.script.run.withSuccessHandler(url => {
+                if (url) {
+                    window.location.href = url;
+                } else {
+                    window.location.reload();
+                }
+            }).getAppUrl();
+        }, "Konfirmasi Logout", "Keluar");
+    }
+
+    // --- Realtime Clock Logic ---
+    function startRealtimeClock() {
+        function update() {
+            const now = new Date();
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+
+            document.getElementById('clock').innerText = `${h}:${m}:${s}`;
+            document.getElementById('date').innerText = `${dayName}, ${day} ${month} ${year}`;
+        }
+        setInterval(update, 1000);
+        update();
+    }
+
+    // --- Toast Notification Functions ---
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            success: 'check-circle',
+            error: 'alert-circle',
+            warning: 'alert-triangle',
+            info: 'info'
+        };
+        
+        const titles = {
+            success: 'Berhasil',
+            error: 'Error',
+            warning: 'Peringatan',
+            info: 'Info'
+        };
+
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i data-lucide="${icons[type]}" size="20"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${titles[type]}</div>
+                <div style="font-size: 13px; color: var(--text-muted);">${message}</div>
+            </div>
+        `;
+
+        container.appendChild(toast);
+        lucide.createIcons();
+
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            toast.classList.add('toast-out');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // --- Confirm Dialog Functions ---
+    let confirmCallback = null;
+
+    function showConfirm(message, callback, title = "Konfirmasi", btnText = "Ya, Lanjutkan") {
+        document.getElementById('confirmMessage').innerText = message;
+        document.getElementById('confirmTitle').innerText = title;
+        document.getElementById('confirmBtnText').innerText = btnText;
+        document.getElementById('confirmOverlay').style.display = 'flex';
+        confirmCallback = callback;
+    }
+
+    function closeConfirm(confirmed) {
+        document.getElementById('confirmOverlay').style.display = 'none';
+        if (confirmed && confirmCallback) {
+            confirmCallback();
+        }
+        confirmCallback = null;
+    }
+</script>

@@ -1,0 +1,71 @@
+<script>
+    // --- Document Picker & Type Selection Functions ---
+
+    function initDocPicker() {
+        const grid = document.getElementById('docPickerGrid');
+        const select = document.getElementById('docType');
+        const docs = [
+            { val: 'kwitansi', name: 'Kwitansi SPJ', icon: 'banknote', color: '#10b981', desc: 'Tanda terima pembayaran sah' },
+            { val: 'nota', name: 'Nota Toko / Invoice', icon: 'shopping-bag', color: '#3b82f6', desc: 'Rincian belanja dari penyedia' },
+            { val: 'pesanan', name: 'Surat Pesanan', icon: 'file-signature', color: '#f59e0b', desc: 'Pemesanan barang formal' },
+            { val: 'berita_acara', name: 'BAST', icon: 'clipboard-check', color: '#8b5cf6', desc: 'Berita Acara Serah Terima' },
+            { val: 'undangan', name: 'Surat Undangan', icon: 'mail', color: '#ec4899', desc: 'Undangan rapat atau kegiatan' },
+            { val: 'notulen', name: 'Notulen Kegiatan', icon: 'file-text', color: '#64748b', desc: 'Catatan hasil rapat' },
+            { val: 'daftar_hadir', name: 'Daftar Hadir', icon: 'users', color: '#06b6d4', desc: 'Bukti kehadiran peserta' },
+            { val: 'dokumentasi', name: 'Dokumentasi', icon: 'camera', color: '#f43f5e', desc: 'Foto-foto kegiatan' },
+            { val: 'rencana', name: 'Dok. Perencanaan', icon: 'map', color: '#14b8a6', desc: 'Kebutuhan & spesifikasi' },
+            { val: 'spk', name: 'SPK (Konstruksi/Jasa/Barang)', icon: 'briefcase', color: '#4f46e5', desc: 'Surat Perintah Kerja Umum' },
+            { val: 'spk_guru_honorer', name: 'PKS Guru Honorer', icon: 'user-check', color: '#2563eb', desc: 'Perjanjian kerja tahunan guru' },
+            { val: 'spk_tenaga_honorer', name: 'PKS Tenaga Honorer', icon: 'user-cog', color: '#2563eb', desc: 'Perjanjian kerja staf/penjaga' },
+            { val: 'sk_pembagian_tugas', name: 'SK Pembagian Tugas', icon: 'award', color: '#ef4444', desc: 'Lampiran PKS Guru' },
+            { val: 'daftar_penerima_honor', name: 'Daftar Terima Honor', icon: 'receipt', color: '#16a34a', desc: 'Tabel honorarium multi-penerima' }
+        ];
+
+        grid.innerHTML = docs.map(doc => `
+            <div class="doc-card ${select.value === doc.val ? 'active' : ''}" onclick="selectDocType('${doc.val}')">
+                <i data-lucide="${doc.icon}" size="22"></i>
+                <div class="doc-card-info">
+                    <h4>${doc.name}</h4>
+                    <p>${doc.desc}</p>
+                </div>
+            </div>
+        `).join('');
+        lucide.createIcons();
+    }
+
+    function selectDocType(val) {
+        const select = document.getElementById('docType');
+        select.value = val;
+
+        // Update UI
+        document.getElementById('currentDocTitle').innerText = select.options[select.selectedIndex].text;
+
+        // Re-render picker grid to show active
+        initDocPicker();
+
+        // Switch to form tab
+        switchPreviewTab('form');
+
+        // Call existing logic
+        handleDocTypeChange();
+    }
+
+    function handleDocTypeChange() {
+        const docType = document.getElementById('docType').value;
+        
+        // Update current doc title
+        const select = document.getElementById('docType');
+        const selectedOption = select.options[select.selectedIndex];
+        const titleEl = document.getElementById('currentDocTitle');
+        if (titleEl) {
+            titleEl.innerText = selectedOption.text;
+        }
+
+        // Re-render doc picker grid to update active state
+        initDocPicker();
+
+        // Update preview
+        updateRincianSections();
+        updatePreview();
+    }
+</script>

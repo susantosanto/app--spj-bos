@@ -1,0 +1,78 @@
+<!-- View 3: Data Sekolah -->
+<section id="settings-view" class="view-section">
+    <div class="settings-container">
+        <div class="settings-header">
+            <div class="settings-icon">
+                <i data-lucide="school" size="32"></i>
+            </div>
+            <div class="settings-title">
+                <h3>Konfigurasi Sekolah</h3>
+                <p>Sesuaikan informasi sekolah untuk kop surat & tanda tangan.</p>
+            </div>
+        </div>
+
+        <form id="schoolForm">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label>Nama Sekolah</label>
+                    <input type="text" id="schoolName" name="schoolName"
+                        placeholder="Contoh: SD NEGERI 01 CONTOH">
+                </div>
+                <div class="form-group full-width">
+                    <label>Alamat Lengkap</label>
+                    <input type="text" id="schoolAddress" name="schoolAddress"
+                        placeholder="Jl. Pendidikan No. 123">
+                </div>
+                <div class="form-group">
+                    <label>NPSN</label>
+                    <input type="text" id="npsn" name="npsn" placeholder="12345678">
+                </div>
+                <div class="form-group">
+                    <label>Kecamatan</label>
+                    <input type="text" id="kecamatan" name="kecamatan" placeholder="Contoh: Kec. Ilmu">
+                </div>
+                <div class="form-group">
+                    <label>Nama Kepala Sekolah</label>
+                    <input type="text" id="principalName" name="principalName"
+                        placeholder="Nama Lengkap & Gelar">
+                </div>
+                <div class="form-group">
+                    <label>NIP Kepala Sekolah</label>
+                    <input type="text" id="principalNip" name="principalNip"
+                        placeholder="19XXXXXXXX XXXXXX X XXX">
+                </div>
+                <div class="form-group">
+                    <label>Nama Bendahara</label>
+                    <input type="text" id="treasurerName" name="treasurerName"
+                        placeholder="Nama Lengkap & Gelar">
+                </div>
+                <div class="form-group">
+                    <label>NIP Bendahara</label>
+                    <input type="text" id="treasurerNip" name="treasurerNip"
+                        placeholder="19XXXXXXXX XXXXXX X XXX">
+                </div>
+
+                <button type="submit" class="btn-primary btn-submit">
+                    <i data-lucide="save" size="18"></i>
+                    Simpan Data Sekolah
+                </button>
+            </div>
+        </form>
+
+        <!-- Backup & Restore -->
+        <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 30px;">
+            <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #1e293b;">Backup & Restore</h4>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn-primary" onclick="backupData()">
+                    <i data-lucide="download" size="18"></i>
+                    Backup Data
+                </button>
+                <button class="btn-primary" onclick="document.getElementById('restoreInput').click()">
+                    <i data-lucide="upload" size="18"></i>
+                    Restore Data
+                </button>
+                <input type="file" id="restoreInput" accept=".json" style="display: none;" onchange="restoreData(this)">
+            </div>
+        </div>
+    </div>
+</section>

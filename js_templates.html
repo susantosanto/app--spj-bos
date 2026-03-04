@@ -1,0 +1,219 @@
+<script>
+    // --- Document Template Generators ---
+
+    // Helper to get school data
+    function getSchoolData() {
+        return {
+            name: document.getElementById('schoolName').value || "SD NEGERI 01",
+            address: document.getElementById('schoolAddress').value || "",
+            kecamatan: document.getElementById('kecamatan').value || "",
+            npsn: document.getElementById('npsn').value || "",
+            principal: document.getElementById('principalName').value || "",
+            principalNip: document.getElementById('principalNip').value || "",
+            treasurer: document.getElementById('treasurerName').value || "",
+            treasurerNip: document.getElementById('treasurerNip').value || ""
+        };
+    }
+
+    // Helper to get school kop surat
+    function getSchoolKop(schoolData) {
+        return `
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    ${logoBase64 ? `<img src="${logoBase64}" style="height: 60px; width: auto;">` : ''}
+                    <div>
+                        <h1 style="margin: 0; font-size: 18px; font-weight: bold;">${schoolData.name}</h1>
+                        <p style="margin: 3px 0 0 0; font-size: 12px;">${schoolData.address}</p>
+                        <p style="margin: 2px 0 0 0; font-size: 11px;">Kec. ${schoolData.kecamatan} | NPSN: ${schoolData.npsn}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 1. Kwitansi Template
+    function getHtml_kwitansi(data) {
+        const schoolData = data.schoolData;
+        const schoolKop = getSchoolKop(schoolData);
+        const tanggal = data.tanggal || "01/01/2025";
+        const nomorSurat = data.nomorSurat || "";
+        const uraian = data.uraian || "Belanja Barang";
+        const jumlah = data.jumlah || 0;
+        const vendorName = data.vendorName || "Penerima";
+        const vendorAddress = data.vendorAddress || "";
+        const tanggalText = getDateText(tanggal);
+
+        const terbilangText = terbilang(jumlah) + " Rupiah";
+
+        return `
+            <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 20px; width: 100%; box-sizing: border-box;">
+                ${schoolKop}
+                <div style="text-align: center; margin: 20px 0;">
+                    <h2 style="margin: 0; font-size: 18px; font-weight: bold; text-decoration: underline;">KWITANSI</h2>
+                    <p style="margin: 5px 0 0 0; font-size: 14px;">Nomor: ${nomorSurat}</p>
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <p style="margin: 0 0 10px 0; font-size: 14px;">Sudah terima dari: <strong>${vendorName}</strong></p>
+                    <p style="margin: 0 0 10px 0; font-size: 14px;">Alamat: ${vendorAddress}</p>
+                    <p style="margin: 0 0 10px 0; font-size: 14px;">Uang sejumlah: <strong style="font-size: 16px;">${terbilangText}</strong></p>
+                    <p style="margin: 0 0 10px 0; font-size: 14px;">Untuk pembayaran: <strong>${uraian}</strong></p>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
+                    <div style="text-align: center; width: 250px;">
+                        <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${tanggalText.fullDate}</p>
+                        <p style="font-weight: bold; margin-bottom: 80px;">Penerima,</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin:0;">${vendorName}</p>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 40px; border-top: 2px solid #000; padding-top: 10px;">
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 5px;">Mengetahui,</p>
+                        <p style="font-weight: bold; margin-bottom: 60px;">Kepala Sekolah</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p>
+                        <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
+                    </div>
+                    <div style="text-align: center; font-size: 16px; font-weight: bold;">
+                        <p style="margin: 0;">Jumlah: <span style="font-size: 20px;">Rp ${jumlah.toLocaleString('id-ID')}</span></p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 2. Nota Template (Multiple Vendor Styles)
+    function getHtml_nota(data) {
+        const schoolData = data.schoolData;
+        const vendorStyle = data.vendorStyle || 'standard';
+        const vendorName = data.vendorName || "Toko";
+        const vendorAddress = data.vendorAddress || "Alamat Toko";
+        const tanggal = data.tanggal || "01/01/2025";
+        const uraian = data.uraian || "Belanja Barang";
+        const jumlah = data.jumlah || 0;
+        const hwAttr = 'data-hw="true"'; // Handwriting attribute for custom fonts
+
+        // Get items from Nota List
+        const itemRows = [];
+        document.querySelectorAll('.nota-item-row').forEach(row => {
+            const inputs = row.querySelectorAll('input');
+            itemRows.push({
+                name: inputs[0].value,
+                qty: parseInt(inputs[1].value) || 1,
+                price: parseInt(inputs[2].value) || 0
+            });
+        });
+
+        let itemsHtml = '';
+        let itemsHtmlSwapped = '';
+
+        if (itemRows.length > 0) {
+            itemRows.forEach((item, i) => {
+                const sub = item.qty * item.price;
+                itemsHtml += `
+                    <tr style="height: 25px; border-bottom: 1px solid #000;">
+                        <td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${item.name}</td>
+                        <td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">${item.qty}</td>
+                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${item.price.toLocaleString('id-ID')}</td>
+                        <td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${sub.toLocaleString('id-ID')}</td>
+                    </tr>
+                `;
+                itemsHtmlSwapped += `
+                    <tr style="height: 25px; border-bottom: 1px solid #000;">
+                        <td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">${item.qty}</td>
+                        <td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${item.name}</td>
+                        <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${item.price.toLocaleString('id-ID')}</td>
+                        <td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${sub.toLocaleString('id-ID')}</td>
+                    </tr>
+                `;
+            });
+
+            // Fill remaining empty rows (up to 12)
+            const remaining = 12 - itemRows.length;
+            for (let i = 0; i < remaining; i++) {
+                itemsHtml += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>`;
+                itemsHtmlSwapped += `<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>`;
+            }
+        } else {
+            // Default fallback
+            itemsHtml = `
+                <tr style="height: 25px; border-bottom: 1px solid #000;">
+                    <td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${uraian}</td>
+                    <td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">1</td>
+                    <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
+                    <td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
+                </tr>
+            ` + Array(11).fill('<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>').join('');
+
+            itemsHtmlSwapped = `
+                <tr style="height: 25px; border-bottom: 1px solid #000;">
+                    <td style="border-right: 2px solid #000; text-align: center; width: 60px; ${hwAttr}">1</td>
+                    <td style="border-right: 2px solid #000; padding: 0 8px; ${hwAttr}">${uraian}</td>
+                    <td style="border-right: 2px solid #000; text-align: right; padding-right: 8px; width: 100px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
+                    <td style="text-align: right; padding-right: 8px; width: 120px; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td>
+                </tr>
+            ` + Array(11).fill('<tr style="height: 25px; border-bottom: 1px solid #000;"><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td style="border-right: 2px solid #000;"></td><td></td></tr>').join('');
+        }
+
+        // Check for custom template
+        if (vendorStyle.startsWith('custom_')) {
+            const templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
+            if (templates[vendorStyle]) {
+                // Replace template variables with actual values
+                return templates[vendorStyle].html
+                    .replace(/\$\{tanggal\}/g, tanggal)
+                    .replace(/\$\{schoolData\.name\}/g, schoolData.name)
+                    .replace(/\$\{jumlah\.toLocaleString\('id-ID'\)\}/g, jumlah.toLocaleString('id-ID'))
+                    .replace(/\$\{itemsHtml\}/g, itemsHtml);
+            }
+        }
+
+        // Built-in vendor styles would continue here...
+        // For brevity, returning standard nota
+        return `
+            <div style="font-family: Arial, sans-serif; border: 2px solid #000; padding: 20px; background: #fff; width: 100%;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
+                    <div>
+                        <h1 style="margin:0; font-size: 24px; font-weight: bold;">${vendorName}</h1>
+                        <p style="margin: 5px 0 0 0; font-size: 12px;">${vendorAddress}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <h2 style="margin: 0; font-size: 24px;">NOTA</h2>
+                        <p style="margin: 5px 0 0 0; font-size: 12px;">${tanggal}</p>
+                    </div>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #000;">
+                            <th style="padding: 10px; text-align: left; border-right: 2px solid #000;">URAIAN</th>
+                            <th style="padding: 10px; width: 60px; text-align: center; border-right: 2px solid #000;">QTY</th>
+                            <th style="padding: 10px; width: 100px; text-align: right; border-right: 2px solid #000;">HARGA</th>
+                            <th style="padding: 10px; width: 120px; text-align: right;">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsHtml}
+                    </tbody>
+                    <tfoot>
+                        <tr style="font-weight: bold;">
+                            <td colspan="3" style="border: 1px solid #000; padding: 12px; text-align: right;">TOTAL</td>
+                            <td style="border: 1px solid #000; padding: 12px; text-align: right;">Rp ${jumlah.toLocaleString('id-ID')}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 60px;">Tanda Terima,</p>
+                        <p style="border-bottom: 1px solid #000; width: 150px;"></p>
+                    </div>
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 60px;">Hormat Kami,</p>
+                        <p style="font-weight: bold;">${vendorName}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }

@@ -1,0 +1,150 @@
+<script>
+    // --- Custom Template Management Functions ---
+
+    function saveCustomTemplate() {
+        const name = document.getElementById('customTplName').value.trim();
+        const storeName = document.getElementById('customStoreName').value.trim();
+        const storeAddress = document.getElementById('customStoreAddress').value.trim();
+        const themeColor = document.getElementById('customStoreColor').value;
+        const logoInput = document.getElementById('customStoreLogo');
+
+        if (!name || !storeName) {
+            showToast("Nama Template dan Nama Toko wajib diisi!", "error");
+            return;
+        }
+
+        // Helper to process save after getting logo (or not)
+        const processSave = (logoBase64) => {
+            // Construct Standard HTML Template with injected values
+            const html = `
+                <div style="font-family: Arial, sans-serif; border: 1px solid #ccc; padding: 40px; background: #fff; color: #000;">
+                    <!-- Header -->
+                    <div style="display: flex; justify-content: space-between; border-bottom: 3px double ${themeColor}; padding-bottom: 20px; margin-bottom: 20px;">
+                        <div style="display: flex; gap: 20px; align-items: center;">
+                            ${logoBase64 ? `<img src="${logoBase64}" style="height: 70px; width: auto; object-fit: contain;">` : ''}
+                            <div>
+                                <h1 style="margin:0; font-size: 26px; font-weight: 800; text-transform: uppercase; color: ${themeColor};">${storeName}</h1>
+                                <p style="margin: 5px 0 0 0; font-size: 12px; color: #555; max-width: 300px;">${storeAddress}</p>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <h2 style="margin: 0; font-size: 28px; color: #ccc; letter-spacing: 2px;">NOTA</h2>
+                            <p style="font-size: 13px; margin: 5px 0 0 0; font-weight: bold;">\${tanggal}</p>
+                            <p style="font-size: 13px; margin: 2px 0 0 0;">Kepada: <strong>\${schoolData.name}</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px;">
+                        <thead>
+                            <tr style="background: ${themeColor}; color: #fff;">
+                                <th style="padding: 12px; text-align: left; border: 1px solid ${themeColor};">URAIAN BARANG</th>
+                                <th style="padding: 12px; width: 60px; text-align: center; border: 1px solid ${themeColor};">QTY</th>
+                                <th style="padding: 12px; width: 120px; text-align: right; border: 1px solid ${themeColor};">HARGA</th>
+                                <th style="padding: 12px; width: 140px; text-align: right; border: 1px solid ${themeColor};">TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${itemsHtml}
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-weight: bold;">
+                                <td colspan="3" style="border: 1px solid #ddd; padding: 12px; text-align: right;">TOTAL TAGIHAN</td>
+                                <td style="border: 1px solid #ddd; padding: 12px; text-align: right; color: ${themeColor}; font-size: 14px;">Rp \${jumlah.toLocaleString('id-ID')}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Footer / Signature -->
+                    <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+                        <div style="text-align: center; width: 180px;">
+                            <p style="margin-bottom: 70px; font-size: 12px;">Tanda Terima,</p>
+                            <div style="border-bottom: 1px solid #000;"></div>
+                        </div>
+                        <div style="text-align: center; width: 180px;">
+                            <p style="margin-bottom: 70px; font-size: 12px;">Hormat Kami,</p>
+                            <p style="font-weight: bold; margin: 0; font-size: 13px; color: ${themeColor};">${storeName}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Save to LocalStorage
+            try {
+                let templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
+                templates['custom_' + name.replace(/\s+/g, '_')] = { name: name, html: html };
+                localStorage.setItem('spj_custom_templates', JSON.stringify(templates));
+
+                showToast("Template Nota berhasil dibuat & disimpan!");
+                loadCustomTemplates();
+                renderSavedTemplatesList();
+                
+                // Reset form
+                document.getElementById('customTplName').value = '';
+                document.getElementById('customStoreName').value = '';
+                document.getElementById('customStoreAddress').value = '';
+                document.getElementById('customStoreLogo').value = '';
+            } catch (e) {
+                showToast("Gagal menyimpan (Mungkin ukuran logo terlalu besar): " + e.message, "error");
+            }
+        };
+
+        // Handle File Upload
+        if (logoInput.files && logoInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) { processSave(e.target.result); };
+            reader.onerror = function () { showToast("Gagal membaca file logo", "error"); };
+            reader.readAsDataURL(logoInput.files[0]);
+        } else {
+            processSave(null);
+        }
+    }
+
+    function loadCustomTemplates() {
+        const select = document.getElementById('vendorStyle');
+        // Remove existing custom options (identified by value starting with 'custom_')
+        Array.from(select.options).forEach(opt => {
+            if (opt.value.startsWith('custom_')) opt.remove();
+        });
+
+        const templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
+        Object.keys(templates).forEach(key => {
+            const opt = new Option("★ " + templates[key].name + " (Custom)", key);
+            select.add(opt);
+        });
+    }
+
+    function renderSavedTemplatesList() {
+        const listContainer = document.getElementById('savedTemplatesList');
+        if (!listContainer) return;
+
+        const templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
+        const keys = Object.keys(templates);
+
+        if (keys.length === 0) {
+            listContainer.innerHTML = '<p style="color: #64748b; font-size: 13px; font-style: italic;">Belum ada template kustom yang disimpan.</p>';
+            return;
+        }
+
+        listContainer.innerHTML = keys.map(key => `
+            <div class="saved-template-item">
+                <div style="font-weight: 600; font-size: 14px; color: #334155;">${templates[key].name}</div>
+                <button onclick="deleteCustomTemplate('${key}')" class="btn-danger" style="padding: 6px 10px; font-size: 11px;">
+                    <i data-lucide="trash-2" size="14"></i> Hapus
+                </button>
+            </div>
+        `).join('');
+        lucide.createIcons();
+    }
+
+    function deleteCustomTemplate(key) {
+        showConfirm("Hapus template nota ini?", () => {
+            let templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
+            delete templates[key];
+            localStorage.setItem('spj_custom_templates', JSON.stringify(templates));
+            showToast("Template berhasil dihapus");
+            loadCustomTemplates();
+            renderSavedTemplatesList();
+        });
+    }
+</script>

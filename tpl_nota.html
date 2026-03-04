@@ -1,0 +1,48 @@
+<!-- Template: Nota Toko / Invoice -->
+<!-- Usage: getHtml_nota(data) -->
+<div style="font-family: Arial, sans-serif; border: 2px solid #000; padding: 20px; background: #fff; width: 100%;">
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
+        <div>
+            <h1 style="margin:0; font-size: 24px; font-weight: bold;">${data.vendorName}</h1>
+            <p style="margin: 5px 0 0 0; font-size: 12px;">${data.vendorAddress}</p>
+        </div>
+        <div style="text-align: right;">
+            <h2 style="margin: 0; font-size: 24px;">NOTA</h2>
+            <p style="margin: 5px 0 0 0; font-size: 12px;">${data.tanggal}</p>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="border-bottom: 2px solid #000;">
+                <th style="padding: 10px; text-align: left; border-right: 2px solid #000;">URAIAN</th>
+                <th style="padding: 10px; width: 60px; text-align: center; border-right: 2px solid #000;">QTY</th>
+                <th style="padding: 10px; width: 100px; text-align: right; border-right: 2px solid #000;">HARGA</th>
+                <th style="padding: 10px; width: 120px; text-align: right;">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${itemsHtml}
+        </tbody>
+        <tfoot>
+            <tr style="font-weight: bold;">
+                <td colspan="3" style="border: 1px solid #000; padding: 12px; text-align: right;">TOTAL</td>
+                <td style="border: 1px solid #000; padding: 12px; text-align: right;">Rp ${data.jumlah.toLocaleString('id-ID')}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- Signatures -->
+    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+        <div style="text-align: center;">
+            <p style="margin-bottom: 60px;">Tanda Terima,</p>
+            <p style="border-bottom: 1px solid #000; width: 150px;"></p>
+        </div>
+        <div style="text-align: center;">
+            <p style="margin-bottom: 60px;">Hormat Kami,</p>
+            <p style="font-weight: bold;">${data.vendorName}</p>
+        </div>
+    </div>
+</div>

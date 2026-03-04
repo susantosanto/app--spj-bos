@@ -1,3 +1,8 @@
+// ─── HELPER FUNCTION FOR MODULAR HTML INCLUDES ───────────
+function include(filename) {
+    return HtmlService.createHtmlOutputFromFile(filename).getContent();
+}
+
 function doGet() {
     return HtmlService.createTemplateFromFile('login')
         .evaluate()
@@ -7,12 +12,27 @@ function doGet() {
 }
 
 function getMainPageHtml() {
+    // ═══════════════════════════════════════════════════════════════════
+    // SWITCH VERSION HERE:
+    // Uncomment FrontEnd_v2 to use new modular version
+    // Comment FrontEnd to disable old version
+    // ═══════════════════════════════════════════════════════════════════
     return HtmlService.createTemplateFromFile('FrontEnd')
+    // return HtmlService.createTemplateFromFile('FrontEnd_v2')
         .evaluate()
         .setTitle('Si-BOS | Sistem Administrasi SPJ')
         .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
         .addMetaTag('viewport', 'width=device-width, initial-scale=1')
         .getContent();
+}
+
+// Entry point dev (untuk tes FrontEnd_v2 secara terpisah jika perlu)
+function doGetV2() {
+    return HtmlService.createTemplateFromFile('FrontEnd_v2')
+        .evaluate()
+        .setTitle('Si-BOS v2 | DEV MODE')
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+        .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
 function MINTA_IZIN_AKSES() {

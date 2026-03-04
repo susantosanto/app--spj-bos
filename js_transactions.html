@@ -1,0 +1,134 @@
+<script>
+    // --- Transaction Management Functions ---
+
+    // Render transactions to table
+    function renderTransactions(transactions) {
+        const tbody = document.getElementById('transactionTbody');
+        const emptyState = document.getElementById('emptyState');
+        const tableContainer = document.getElementById('transactionTableContainer');
+
+        if (!transactions || transactions.length === 0) {
+            emptyState.style.display = 'block';
+            tableContainer.style.display = 'none';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        tableContainer.style.display = 'block';
+
+        tbody.innerHTML = transactions.map((tx, index) => `
+            <tr class="hover-row" style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 12px;">${tx.tanggal}</td>
+                <td style="padding: 12px;">${tx.noBukti}</td>
+                <td style="padding: 12px;">${tx.uraian}</td>
+                <td style="padding: 12px; text-align: right;">Rp ${tx.pengeluaran.toLocaleString('id-ID')}</td>
+                <td style="padding: 12px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-primary" onclick="openPreviewForTransaction(${index})" style="padding: 6px 12px; font-size: 12px;">
+                            <i data-lucide="eye" size="14"></i> Preview
+                        </button>
+                        <button class="btn-danger" onclick="removeTransaction(${index})" style="padding: 6px 12px; font-size: 12px;">
+                            <i data-lucide="trash-2" size="14"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+
+        lucide.createIcons();
+    }
+
+    // Open Add Modal
+    function openAddModal() {
+        document.getElementById('addTanggal').valueAsDate = new Date();
+        document.getElementById('addModal').style.display = 'flex';
+    }
+
+    function closeAddModal() {
+        document.getElementById('addModal').style.display = 'none';
+        document.getElementById('addTransactionForm').reset();
+    }
+
+    // Save manual transaction
+    function saveManualTransaction(e) {
+        e.preventDefault();
+
+        const newTx = {
+            id: 'manual_' + Date.now(),
+            tanggal: document.getElementById('addTanggal').value.replace(/-/g, '/'),
+            noBukti: document.getElementById('addNoBukti').value,
+            uraian: document.getElementById('addUraian').value,
+            pengeluaran: parseFloat(document.getElementById('addJumlah').value) || 0,
+            penerima: document.getElementById('addPenerima').value,
+            type: document.getElementById('addJenis').value,
+            vendorStyle: document.getElementById('addJenis').value === 'nota' ? 'standard' : 'standard'
+        };
+
+        allTransactions.push(newTx);
+        renderTransactions(allTransactions);
+        closeAddModal();
+        showToast("Transaksi berhasil ditambahkan!");
+
+        // Update extraction info
+        document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
+    }
+
+    // Remove transaction
+    function removeTransaction(index) {
+        showConfirm("Apakah Anda yakin ingin menghapus transaksi ini?", () => {
+            allTransactions.splice(index, 1);
+            renderTransactions(allTransactions);
+            document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
+            showToast("Transaksi dihapus");
+        }, "Konfirmasi Hapus", "Ya, Hapus");
+    }
+
+    // Open preview for specific transaction
+    function openPreviewForTransaction(index) {
+        const tx = allTransactions[index];
+        if (!tx) return;
+
+        // Populate form with transaction data
+        document.getElementById('custVendorName').value = tx.penerima;
+        document.getElementById('custVendorAddress').value = "Alamat " + tx.penerima;
+        document.getElementById('custUraian').value = tx.uraian;
+        document.getElementById('custJumlah').value = tx.pengeluaran;
+        document.getElementById('custTanggal').value = tx.tanggal.replace(/\//g, '-');
+        document.getElementById('custTanggalPesan').value = tx.tanggal.replace(/\//g, '-');
+        document.getElementById('custTanggalKegiatan').value = tx.tanggal.replace(/\//g, '-');
+        document.getElementById('custNomorSurat').value = "020/SD-BOS/" + new Date().getFullYear();
+
+        document.getElementById('custPerihal').value = (tx.type === 'konsumsi' ? "Belanja Konsumsi" : "Pesanan Barang/Jasa");
+        document.getElementById('custTempatKegiatan').value = document.getElementById('schoolName').value || "Sekolah";
+        document.getElementById('custWaktuKegiatan').value = "08.00 sd Selesai";
+        document.getElementById('custTembusan').value = "1. Pengawas Pembina\n2. K3S Kecamatan " + (document.getElementById('kecamatan').value || "");
+
+        const docTypeSelect = document.getElementById('docType');
+        if (tx.type === 'konsumsi' || tx.type === 'nota') {
+            docTypeSelect.value = 'nota';
+            document.getElementById('vendorStyle').value = tx.vendorStyle || 'standard';
+        } else if (tx.type === 'jasa') {
+            docTypeSelect.value = 'nota';
+            document.getElementById('vendorStyle').value = 'toko-prima';
+        } else {
+            docTypeSelect.value = 'kwitansi';
+        }
+
+        // Populate Nota Items if needed
+        if (docTypeSelect.value === 'nota') {
+            document.getElementById('notaItemsList').innerHTML = '';
+            addNotaItem(tx.uraian, 1, tx.pengeluaran);
+        }
+
+        initDocPicker();
+        handleDocTypeChange();
+        switchPreviewTab('form');
+        document.getElementById('previewModal').style.display = 'flex';
+        lucide.createIcons();
+    }
+
+    // Generate SPJ (placeholder for future implementation)
+    function generateSpj() {
+        showToast("Fitur generate SPJ akan segera hadir!", "info");
+    }
+</script>

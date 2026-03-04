@@ -1,0 +1,105 @@
+<style>
+    /* --- Sidebar Styles --- */
+    .sidebar {
+        width: 280px;
+        background: #020617;
+        background-image: radial-gradient(circle at top left, #1e3a8a20, transparent 40%), radial-gradient(circle at bottom right, #1e40af10, transparent 40%);
+        color: var(--white);
+        display: flex;
+        flex-direction: column;
+        padding: 30px 20px;
+        flex-shrink: 0;
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.3);
+        border-right: 1px solid rgba(255, 255, 255, 0.03);
+        z-index: 50;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 10px 40px 10px;
+        position: relative;
+    }
+
+    .logo-container::after {
+        content: '';
+        position: absolute;
+        bottom: 20px;
+        left: 10px;
+        right: 10px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    .logo-icon {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        padding: 10px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+
+    .logo-text h1 {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        background: linear-gradient(to right, #fff, #94a3b8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text p {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex-grow: 1;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 18px;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        color: #94a3b8;
+        font-weight: 500;
+        font-size: 14px;
+        border: 1px solid transparent;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.03);
+        color: #f1f5f9;
+        transform: translateX(5px);
+    }
+
+    .nav-item.active {
+        background: linear-gradient(90deg, rgba(37, 99, 235, 0.15), rgba(37, 99, 235, 0.05));
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        box-shadow: 0 0 30px rgba(37, 99, 235, 0.1);
+    }
+
+    .sidebar-footer {
+        padding-top: 20px;
+        font-size: 11px;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: auto;
+    }
+</style>

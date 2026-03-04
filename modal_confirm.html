@@ -1,0 +1,16 @@
+<!-- Custom Confirm Modal -->
+<div id="confirmOverlay" class="confirm-overlay">
+    <div class="confirm-modal">
+        <div class="confirm-icon">
+            <i data-lucide="alert-triangle" size="32"></i>
+        </div>
+        <h3 id="confirmTitle">Konfirmasi Hapus</h3>
+        <p id="confirmMessage">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.
+        </p>
+        <div class="confirm-actions">
+            <button class="confirm-btn-cancel" onclick="closeConfirm(false)">Batal</button>
+            <button class="confirm-btn-ok" onclick="closeConfirm(true)"><span id="confirmBtnText">Ya,
+                    Lanjutkan</span></button>
+        </div>
+    </div>
+</div>

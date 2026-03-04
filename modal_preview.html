@@ -1,0 +1,299 @@
+<!-- Preview Modal -->
+<div id="previewModal" class="modal-overlay">
+    <div class="modal-container preview-modal-container">
+        <!-- Left Sidebar -->
+        <div class="preview-sidebar">
+            <div class="preview-sidebar-header">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Generator Dokumen</h3>
+                <p style="font-size: 12px; color: var(--text-muted);">Pilih jenis dokumen dan lengkapi data</p>
+
+                <div class="preview-tabs">
+                    <button class="preview-tab-btn" onclick="switchPreviewTab('select')">
+                        <i data-lucide="grid" size="16"></i>
+                        Pilih
+                    </button>
+                    <button class="preview-tab-btn" onclick="switchPreviewTab('form')">
+                        <i data-lucide="edit" size="16"></i>
+                        Form
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab: Select Document Type -->
+            <div id="tab-select" class="preview-tab-content active">
+                <div class="doc-selector-wrapper">
+                    <label class="doc-selector-label">
+                        <i data-lucide="file-text" size="16"></i>
+                        Jenis Dokumen
+                    </label>
+                    <select id="docType" onchange="handleDocTypeChange()">
+                        <option value="kwitansi">Kwitansi SPJ</option>
+                        <option value="nota">Nota Toko / Invoice</option>
+                        <option value="pesanan">Surat Pesanan</option>
+                        <option value="berita_acara">Berita Acara Serah Terima</option>
+                        <option value="undangan">Surat Undangan</option>
+                        <option value="notulen">Notulen Kegiatan</option>
+                        <option value="daftar_hadir">Daftar Hadir</option>
+                        <option value="dokumentasi">Dokumentasi</option>
+                        <option value="rencana">Dokumen Perencanaan</option>
+                        <option value="spk">SPK (Konstruksi/Jasa/Barang)</option>
+                        <option value="spk_guru_honorer">PKS Guru Honorer</option>
+                        <option value="spk_tenaga_honorer">PKS Tenaga Honorer</option>
+                        <option value="sk_pembagian_tugas">SK Pembagian Tugas</option>
+                        <option value="daftar_penerima_honor">Daftar Terima Honor</option>
+                    </select>
+                </div>
+
+                <div id="docPickerGrid" class="doc-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Tab: Form -->
+            <div id="tab-form" class="preview-tab-content">
+                <div class="form-grid-modal">
+                    <!-- Base Fields -->
+                    <div class="form-group">
+                        <label>Nomor Surat</label>
+                        <input type="text" id="custNomorSurat" placeholder="Nomor surat" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Perihal / Uraian</label>
+                        <input type="text" id="custPerihal" placeholder="Perihal" oninput="updatePreview()">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Vendor Style (untuk Nota)</label>
+                        <select id="vendorStyle" onchange="updatePreview()" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+                            <option value="standard">Standard (Hitam)</option>
+                            <option value="rm-family">RM. Family</option>
+                            <option value="cahya-cellular">Cahya Cellular</option>
+                            <option value="media-komputer">Media Komputer</option>
+                            <option value="mitra-photocopy">Mitra Photocopy</option>
+                            <option value="sinar-abadi">Sinar Abadi</option>
+                            <option value="toko-prima">Toko Prima</option>
+                            <option value="bunga-mandiri">Bunga Mandiri</option>
+                            <option value="sentosa">Sentosa</option>
+                            <option value="mandiri">Mandiri</option>
+                            <option value="sejahtera">Sejahtera</option>
+                            <option value="rezeki">Rezeki</option>
+                            <option value="agung">Agung</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Nama Vendor / Toko</label>
+                        <input type="text" id="custVendorName" placeholder="Nama vendor/toko" oninput="updatePreview()">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Uraian Kegiatan</label>
+                        <textarea id="custUraian" placeholder="Uraian lengkap" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 80px;" oninput="updatePreview()"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Jumlah (Rp)</label>
+                        <input type="number" id="custJumlah" placeholder="0" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="date" id="custTanggal" onchange="updatePreview()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Pesan</label>
+                        <input type="date" id="custTanggalPesan" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal Kegiatan</label>
+                        <input type="date" id="custTanggalKegiatan" onchange="updatePreview()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hari</label>
+                        <input type="text" id="custHari" placeholder="Senin, Selasa, ..." oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Tempat</label>
+                        <input type="text" id="custTempat" placeholder="Tempat kegiatan" oninput="updatePreview()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Waktu</label>
+                        <input type="text" id="custWaktu" placeholder="Waktu kegiatan" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Vendor</label>
+                        <input type="text" id="custVendorAddress" placeholder="Alamat vendor" oninput="updatePreview()">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Tempat & Tanggal Kwitansi</label>
+                        <input type="text" id="custTempatTanggalKwitansi" placeholder="Cikalongwetan, ..." oninput="updatePreview()">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Tembusan</label>
+                        <textarea id="custTembusan" placeholder="1. Pengawas Pembina\n2. Arsip" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 60px;" oninput="updatePreview()"></textarea>
+                    </div>
+
+                    <!-- Logo Upload -->
+                    <div class="form-group">
+                        <label>Logo Sekolah</label>
+                        <input type="file" id="custLogoUpload" accept="image/*" onchange="handleLogoUpload(this)" style="font-size: 12px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Cap Sekolah</label>
+                        <input type="file" id="custStampUpload" accept="image/*" onchange="handleStampUpload(this)" style="font-size: 12px;">
+                    </div>
+                </div>
+
+                <!-- Dynamic Sections (injected by JS based on docType) -->
+                <div id="notaItemsSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Rincian Barang</h4>
+                    <div id="notaItemsList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                    <button type="button" class="btn-primary" onclick="addNotaItem()" style="margin-top: 12px; width: 100%; justify-content: center;">
+                        <i data-lucide="plus" size="16"></i> Tambah Item
+                    </button>
+                </div>
+
+                <div id="notulenSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Hasil & Kesimpulan</h4>
+                    <div class="form-group">
+                        <label>Hasil Kegiatan</label>
+                        <textarea id="custHasil" placeholder="Hasil kegiatan..." style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 100px;" oninput="updatePreview()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Kesimpulan</label>
+                        <textarea id="custKesimpulan" placeholder="Kesimpulan..." style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 60px;" oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+
+                <div id="attendanceSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Daftar Hadir</h4>
+                    <div id="attendanceList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                    <button type="button" class="btn-primary" onclick="addAttendanceRow()" style="margin-top: 12px; width: 100%; justify-content: center;">
+                        <i data-lucide="plus" size="16"></i> Tambah Peserta
+                    </button>
+                    <button type="button" class="btn-danger" onclick="loadDefaultAttendance()" style="margin-top: 8px; width: 100%; justify-content: center;">
+                        <i data-lucide="users" size="16"></i> Load Default
+                    </button>
+                </div>
+
+                <div id="documentationSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Foto Dokumentasi</h4>
+                    <div class="form-group">
+                        <label>Jumlah Foto (1-5)</label>
+                        <select id="docPhotoCount" onchange="updatePhotoInputs()" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+                            <option value="1">1 Foto</option>
+                            <option value="2">2 Foto</option>
+                            <option value="3">3 Foto</option>
+                            <option value="4">4 Foto</option>
+                            <option value="5">5 Foto</option>
+                        </select>
+                    </div>
+                    <div id="photoUploads">
+                        <div id="ph-1" class="form-group">
+                            <label>Foto 1</label>
+                            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 1)" style="font-size: 12px;">
+                        </div>
+                        <div id="ph-2" class="form-group" style="display: none;">
+                            <label>Foto 2</label>
+                            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 2)" style="font-size: 12px;">
+                        </div>
+                        <div id="ph-3" class="form-group" style="display: none;">
+                            <label>Foto 3</label>
+                            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 3)" style="font-size: 12px;">
+                        </div>
+                        <div id="ph-4" class="form-group" style="display: none;">
+                            <label>Foto 4</label>
+                            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 4)" style="font-size: 12px;">
+                        </div>
+                        <div id="ph-5" class="form-group" style="display: none;">
+                            <label>Foto 5</label>
+                            <input type="file" accept="image/*" onchange="handleDocPhotoUpload(this, 5)" style="font-size: 12px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional sections for other doc types -->
+                <div id="rencanaExtraSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Detail Perencanaan</h4>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <input type="text" id="custKategori" placeholder="Kategori barang/jasa" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Barang</label>
+                        <input type="number" id="custJumlahBarang" placeholder="1" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Spesifikasi</label>
+                        <textarea id="custSpesifikasi" placeholder="Spesifikasi lengkap" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 80px;" oninput="updatePreview()"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Persyaratan</label>
+                        <textarea id="custPersyaratan" placeholder="Persyaratan penyedia" style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 80px;" oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+
+                <div id="spkExtraSection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Detail SPK</h4>
+                    <div class="form-group">
+                        <label>Provider</label>
+                        <input type="text" id="custSpkProvider" placeholder="Penyedia barang/jasa" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Tgl Negosiasi</label>
+                        <input type="date" id="custTglNegosiasi" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Waktu Pelaksanaan</label>
+                        <input type="date" id="custWaktuPelaksanaan" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Waktu Penyelesaian</label>
+                        <input type="date" id="custWaktuPenyelesaian" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Instruksi</label>
+                        <textarea id="custInstruksi" placeholder="Instruksi pekerjaan..." style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; min-height: 80px;" oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Main Preview Area -->
+        <div class="preview-main">
+            <div class="preview-toolbar">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="btn-primary" onclick="window.print()">
+                        <i data-lucide="printer" size="18"></i>
+                        Cetak
+                    </button>
+                    <button class="btn-danger" onclick="closePreview()">
+                        <i data-lucide="x" size="18"></i>
+                        Tutup
+                    </button>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span id="zoomLevel" style="font-size: 12px; color: var(--text-muted);">Scale: 80%</span>
+                    <input type="range" min="50" max="100" value="80" oninput="zoomPreview(this.value)" style="width: 100px;">
+                    <select onchange="changeLayout(this.value)" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <option value="portrait">Portrait</option>
+                        <option value="landscape">Landscape</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="paper-viewport">
+                <div id="printArea">
+                    <div id="paperContent" class="paper a4">
+                        <!-- Content injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
