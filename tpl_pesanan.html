@@ -1,50 +1,151 @@
 <script>
     // --- SURAT PESANAN TEMPLATE ---
-    function getPesananHtml(schoolData, schoolKop, uraian, cleanUraian, tanggalPesan, tanggalKegiatan, datePesanInfo, dateKegiatanInfo, perihal, tempatKegiatan, waktuKegiatan, tembusan) {
-        const nomorSurat = document.getElementById('custNomorSurat')?.value || "020/SD-BOS/2025";
-        const vendorName = document.getElementById('custVendorName')?.value || "Toko/Supplier";
-        const jmlPesanan = document.getElementById('custJumlahPesanan')?.value || "1 Paket";
-        const jenisKegiatan = document.getElementById('custJenisKegiatanPesanan')?.value;
-        
+    function getPesananHtml(schoolData, schoolKop, uraian, cleanUraian, tanggalPesan, tanggalKegiatan, datePesanInfo, dateKegiatanInfo, perihal, tempatKegiatan, waktuKegiatan, tembusan, vendorName, nomorSurat, jenisKegiatanPesanan, jumlahPesanan) {
+        // Build rincian table HTML based on activity type
         let rincianTableHtml = '';
         
-        if (jenisKegiatan === 'makanan') {
-            const rows = document.querySelectorAll('#makananList .makanan-row');
-            if (rows.length > 0) {
-                let html = '<tbody><tr style="background:#f0f0f0;font-weight:bold;"><td style="border:1px solid #000;padding:8px;width:40px;">No</td><td style="border:1px solid #000;padding:8px;">Menu Makanan/Snack</td><td style="border:1px solid #000;padding:8px;width:80px;">Volume</td><td style="border:1px solid #000;padding:8px;width:80px;">Satuan</td><td style="border:1px solid #000;padding:8px;width:120px;">Harga Satuan</td><td style="border:1px solid #000;padding:8px;width:120px;">Jumlah</td></tr>';
-                rows.forEach((row, i) => {
+        if (jenisKegiatanPesanan === 'makanan') {
+            // Build makanan rows from form
+            const makananRows = [];
+            const makananList = document.querySelectorAll('#makananList .makanan-row');
+            if (makananList.length > 0) {
+                makananList.forEach((row, idx) => {
                     const inputs = row.querySelectorAll('input');
-                    html += `<tr><td style="border:1px solid #000;padding:8px;text-align:center;">${i+1}</td><td style="border:1px solid #000;padding:8px;">${inputs[0]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${inputs[1]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${inputs[2]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:right;">${(parseInt(inputs[3]?.value)||0).toLocaleString('id-ID')}</td><td style="border:1px solid #000;padding:8px;text-align:right;">${(parseInt(inputs[4]?.value)||0).toLocaleString('id-ID')}</td></tr>`;
+                    const menu = inputs[0]?.value || '-';
+                    const vol = inputs[1]?.value || '-';
+                    const harga = parseInt(inputs[2]?.value) || 0;
+                    const jumlah = parseInt(inputs[3]?.value) || 0;
+                    makananRows.push(`
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">${idx + 1}</td>
+                            <td style="border: 1px solid #000; padding: 8px;">${menu}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">${vol}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${harga.toLocaleString('id-ID')}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${jumlah.toLocaleString('id-ID')}</td>
+                        </tr>
+                    `);
                 });
-                html += '</tbody>';
-                rincianTableHtml = `<table style="width:100%;border-collapse:collapse;border:1px solid #000;margin:20px auto;">${html}</table>`;
             }
-        } else if (jenisKegiatan === 'barang') {
-            const rows = document.querySelectorAll('#barangList .barang-row');
-            if (rows.length > 0) {
-                let html = '<tbody><tr style="background:#f0f0f0;font-weight:bold;"><td style="border:1px solid #000;padding:8px;width:40px;">No</td><td style="border:1px solid #000;padding:8px;">Nama Barang</td><td style="border:1px solid #000;padding:8px;">Spesifikasi</td><td style="border:1px solid #000;padding:8px;width:80px;">Volume</td><td style="border:1px solid #000;padding:8px;width:80px;">Satuan</td><td style="border:1px solid #000;padding:8px;width:120px;">Harga Satuan</td><td style="border:1px solid #000;padding:8px;width:120px;">Jumlah</td></tr>';
-                rows.forEach((row, i) => {
+            rincianTableHtml = `
+                <div style="margin: 20px auto; width: 95%;">
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                        <thead>
+                            <tr style="background: #f0f0f0;">
+                                <th style="border: 1px solid #000; padding: 8px; width: 40px;">No</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Menu Makanan/Snack</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 100px;">Volume</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 120px;">Harga Satuan</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 120px;">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${makananRows.length > 0 ? makananRows.join('') : '<tr><td colspan="5" style="padding: 20px; text-align: center;">Belum ada rincian menu</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>`;
+        } else if (jenisKegiatanPesanan === 'barang') {
+            const barangRows = [];
+            const barangList = document.querySelectorAll('#barangList .barang-row');
+            if (barangList.length > 0) {
+                barangList.forEach((row, idx) => {
                     const inputs = row.querySelectorAll('input');
-                    html += `<tr><td style="border:1px solid #000;padding:8px;text-align:center;">${i+1}</td><td style="border:1px solid #000;padding:8px;">${inputs[0]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;">${inputs[1]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${inputs[2]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${inputs[3]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:right;">${(parseInt(inputs[4]?.value)||0).toLocaleString('id-ID')}</td><td style="border:1px solid #000;padding:8px;text-align:right;">${(parseInt(inputs[5]?.value)||0).toLocaleString('id-ID')}</td></tr>`;
+                    const nama = inputs[0]?.value || '-';
+                    const spek = inputs[1]?.value || '-';
+                    const vol = inputs[2]?.value || '-';
+                    const harga = parseInt(inputs[3]?.value) || 0;
+                    const jumlah = parseInt(inputs[4]?.value) || 0;
+                    barangRows.push(`
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">${idx + 1}</td>
+                            <td style="border: 1px solid #000; padding: 8px;">${nama}</td>
+                            <td style="border: 1px solid #000; padding: 8px;">${spek}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">${vol}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${harga.toLocaleString('id-ID')}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${jumlah.toLocaleString('id-ID')}</td>
+                        </tr>
+                    `);
                 });
-                html += '</tbody>';
-                rincianTableHtml = `<table style="width:100%;border-collapse:collapse;border:1px solid #000;margin:20px auto;">${html}</table>`;
             }
-        } else if (jenisKegiatan === 'jasa') {
-            const rows = document.querySelectorAll('#jasaList .jasa-row');
-            if (rows.length > 0) {
-                let html = '<tbody><tr style="background:#f0f0f0;font-weight:bold;"><td style="border:1px solid #000;padding:8px;width:40px;">No</td><td style="border:1px solid #000;padding:8px;">Jenis Pekerjaan</td><td style="border:1px solid #000;padding:8px;width:80px;">Volume</td><td style="border:1px solid #000;padding:8px;width:80px;">Satuan</td><td style="border:1px solid #000;padding:8px;width:120px;">Harga Satuan</td><td style="border:1px solid #000;padding:8px;width:120px;">Jumlah</td></tr>';
-                rows.forEach((row, i) => {
+            rincianTableHtml = `
+                <div style="margin: 20px auto; width: 95%;">
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                        <thead>
+                            <tr style="background: #f0f0f0;">
+                                <th style="border: 1px solid #000; padding: 8px; width: 40px;">No</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Nama Barang</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Spesifikasi</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 80px;">Volume</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 120px;">Harga Satuan</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 120px;">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${barangRows.length > 0 ? barangRows.join('') : '<tr><td colspan="6" style="padding: 20px; text-align: center;">Belum ada rincian barang</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>`;
+        } else if (jenisKegiatanPesanan === 'jasa') {
+            const jasaRows = [];
+            const jasaList = document.querySelectorAll('#jasaList .jasa-row');
+            if (jasaList.length > 0) {
+                jasaList.forEach((row, idx) => {
                     const inputs = row.querySelectorAll('input');
-                    html += `<tr><td style="border:1px solid #000;padding:8px;text-align:center;">${i+1}</td><td style="border:1px solid #000;padding:8px;">${inputs[0]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${inputs[1]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${inputs[2]?.value||'-'}</td><td style="border:1px solid #000;padding:8px;text-align:right;">${(parseInt(inputs[3]?.value)||0).toLocaleString('id-ID')}</td><td style="border:1px solid #000;padding:8px;text-align:right;">${(parseInt(inputs[4]?.value)||0).toLocaleString('id-ID')}</td></tr>`;
+                    const jenis = inputs[0]?.value || '-';
+                    const vol = inputs[1]?.value || '-';
+                    const harga = parseInt(inputs[2]?.value) || 0;
+                    const jumlah = parseInt(inputs[3]?.value) || 0;
+                    const ket = inputs[4]?.value || '-';
+                    jasaRows.push(`
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">${idx + 1}</td>
+                            <td style="border: 1px solid #000; padding: 8px;">${jenis}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">${vol}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${harga.toLocaleString('id-ID')}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${jumlah.toLocaleString('id-ID')}</td>
+                            <td style="border: 1px solid #000; padding: 8px;">${ket}</td>
+                        </tr>
+                    `);
                 });
-                html += '</tbody>';
-                rincianTableHtml = `<table style="width:100%;border-collapse:collapse;border:1px solid #000;margin:20px auto;">${html}</table>`;
             }
+            rincianTableHtml = `
+                <div style="margin: 20px auto; width: 95%;">
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                        <thead>
+                            <tr style="background: #f0f0f0;">
+                                <th style="border: 1px solid #000; padding: 8px; width: 40px;">No</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Jenis Jasa</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 100px;">Volume</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 120px;">Harga Satuan</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 120px;">Jumlah</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${jasaRows.length > 0 ? jasaRows.join('') : '<tr><td colspan="6" style="padding: 20px; text-align: center;">Belum ada rincian jasa</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>`;
+        } else {
+            // Default simple table
+            rincianTableHtml = `
+                <div style="margin: 20px auto; width: 90%;">
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                        <tr style="background: #f0f0f0;">
+                            <th style="border: 1px solid #000; padding: 8px;">No</th>
+                            <th style="border: 1px solid #000; padding: 8px;">Uraian Barang/Kebutuhan</th>
+                            <th style="border: 1px solid #000; padding: 8px;">Jumlah</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">1</td>
+                            <td style="border: 1px solid #000; padding: 8px;">${cleanUraian}</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">${jumlahPesanan || '1'}</td>
+                        </tr>
+                    </table>
+                </div>`;
         }
 
         return `
-            <div style="font-family: 'Times New Roman', serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
+            <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
                 ${schoolKop}
                 <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
                     <p>${schoolData.kecamatan}, ${datePesanInfo.fullDate}</p>
@@ -54,40 +155,32 @@
                     <div>Sifat</div><div>:</div><div>Biasa</div>
                     <div>Lampiran</div><div>:</div><div>-</div>
                     <div>Perihal</div><div>:</div><div style="font-weight: bold; text-decoration: underline;">${perihal}</div>
+
                     <div style="grid-column: 3; margin-top: 10px;">
                         <strong>Kepada Yth,</strong><br>
                         <strong>${vendorName}</strong><br>
                         di Tempat
                     </div>
                 </div>
+
                 <p>Assalamualaikum Wr, Wb.</p>
                 <p style="text-indent: 40px; text-align: justify; line-height: 1.5;">
-                    Dengan Hormat, sehubungan dengan akan dilaksanakannya kegiatan <b>${cleanUraian}</b> di ${schoolData.name}, maka kami bermaksud memesan ${jmlPesanan} kepada perusahaan yang Bapak/Ibu pimpin.
+                    Dengan Hormat, Bersamaan ini kami sampaikan bahwa sehubungan dengan akan dilaksanakannya kegiatan pada tanggal <b>${dateKegiatanInfo.fullDate}</b>, Kami bermaksud ingin memesan kebutuhan dengan rincian sebagai berikut:
                 </p>
-                <p style="text-indent: 40px; text-align: justify; line-height: 1.5;">
-                    Adapun kegiatan tersebut akan dilaksanakan pada:
-                </p>
-                <div style="margin: 20px 40px; line-height: 2;">
-                    <div style="display: grid; grid-template-columns: 100px 20px 1fr;">
-                        <div>Hari/Tanggal</div><div>:</div><div>${dateKegiatanInfo.fullDate}</div>
-                        <div>Waktu</div><div>:</div><div>${waktuKegiatan}</div>
-                        <div>Tempat</div><div>:</div><div>${tempatKegiatan}</div>
-                    </div>
-                </div>
-                <p style="text-indent: 40px; margin-bottom: 20px;">Adapun rincian pesanan adalah sebagai berikut:</p>
+
                 ${rincianTableHtml}
-                <p style="text-indent: 40px; margin-bottom: 40px;">Demikian surat pesanan ini kami sampaikan. Atas perhatian dan kerjasamanya kami ucapkan terima kasih.</p>
-                <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
+
+                <p style="text-indent: 40px; margin-bottom: 40px;">Demikian surat pesanan ini kami sampaikan, Atas perhatiannya dan kerjasamanya kami ucapkan terimakasih.</p>
+
+                <div style="display: flex; justify-content: flex-end; padding-right: 50px;">
                     <div style="text-align: center;">
-                        <p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah,</p>
-                        <p style="font-weight: bold; text-decoration: underline; margin: 0;">${schoolData.principal}</p>
-                        <p style="margin: 0;">NIP. ${schoolData.principalNip}</p>
+                        <p>Mengetahui,</p>
+                        <p style="font-weight: bold; margin-bottom: 80px;">Kepala Sekolah</p>
+                        <p style="font-weight: bold; text-decoration: underline; margin:0;">${schoolData.principal}</p>
+                        <p style="margin:0;">NIP. ${schoolData.principalNip}</p>
                     </div>
                 </div>
-                <div style="margin-top: 40px; font-size: 11px;">
-                    <p style="text-decoration: underline; margin:0;">Tembusan:</p>
-                    <div style="white-space: pre-line; margin:0; padding-left: 20px;">${tembusan||"1. Pengawas Pembina\n2. K3S Kecamatan"}</div>
-                </div>
-            </div>`;
+            </div>
+        `;
     }
 </script>

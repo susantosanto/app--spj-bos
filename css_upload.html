@@ -1,0 +1,223 @@
+<style>
+    /* ========================================
+       UNGGAH BKU - ULTRA PREMIUM 2026
+       ======================================== */
+    #upload-view {
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        min-height: 100%;
+    }
+
+    .upload-container-premium {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .upload-hero {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .upload-hero h2 {
+        font-size: 36px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #475569 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 12px;
+        letter-spacing: -1.5px;
+    }
+
+    .upload-hero p {
+        font-size: 16px;
+        color: #64748b;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .upload-methods-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    .upload-method-card {
+        background: #ffffff;
+        border-radius: 28px;
+        padding: 48px 36px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upload-method-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, var(--card-gradient) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.6s;
+        z-index: 0;
+    }
+
+    .upload-method-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--card-color), var(--card-color-secondary));
+        border-radius: 4px 4px 0 0;
+        transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1;
+    }
+
+    .upload-method-card:hover::before { opacity: 1; }
+    .upload-method-card:hover::after { width: 80%; }
+
+    .upload-method-card:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 60px var(--card-glow);
+        border-color: var(--card-color);
+    }
+
+    .upload-method-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        z-index: 2;
+        background: var(--card-bg);
+        color: var(--card-color);
+        box-shadow: 0 8px 24px var(--card-shadow);
+    }
+
+    .upload-method-card:hover .upload-method-icon {
+        transform: scale(1.15) rotate(-5deg);
+        box-shadow: 0 16px 40px var(--card-shadow);
+    }
+
+    .upload-method-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 10px;
+        transition: color 0.4s;
+        position: relative;
+        z-index: 2;
+    }
+
+    .upload-method-card:hover .upload-method-title { color: var(--card-color); }
+    .upload-method-desc { font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 20px; position: relative; z-index: 2; }
+
+    .upload-method-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 0, 0, 0.04);
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+        transition: all 0.4s;
+        position: relative;
+        z-index: 2;
+    }
+
+    .upload-method-card:hover .upload-method-badge {
+        background: var(--card-color);
+        color: white;
+        box-shadow: 0 4px 12px var(--card-shadow);
+    }
+
+    .upload-method-card.drive {
+        --card-bg: linear-gradient(135deg, #eff6ff, #dbeafe);
+        --card-color: #3b82f6;
+        --card-color-secondary: #2563eb;
+        --card-gradient: rgba(59, 130, 246, 0.12);
+        --card-shadow: rgba(59, 130, 246, 0.3);
+        --card-glow: rgba(59, 130, 246, 0.25);
+    }
+
+    .upload-method-card.local {
+        --card-bg: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        --card-color: #22c55e;
+        --card-color-secondary: #16a34a;
+        --card-gradient: rgba(34, 197, 94, 0.12);
+        --card-shadow: rgba(34, 197, 94, 0.3);
+        --card-glow: rgba(34, 197, 94, 0.25);
+    }
+
+    .upload-info-section {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 32px;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .upload-info-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 16px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 20px;
+    }
+
+    .upload-info-title i { color: #3b82f6; }
+
+    .upload-info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .upload-info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        border: 1px solid rgba(226, 232, 240, 0.5);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .upload-info-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        border-color: #3b82f6;
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    }
+
+    .upload-info-item i { color: #3b82f6; flex-shrink: 0; margin-top: 2px; }
+    .upload-info-item h4 { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+    .upload-info-item p { font-size: 11px; color: #64748b; line-height: 1.5; }
+
+    @media (max-width: 768px) {
+        .upload-methods-grid { grid-template-columns: 1fr; }
+        .upload-info-grid { grid-template-columns: 1fr; }
+        .upload-hero h2 { font-size: 28px; }
+    }
+</style>

@@ -1,45 +1,98 @@
 <script>
-    // --- BERITA ACARA TEMPLATE ---
-    function getBeritaAcaraHtml(schoolData, schoolKop, vendorName, uraian, jumlah, tanggal, dateInfo) {
-        const nomorSurat = document.getElementById('custNomorSurat')?.value || "020/SD-BOS/2025";
-        const cleanUraian = uraian.replace(/^(Belanja )?Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "").replace(/^Konsumsi \((Makan & Snack|Makan|Snack)\) /i, "");
-        
+    // --- BERITA ACARA SERAH TERIMA TEMPLATE ---
+    function getBeritaAcaraHtml(schoolData, schoolKop, vendorName, uraian, jumlah, tanggal, dateInfo, vendorAddress, nomorSurat, terbilangText) {
+        // For BA, show the full uraian including "Makan & Snack" - DON'T clean it
+        const displayUraian = uraian;
+
         return `
-            <div style="font-family: 'Times New Roman', serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
+            <div style="font-family: 'Times New Roman', Times, serif; color: #000; padding: 10px 40px; width: 100%; box-sizing: border-box;">
                 ${schoolKop}
-                <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline;">BERITA ACARA SERAH TERIMA</div>
-                <div style="text-align: center; margin-bottom: 20px;">Nomor: ${nomorSurat}</div>
-                
-                <p style="text-align: justify; line-height: 1.5;">Pada hari ini ${dateInfo.dayName} tanggal ${dateInfo.fullDate}, bertempat di ${schoolData.name}, telah dilaksanakan serah terima ${cleanUraian} dengan nilai Rp ${jumlah.toLocaleString('id-ID')} (${terbilang(jumlah)} Rupiah) dari:</p>
-                
-                <table style="width: 100%; margin: 20px 0;">
-                    <tr><td style="width: 200px;">Nama</td><td>: ${vendorName || "........................"}</td></tr>
-                    <tr><td>Alamat</td><td>: ${document.getElementById('custVendorAddress')?.value || "........................"}</td></tr>
+
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h3 style="text-decoration: underline; margin: 0; font-size: 16px;">BERITA ACARA SERAH TERIMA BARANG/JASA</h3>
+                    <p style="margin: 5px 0 0 0;">Nomor: ${nomorSurat}</p>
+                </div>
+
+                <p style="text-align: justify; line-height: 1.6;">
+                    Pada hari ini <strong>${dateInfo.dayName}</strong> tanggal <strong>${dateInfo.fullDate}</strong>, kami yang bertanda tangan di bawah ini:
+                </p>
+
+                <table style="width: 100%; margin-bottom: 20px;">
+                    <tr>
+                        <td style="width: 30px; vertical-align: top;">1.</td>
+                        <td style="width: 100px; vertical-align: top;">Nama</td>
+                        <td style="vertical-align: top;">: <strong>${vendorName}</strong></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="vertical-align: top;">Alamat</td>
+                        <td style="vertical-align: top;">: ${vendorAddress}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2" style="padding-top: 5px;">Selanjutnya disebut <strong>PIHAK PERTAMA</strong></td>
+                    </tr>
+                    <tr><td colspan="3" style="height: 15px;"></td></tr>
+                    <tr>
+                        <td style="width: 30px; vertical-align: top;">2.</td>
+                        <td style="width: 100px; vertical-align: top;">Nama</td>
+                        <td style="vertical-align: top;">: <strong>${schoolData.principal}</strong></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="vertical-align: top;">NIP</td>
+                        <td style="vertical-align: top;">: ${schoolData.principalNip}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="vertical-align: top;">Jabatan</td>
+                        <td style="vertical-align: top;">: Kepala Sekolah ${schoolData.name}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2" style="padding-top: 5px;">Selanjutnya disebut <strong>PIHAK KEDUA</strong></td>
+                    </tr>
                 </table>
-                
-                <p style="text-align: justify; line-height: 1.5;">Kepada:</p>
-                
-                <table style="width: 100%; margin: 20px 0;">
-                    <tr><td style="width: 200px;">Nama</td><td>: ${schoolData.treasurer}</td></tr>
-                    <tr><td>NIP</td><td>: ${schoolData.treasurerNip}</td></tr>
-                    <tr><td>Jabatan</td><td>: Bendahara ${schoolData.name}</td></tr>
-                </table>
-                
-                <p style="text-align: justify; line-height: 1.5;">Demikian berita acara ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
-                
-                <div style="display: flex; justify-content: space-between; margin-top: 40px;">
-                    <div style="text-align: center; min-width: 200px;">
-                        <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${dateInfo.fullDate}</p>
-                        <p style="font-weight: bold; margin-bottom: 80px;">Yang Menyerahkan,</p>
-                        <p style="font-weight: bold; text-decoration: underline; margin: 0;">${vendorName || "........................"}</p>
+
+                <p style="text-align: justify; line-height: 1.6;">
+                    PIHAK PERTAMA menyerahkan barang/jasa kepada PIHAK KEDUA, dan PIHAK KEDUA menerima barang/jasa dari PIHAK PERTAMA berupa:
+                </p>
+
+                <div style="border: 1px solid #000; padding: 15px; margin: 10px 0;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="width: 120px; font-weight: bold;">Uraian Barang</td>
+                            <td>: ${displayUraian}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Nilai Barang</td>
+                            <td>: Rp ${jumlah.toLocaleString('id-ID')}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Terbilang</td>
+                            <td style="font-style: italic;">: ${terbilangText}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <p style="text-align: justify; line-height: 1.6; margin-bottom: 40px;">
+                    Demikian Berita Acara Serah Terima ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.
+                </p>
+
+                <div style="display: flex; justify-content: space-between; text-align: center;">
+                    <div style="width: 200px;">
+                        <p>PIHAK PERTAMA</p>
+                        <br><br><br><br>
+                        <p style="font-weight: bold; text-decoration: underline;">${vendorName}</p>
                     </div>
-                    <div style="text-align: center; min-width: 200px;">
-                        <p style="margin-bottom: 5px;">${schoolData.kecamatan}, ${dateInfo.fullDate}</p>
-                        <p style="font-weight: bold; margin-bottom: 80px;">Yang Menerima,</p>
-                        <p style="font-weight: bold; text-decoration: underline; margin: 0;">${schoolData.treasurer}</p>
-                        <p style="margin: 0;">NIP. ${schoolData.treasurerNip}</p>
+                    <div style="width: 200px;">
+                        <p>PIHAK KEDUA</p>
+                        <br><br><br><br>
+                        <p style="font-weight: bold; text-decoration: underline;">${schoolData.principal}</p>
+                        <p>NIP. ${schoolData.principalNip}</p>
                     </div>
                 </div>
-            </div>`;
+            </div>
+        `;
     }
 </script>

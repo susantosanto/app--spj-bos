@@ -1,15 +1,9 @@
 <script>
-            const confirmOverlay = document.getElementById('confirmOverlay');
-            confirmOverlay.style.display = 'none';
-            if (confirmed && confirmCallback) {
-                confirmCallback();
-            }
-            confirmCallback = null; // Reset callback
-        }
+    // ═══ GLOBAL STATE ════════════════════════════════
+    window.allTransactions = [];
 
-
-        // Action: Save School Data
-        function saveData() {
+    // Action: Save School Data
+    function saveData() {
             const formData = {
                 schoolName: document.getElementById('schoolName').value,
                 schoolAddress: document.getElementById('schoolAddress').value,
@@ -33,17 +27,15 @@
             localStorage.setItem('spj_school_data', JSON.stringify(formData));
 
             setTimeout(() => {
-                showToast("Data Berhasil Disimpan di Browser!");
+                window.showToast("Data Berhasil Disimpan di Browser!");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 lucide.createIcons();
             }, 500);
         }
 
-        let allTransactions = [];
-
         function renderTransactions(data) {
-            allTransactions = data;
+            window.allTransactions = data;
             const tbody = document.getElementById('transactionTbody');
             const container = document.getElementById('transactionTableContainer');
             const emptyState = document.getElementById('emptyState');
@@ -58,22 +50,46 @@
             emptyState.style.display = 'none';
 
             tbody.innerHTML = data.map(tx => `
-                <tr class="hover-row" style="border-bottom: 1px solid #f1f5f9;">
+                <tr class="hover-row" style="border-bottom: 1px solid #f1f5f9;" data-tx-id="${tx.id}">
                     <td style="padding: 16px; font-size: 14px;">${tx.tanggal}</td>
                     <td style="padding: 16px; font-size: 14px;"><span style="background: #eff6ff; color: #2563eb; padding: 4px 8px; border-radius: 4px; font-weight: 600;">${tx.noBukti}</span></td>
                     <td style="padding: 16px; font-size: 14px; max-width: 300px;">${tx.uraian}</td>
                     <td style="padding: 16px; font-size: 14px; font-weight: 600;">Rp ${tx.pengeluaran.toLocaleString('id-ID')}</td>
                     <td style="padding: 16px; display: flex; gap: 8px;">
-                        <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="generateSpj('${tx.id}')" title="Cetak">
+                        <button class="btn-action-print" data-tx-id="${tx.id}" title="Cetak">
                             <i data-lucide="printer" size="14"></i>
                         </button>
-                        <button class="btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="removeTransaction('${tx.id}')" title="Hapus">
+                        <button class="btn-action-delete" data-tx-id="${tx.id}" title="Hapus">
                             <i data-lucide="trash-2" size="14"></i>
                         </button>
                     </td>
                 </tr>
             `).join('');
             lucide.createIcons();
+
+            // Attach event listeners after rendering
+            attachTransactionListeners();
+        }
+
+        function attachTransactionListeners() {
+            // Remove old listeners first (optional - prevents duplicates)
+            document.querySelectorAll('.btn-action-print').forEach(btn => {
+                btn.onclick = null;
+                btn.onclick = function() {
+                    const txId = this.getAttribute('data-tx-id');
+                    console.log('Print button clicked:', txId);
+                    window.generateSpj(txId);
+                };
+            });
+
+            document.querySelectorAll('.btn-action-delete').forEach(btn => {
+                btn.onclick = null;
+                btn.onclick = function() {
+                    const txId = this.getAttribute('data-tx-id');
+                    console.log('Delete button clicked:', txId);
+                    window.removeTransaction(txId);
+                };
+            });
         }
 
         // --- Manual Transaction Logic ---
@@ -102,7 +118,7 @@
             const jumlah = parseFloat(document.getElementById('addJumlah').value);
 
             if (!dateVal || !noBukti || !uraian || !jumlah) {
-                showToast("Mohon lengkapi Tanggal, No Bukti, Uraian, dan Jumlah.", "error");
+                window.showToast("Mohon lengkapi Tanggal, No Bukti, Uraian, dan Jumlah.", "error");
                 return;
             }
 
@@ -128,25 +144,25 @@
                 vendorStyle: vendorStyle
             };
 
-            allTransactions.push(newTx);
-            renderTransactions(allTransactions);
+            window.allTransactions.push(newTx);
+            renderTransactions(window.allTransactions);
             closeAddModal();
 
             // Show feedback
-            document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi (Termasuk manual)`;
+            document.getElementById('extractionInfo').innerText = `Total ${window.allTransactions.length} transaksi (Termasuk manual)`;
         }
 
         function removeTransaction(id) {
-            showConfirm("Apakah Anda yakin ingin menghapus transaksi ini?", () => {
-                allTransactions = allTransactions.filter(tx => tx.id !== id);
-                renderTransactions(allTransactions);
-                document.getElementById('extractionInfo').innerText = `Total ${allTransactions.length} transaksi`;
-                showToast("Transaksi berhasil dihapus");
+            window.showConfirm("Apakah Anda yakin ingin menghapus transaksi ini?", () => {
+                window.allTransactions = window.allTransactions.filter(tx => tx.id !== id);
+                renderTransactions(window.allTransactions);
+                document.getElementById('extractionInfo').innerText = `Total ${window.allTransactions.length} transaksi`;
+                window.showToast("Transaksi berhasil dihapus");
             });
         }
 
         function generateSpj(txId) {
-            const tx = allTransactions.find(t => t.id === txId);
+            const tx = window.allTransactions.find(t => t.id === txId);
             if (!tx) return;
 
             // Pre-fill the customizer - (Redundant school fields removed from UI)
@@ -189,4 +205,19 @@
             lucide.createIcons();
         }
 
-</script>
+        // ═══ EXPOSE FUNCTIONS TO GLOBAL SCOPE ════════════════════════
+        window.renderTransactions = renderTransactions;
+        window.attachTransactionListeners = attachTransactionListeners;
+        window.openAddModal = openAddModal;
+        window.closeAddModal = closeAddModal;
+        window.saveManualTransaction = saveManualTransaction;
+        window.removeTransaction = removeTransaction;
+        window.generateSpj = generateSpj;
+
+        console.log('✅ js_transactions loaded - functions:', {
+            renderTransactions: typeof window.renderTransactions,
+            generateSpj: typeof window.generateSpj,
+            removeTransaction: typeof window.removeTransaction,
+            allTransactions: Array.isArray(window.allTransactions)
+        });
+    </script>

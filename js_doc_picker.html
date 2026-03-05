@@ -20,7 +20,10 @@
         ];
 
         const grid = document.getElementById('docPickerGrid');
-        if (!grid) return;
+        if (!grid) {
+            console.error('docPickerGrid not found!');
+            return;
+        }
 
         grid.innerHTML = docTypes.map(doc => `
             <div class="doc-type-card" onclick="selectDocType('${doc.id}')">
@@ -34,6 +37,7 @@
             </div>
         `).join('');
 
+        console.log('Doc picker initialized with', docTypes.length, 'documents');
         lucide.createIcons();
     }
 
@@ -129,7 +133,7 @@
             showFields(['fg-nomor', 'fg-perihal', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah-pesanan', 'fg-jenis-kegiatan-pesanan', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan']);
             if (typeof updateRincianSections === 'function') updateRincianSections();
         } else if (docType === 'berita_acara') {
-            showFields(['fg-nomor', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address']);
+            showFields(['fg-nomor', 'fg-vendor-name', 'fg-uraian', 'fg-jumlah', 'fg-tanggal', 'fg-vendor-address', 'fg-stamp-upload']);
         } else if (docType === 'undangan') {
             showFields(['fg-nomor', 'fg-perihal', 'fg-uraian', 'fg-hari', 'fg-tanggal-pesan', 'fg-tanggal-kegiatan', 'fg-tempat', 'fg-waktu-kegiatan', 'fg-tembusan']);
         } else if (docType === 'notulen') {
@@ -148,7 +152,7 @@
             showFields(['fg-uraian', 'fg-tanggal', 'fg-tempat', 'fg-jumlah']);
             if (rencanaSection) rencanaSection.style.display = 'block';
         } else if (docType === 'spk') {
-            showFields(['fg-nomor', 'fg-tanggal', 'fg-uraian', 'fg-jumlah']);
+            showFields(['fg-nomor', 'fg-tanggal', 'fg-uraian', 'fg-jumlah', 'fg-stamp-upload']);
             if (spkSection) spkSection.style.display = 'block';
             if (notaSection) notaSection.style.display = 'block';
         } else if (docType === 'spk_guru_honorer') {
@@ -176,4 +180,14 @@
 
         updatePreview();
     }
+
+    // ═══ EXPOSE FUNCTIONS TO GLOBAL SCOPE ════════════════════════
+    window.initDocPicker = initDocPicker;
+    window.selectDocType = selectDocType;
+    window.handleDocTypeChange = handleDocTypeChange;
+
+    console.log('✅ js_doc_picker loaded - functions:', {
+        initDocPicker: typeof window.initDocPicker,
+        selectDocType: typeof window.selectDocType
+    });
 </script>

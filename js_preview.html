@@ -3,16 +3,42 @@
 
     function openPreview() {
         const modal = document.getElementById('previewModal');
+        if (!modal) {
+            console.error('❌ previewModal NOT FOUND!');
+            return;
+        }
+
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
 
-        // Initialize Doc Picker list
-        initDocPicker();
+        // Use requestAnimationFrame to ensure modal is fully rendered
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                console.log('=== INITIALIZING DOC PICKER ===');
 
-        // Switch to the first tab by default
-        switchPreviewTab('tab-select');
+                const grid = document.getElementById('docPickerGrid');
+                console.log('docPickerGrid:', grid);
+                console.log('grid children:', grid ? grid.children.length : 'N/A');
 
-        lucide.createIcons();
+                if (typeof initDocPicker === 'function') {
+                    initDocPicker();
+                    console.log('✅ initDocPicker completed');
+                }
+
+                if (typeof switchPreviewTab === 'function') {
+                    switchPreviewTab('tab-select');
+                    console.log('✅ switchPreviewTab completed');
+                }
+
+                if (typeof updatePreview === 'function') {
+                    updatePreview();
+                    console.log('✅ updatePreview completed');
+                }
+
+                lucide.createIcons();
+                console.log('✅ lucide.createIcons completed');
+            });
+        });
     }
 
     function closePreview() {
@@ -166,6 +192,8 @@
         const waktuKegiatan = document.getElementById('custWaktuKegiatan').value || "08.00 sd Selesai";
         const tembusan = document.getElementById('custTembusan').value || "";
         const custTempatTanggalKwitansi = document.getElementById('custTempatTanggalKwitansi')?.value || "";
+        const jenisKegiatanPesanan = document.getElementById('custJenisKegiatanPesanan')?.value || "";
+        const jumlahPesanan = document.getElementById('custJumlahPesanan')?.value || "1";
 
         let html = '';
 
@@ -245,19 +273,20 @@
             } else if (vendorStyle === 'toko-prima') {
                 html = getNotaTokoPrimaHtml(schoolData, vendorAddress, tanggal, hwAttr, itemsHtml, jumlah);
             } else if (vendorStyle === 'standard') {
-                html = getNotaStandardHtml(schoolData, vendorName, vendorAddress, tanggal, hwAttr, jumlah, uraian);
+                html = getNotaStandardHtml(schoolData, vendorName, vendorAddress, tanggal, hwAttr, jumlah, uraian, itemsHtml);
             } else if (vendorStyle === 'plain') {
-                html = getNotaPlainHtml(schoolData, vendorAddress, tanggal, dateInfo, hwAttr, jumlah, uraian, terbilangText);
+                html = getNotaPlainHtml(schoolData, vendorAddress, tanggal, dateInfo, hwAttr, jumlah, uraian, terbilangText, itemsHtml);
             } else if (vendorStyle.startsWith('custom_')) {
                 html = getNotaCustomHtml(vendorStyle, vendorName, vendorAddress, tanggal, schoolData, nomorSurat, jumlah, terbilangText, hwAttr);
             }
         } else if (docType === 'pesanan') {
-            html = getPesananHtml(schoolData, schoolKop, uraian, cleanUraian, tanggalPesan, tanggalKegiatan, datePesanInfo, dateKegiatanInfo, perihal, tempatKegiatan, waktuKegiatan, tembusan);
+            html = getPesananHtml(schoolData, schoolKop, uraian, cleanUraian, tanggalPesan, tanggalKegiatan, datePesanInfo, dateKegiatanInfo, perihal, tempatKegiatan, waktuKegiatan, tembusan, vendorName, nomorSurat, jenisKegiatanPesanan, jumlahPesanan);
         } else if (docType === 'kwitansi') {
             html = getKwitansiHtml(schoolData, nomorSurat, uraian, terbilangText, jumlah, vendorName, custTempatTanggalKwitansi, stampBase64);
         } else if (docType === 'berita_acara') {
-            html = getBeritaAcaraHtml(schoolData, schoolKop, vendorName, uraian, jumlah, tanggal, dateInfo);
+            html = getBeritaAcaraHtml(schoolData, schoolKop, vendorName, uraian, jumlah, tanggal, dateInfo, vendorAddress, nomorSurat, terbilangText);
         } else if (docType === 'undangan') {
+            const hari = document.getElementById('custHari')?.value || dateKegiatanInfo.dayName;
             html = getUndanganHtml(schoolData, schoolKop, nomorSurat, perihal, cleanUraian, tanggalPesan, datePesanInfo, tanggalKegiatan, dateKegiatanInfo, hari, tempatKegiatan, waktuKegiatan, tembusan);
         } else if (docType === 'notulen') {
             html = getNotulenHtml(uraian, dateInfo, schoolData, schoolKop);

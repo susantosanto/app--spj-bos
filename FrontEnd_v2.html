@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Si-BOS | Sistem Administrasi</title>
+    <title>SPJ Flow | School Financial Management</title>
 
     <!-- Google Fonts: Outfit (UI) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +28,8 @@
     <?!= include('css_modal') ?>
     <?!= include('css_print') ?>
     <?!= include('css_toast') ?>
+    <?!= include('css_upload') ?>
+    <?!= include('css_settings') ?>
 </head>
 
 <body>
@@ -45,6 +47,7 @@
         <?!= include('view_dashboard') ?>
         <?!= include('view_upload') ?>
         <?!= include('view_manage') ?>
+        <?!= include('view_excel_guide') ?>
         <?!= include('view_designer') ?>
         <?!= include('view_settings') ?>
 
@@ -58,11 +61,12 @@
     </div>
 
     <!-- ═══ JAVASCRIPT MODULES ════════════════════════ -->
-    <!-- Urutan PENTING: utils → state → core → fitur → templates → preview -->
+    <!-- Urutan PENTING: utils → state → core → UI → transactions → drive → templates → preview -->
     <?!= include('js_utils') ?>
     <?!= include('js_state') ?>
     <?!= include('js_core') ?>
     <?!= include('js_school_data') ?>
+    <?!= include('js_ui') ?>
     <?!= include('js_transactions') ?>
     <?!= include('js_drive') ?>
     <?!= include('js_form_rows') ?>

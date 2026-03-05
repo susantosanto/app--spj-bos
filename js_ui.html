@@ -1,6 +1,29 @@
 <script>
-    // --- UI/UX Interactive Logic ---
+    // UI/UX Interactive Logic
     lucide.createIcons();
+
+    // Load settings from localStorage
+    function loadSettings() {
+        const savedSchoolData = JSON.parse(localStorage.getItem('spj_school_data') || '{}');
+        if (savedSchoolData) {
+            const schoolNameEl = document.getElementById('schoolName');
+            if (schoolNameEl) schoolNameEl.value = savedSchoolData.schoolName || '';
+            const schoolAddressEl = document.getElementById('schoolAddress');
+            if (schoolAddressEl) schoolAddressEl.value = savedSchoolData.schoolAddress || '';
+            const npsnEl = document.getElementById('npsn');
+            if (npsnEl) npsnEl.value = savedSchoolData.npsn || '';
+            const kecamatanEl = document.getElementById('kecamatan');
+            if (kecamatanEl) kecamatanEl.value = savedSchoolData.kecamatan || '';
+            const principalNameEl = document.getElementById('principalName');
+            if (principalNameEl) principalNameEl.value = savedSchoolData.principalName || '';
+            const principalNipEl = document.getElementById('principalNip');
+            if (principalNipEl) principalNipEl.value = savedSchoolData.principalNip || '';
+            const treasurerNameEl = document.getElementById('treasurerName');
+            if (treasurerNameEl) treasurerNameEl.value = savedSchoolData.treasurerName || '';
+            const treasurerNipEl = document.getElementById('treasurerNip');
+            if (treasurerNipEl) treasurerNipEl.value = savedSchoolData.treasurerNip || '';
+        }
+    }
 
     window.addEventListener('load', () => {
         // Hide initial loader
@@ -128,39 +151,22 @@
         }, 500);
     }
 
-    function renderTransactions(data) {
-        allTransactions = data;
-        const tbody = document.getElementById('transactionTbody');
-        const container = document.getElementById('transactionTableContainer');
-        const emptyState = document.getElementById('emptyState');
+    // renderTransactions moved to js_transactions.html to avoid duplication
 
-        if (data.length === 0) {
-            container.style.display = 'none';
-            emptyState.style.display = 'block';
-            return;
-        }
+    // ═══ EXPOSE FUNCTIONS TO GLOBAL SCOPE ════════════════════════
+    window.showToast = showToast;
+    window.showConfirm = showConfirm;
+    window.showView = showView;
+    window.handleLogout = handleLogout;
+    window.startRealtimeClock = startRealtimeClock;
+    window.loadSettings = loadSettings;
 
-        container.style.display = 'block';
-        emptyState.style.display = 'none';
-
-        tbody.innerHTML = data.map(tx => `
-            <tr class="hover-row" style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 16px; font-size: 14px;">${tx.tanggal}</td>
-                <td style="padding: 16px; font-size: 14px;"><span style="background: #eff6ff; color: #2563eb; padding: 4px 8px; border-radius: 4px; font-weight: 600;">${tx.noBukti}</span></td>
-                <td style="padding: 16px; font-size: 14px; max-width: 300px;">${tx.uraian}</td>
-                <td style="padding: 16px; font-size: 14px; font-weight: 600;">Rp ${tx.pengeluaran.toLocaleString('id-ID')}</td>
-                <td style="padding: 16px; display: flex; gap: 8px;">
-                    <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="generateSpj('${tx.id}')" title="Cetak">
-                        <i data-lucide="printer" size="14"></i>
-                    </button>
-                    <button class="btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="removeTransaction('${tx.id}')" title="Hapus">
-                        <i data-lucide="trash-2" size="14"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
-        lucide.createIcons();
-    }
+    console.log('✅ js_ui loaded - functions:', {
+        showToast: typeof window.showToast,
+        showView: typeof window.showView,
+        startRealtimeClock: typeof window.startRealtimeClock,
+        loadSettings: typeof window.loadSettings
+    });
 </script>
 
 <style>

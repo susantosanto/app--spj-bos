@@ -23,9 +23,9 @@
 
                 if (response.success && response.files && response.files.length > 0) {
                     listDiv.innerHTML = response.files.map(file => `
-                        <div class="drive-file-item" onclick="processDriveFile('${file.id}', '${file.name}')">
+                        <div class="drive-file-item" onclick="processDriveFile('${file.id}', '${file.name.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
                             <div class="file-icon">
-                                <i data-lucide="${file.name.toLowerCase().endsWith('.pdf') ? 'file-text' : 'file-spreadsheet'}" size="24"></i>
+                                <i data-lucide="${file.name.toLowerCase().includes('.xlsx') || file.name.toLowerCase().includes('sheet') ? 'file-spreadsheet' : 'file-text'}" size="24"></i>
                             </div>
                             <div class="file-details">
                                 <div class="file-name">${file.name}</div>
@@ -40,7 +40,21 @@
                     listDiv.innerHTML = `
                         <div style="text-align: center; padding: 40px; color: var(--text-muted);">
                             <i data-lucide="search-x" size="48" style="margin-bottom: 10px; opacity: 0.3;"></i>
-                            <p>Tidak ditemukan file PDF dengan nama "BKU" di Drive Anda.</p>
+                            <p>Tidak ditemukan file Excel dengan kata "BKU" atau "ARKAS" di Drive Anda.</p>
+                            <p style="font-size: 12px; margin-top: 10px;">Pastikan file BKU Anda berformat Excel (.xlsx) atau Google Sheets.</p>
+                            <button class="btn-primary" style="margin: 20px auto; font-size: 12px;" onclick="closeDrivePicker()">Tutup</button>
+                        </div>
+                    `;
+                }
+                lucide.createIcons();
+            })
+            .withFailureHandler((error) => {
+                const listDiv = document.getElementById('driveFileList');
+                if (listDiv) {
+                    listDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #ef4444;">
+                            <i data-lucide="alert-circle" size="48" style="margin-bottom: 10px;"></i>
+                            <p style="color: #ef4444;">Terjadi kesalahan: ${error.message}</p>
                             <button class="btn-primary" style="margin: 20px auto; font-size: 12px;" onclick="closeDrivePicker()">Tutup</button>
                         </div>
                     `;
@@ -56,6 +70,10 @@
     }
 
     function processDriveFile(fileId, fileName) {
+        console.log('=== PROCESS DRIVE FILE ===');
+        console.log('File ID:', fileId);
+        console.log('File Name:', fileName);
+
         // Show loading in the modal
         const listDiv = document.getElementById('driveFileList');
         if (listDiv) {
@@ -64,6 +82,7 @@
                     <i data-lucide="loader-2" class="spin" size="48" style="margin-bottom: 20px;"></i>
                     <h4 style="font-weight: 800; color: #0f172a; font-size: 18px; margin-bottom: 8px;">Mengekstrak Data...</h4>
                     <p style="font-size: 14px; color: #64748b; line-height: 1.6;">Harap tunggu sebentar, sistem sedang memproses <br><span style="color: #2563eb; font-weight: 600;">${fileName}</span></p>
+                    <p style="font-size: 11px; color: #94a3b8; margin-top: 10px;">Jika lebih dari 30 detik, silakan refresh halaman</p>
                 </div>
             `;
         }
@@ -84,36 +103,66 @@
             lucide.createIcons();
         }
 
+        // Add timeout handler
+        const timeoutId = setTimeout(() => {
+            console.error('TIMEOUT: Process took too long (>60 seconds)');
+            if (driveCard) {
+                driveCard.innerHTML = originalContent;
+            }
+            lucide.createIcons();
+            showToast("Proses terlalu lama. Silakan coba lagi atau periksa koneksi internet.", "error");
+        }, 60000); // 60 second timeout
+
         google.script.run
             .withSuccessHandler((response) => {
+                clearTimeout(timeoutId); // Clear timeout
+                console.log('=== SUCCESS HANDLER ===');
+                console.log('Response:', response);
+
+                // Check if renderTransactions exists
+                if (typeof renderTransactions !== 'function') {
+                    console.error('renderTransactions is not defined!');
+                    showToast("Error: renderTransactions function not found. Refresh page!", "error");
+                    return;
+                }
+
                 closeDrivePicker(); // Close modal on success
                 if (driveCard) {
                     driveCard.innerHTML = originalContent;
                 }
                 lucide.createIcons();
 
-                if (response.success) {
+                if (response && response.success) {
                     if (response.data && response.data.length > 0) {
                         renderTransactions(response.data);
                         const info = document.getElementById('extractionInfo');
                         if (info) info.innerText = `Ditemukan ${response.data.length} transaksi dari Excel: ${fileName}`;
-                        showView('manage-view', document.querySelector('.nav-item[onclick*="manage-view"]'));
+
+                        // Switch to manage view
+                        const manageNavItem = document.querySelector('.nav-item[onclick*="manage-view"]');
+                        if (manageNavItem) {
+                            showView('manage-view', manageNavItem);
+                        }
                         showToast("Berhasil memproses " + response.data.length + " transaksi.");
                     } else {
                         showToast("File berhasil dibaca, namun tidak ditemukan data transaksi yang valid.", "warning");
                     }
                 } else {
-                    showToast("Gagal memproses file: " + (response.error || "Terjadi kesalahan sistem"), "error");
-                    console.error("Drive Processing Error:", response.error);
+                    const errorMsg = response ? (response.error || "Terjadi kesalahan sistem") : "Response kosong!";
+                    showToast("Gagal memproses file: " + errorMsg, "error");
+                    console.error("Drive Processing Error:", errorMsg);
                 }
             })
             .withFailureHandler((err) => {
+                clearTimeout(timeoutId); // Clear timeout
+                console.error('=== FAILURE HANDLER ===');
+                console.error('Error:', err);
+
                 if (driveCard) {
                     driveCard.innerHTML = originalContent;
                 }
                 lucide.createIcons();
-                showToast("Koneksi gagal atau sesi habis. Silakan coba lagi.", "error");
-                console.error("Script Run Failure:", err);
+                showToast("Koneksi gagal atau sesi habis: " + err.message, "error");
             })
             .processExcelByFileId(fileId);
     }

@@ -4,7 +4,7 @@
         <div class="preview-sidebar">
             <div class="preview-sidebar-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3 style="font-size: 18px; font-weight: 900; color: #0f172a;">Generator SPJ</h3>
+                    <h3 style="font-size: 18px; font-weight: 900; color: #0f172a;">Document Studio</h3>
                     <button onclick="closePreview()"
                         style="background: #f1f5f9; border: none; cursor: pointer; color: #64748b; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                         <i data-lucide="x" size="18"></i>
@@ -54,7 +54,7 @@
                         Sedang Mengedit:</div>
                     <div id="currentDocTitle" style="font-size: 14px; font-weight: 700; color: #1e3a8a;">
                         Kwitansi SPJ</div>
-                    <button onclick="switchPreviewTab('select')"
+                    <button onclick="switchPreviewTab('tab-form')"
                         style="background: none; border: none; color: #2563eb; font-size: 11px; font-weight: 600; cursor: pointer; padding: 0; margin-top: 4px;">Ganti
                         Jenis Dokumen &raquo;</button>
                 </div>
@@ -69,6 +69,9 @@
                 <?!= include('form_nota_items'); ?>
                 <?!= include('form_dokumentasi'); ?>
                 <?!= include('form_pesanan'); ?>
+                <?!= include('form_makanan'); ?>
+                <?!= include('form_barang'); ?>
+                <?!= include('form_jasa'); ?>
                 <?!= include('form_notulen'); ?>
                 <?!= include('form_attendance'); ?>
                 <?!= include('form_common_footer'); ?>

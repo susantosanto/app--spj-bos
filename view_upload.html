@@ -1,32 +1,151 @@
-<!-- View 1: Unggah BKU -->
+<!-- View 1: Unggah BKU - Ultra Modern 2026 -->
 <section id="upload-view" class="view-section">
-    <div class="header-center">
-        <h2>Mulai Dokumentasi SPJ</h2>
-        <p>Pilih file Buku Kas Umum (BKU) Anda untuk memulai ekstraksi transaksi otomatis.</p>
-    </div>
+    <div class="upload-container-premium">
+        <!-- Upload Hero -->
+        <div class="upload-hero">
+            <h2>Import Data BKU</h2>
+            <p>Pilih metode import untuk memulai ekstraksi transaksi otomatis ke dalam sistem SPJ Flow</p>
+        </div>
 
-    <div style="max-width: 600px; margin: 0 auto 60px;">
-        <div class="upload-container-premium">
-            <div class="upload-card-new" onclick="openDrivePicker()"
-                style="background: linear-gradient(135deg, #166534 0%, #22c55e 100%); padding: 80px 40px; border-radius: 32px; color: white; cursor: pointer; transition: all 0.4s ease; position: relative; overflow: hidden; box-shadow: 0 30px 60px -12px rgba(34, 197, 94, 0.4); text-align: center;">
-                <div
-                    style="position: absolute; top: -50px; right: -50px; width: 250px; height: 250px; background: rgba(255,255,255,0.1); border-radius: 50%;">
+        <!-- Upload Methods Grid -->
+        <div class="upload-methods-grid">
+            <!-- Google Drive Method -->
+            <div class="upload-method-card drive" onclick="openDrivePicker()">
+                <div class="upload-method-icon">
+                    <i data-lucide="hard-drive" size="40"></i>
                 </div>
-                <div class="upload-icon-premium"
-                    style="background: rgba(255,255,255,0.2); color: white; width: 90px; height: 90px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; backdrop-filter: blur(5px);">
-                    <i data-lucide="hard-drive" size="44"></i>
+                <h3 class="upload-method-title">Google Drive</h3>
+                <p class="upload-method-desc">Import langsung dari file Excel atau Google Sheets di Drive Anda</p>
+                <div class="upload-method-badge">
+                    <i data-lucide="zap" size="12"></i>
+                    <span>Rekomendasi</span>
                 </div>
-                <h3 style="font-size: 32px; font-weight: 900; margin-bottom: 12px; letter-spacing: -1px;">Google
-                    Drive</h3>
-                <p
-                    style="opacity: 0.9; text-transform: none; letter-spacing: 0; font-size: 16px; font-weight: 400; max-width: 300px; margin: 0 auto;">
-                    Pilih file BKU langsung dari folder Drive Anda dengan cepat.</p>
-                <div
-                    style="margin-top: 40px; display: inline-flex; align-items: center; gap: 12px; font-weight: 800; font-size: 15px; background: rgba(255,255,255,0.2); padding: 12px 24px; border-radius: 50px;">
-                    <span>Cari File Sekarang</span>
-                    <i data-lucide="arrow-right" size="18"></i>
+            </div>
+
+            <!-- Local File Method -->
+            <div class="upload-method-card local" onclick="document.getElementById('localFileInput').click()">
+                <div class="upload-method-icon">
+                    <i data-lucide="folder-open" size="40"></i>
+                </div>
+                <h3 class="upload-method-title">File Lokal</h3>
+                <p class="upload-method-desc">Upload file Excel dari komputer atau perangkat penyimpanan lokal</p>
+                <div class="upload-method-badge">
+                    <i data-lucide="upload" size="12"></i>
+                    <span>Offline</span>
+                </div>
+                <input type="file" id="localFileInput" accept=".xlsx,.xls" style="display: none;" onchange="processLocalFile(this)">
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="upload-info-section">
+            <div class="upload-info-title">
+                <i data-lucide="info" size="20"></i>
+                <span>Persyaratan File BKU</span>
+            </div>
+            <div class="upload-info-grid">
+                <div class="upload-info-item">
+                    <i data-lucide="file-spreadsheet" size="20"></i>
+                    <div>
+                        <h4>Format File</h4>
+                        <p>Excel (.xlsx) atau Google Sheets dengan kolom: Tanggal, No Bukti, Uraian, Pengeluaran</p>
+                    </div>
+                </div>
+                <div class="upload-info-item">
+                    <i data-lucide="shield-check" size="20"></i>
+                    <div>
+                        <h4>Keamanan Data</h4>
+                        <p>Data diproses secara lokal, tidak ada data yang dikirim ke server eksternal</p>
+                    </div>
+                </div>
+                <div class="upload-info-item">
+                    <i data-lucide="clock" size="20"></i>
+                    <div>
+                        <h4>Proses Otomatis</h4>
+                        <p>Ekstraksi otomatis dalam hitungan detik, siap untuk dicetak menjadi dokumen SPJ</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    // Local file processing function - RESEARCHED & TESTED METHOD
+    function processLocalFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        // Validate file type
+        const validExtensions = ['.xlsx', '.xls'];
+        const fileExt = file.name.toLowerCase().slice(file.name.lastIndexOf('.'));
+        if (!validExtensions.includes(fileExt)) {
+            showToast('Format file tidak valid! Gunakan file Excel (.xlsx atau .xls)', 'error');
+            input.value = '';
+            return;
+        }
+
+        // Validate file size (max 10MB)
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            showToast('Ukuran file terlalu besar! Maksimal 10MB', 'error');
+            input.value = '';
+            return;
+        }
+
+        // Show loading state
+        const uploadCard = document.querySelector('.upload-method-card.local');
+        const originalContent = uploadCard.innerHTML;
+        uploadCard.innerHTML = `
+            <div class="upload-method-icon" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0);">
+                <i data-lucide="loader-2" class="spin" size="40"></i>
+            </div>
+            <h3 class="upload-method-title">Mengupload File...</h3>
+            <p class="upload-method-desc">${file.name}</p>
+            <p class="upload-method-desc" style="font-size: 11px; margin-top: 4px;">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+        `;
+        lucide.createIcons();
+
+        // Convert file to Base64
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64Data = e.target.result.split(',')[1]; // Remove data:image/png;base64, prefix
+
+            // Call Google Script with Base64 data
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    uploadCard.innerHTML = originalContent;
+                    lucide.createIcons();
+                    input.value = '';
+
+                    if (response.success && response.data && response.data.length > 0) {
+                        renderTransactions(response.data);
+                        const info = document.getElementById('extractionInfo');
+                        if (info) info.innerText = `Ditemukan ${response.data.length} transaksi dari: ${file.name}`;
+                        showView('manage-view', document.querySelector('.nav-item[onclick*="manage-view"]'));
+                        showToast("Berhasil memproses " + response.data.length + " transaksi.");
+                    } else if (response.success) {
+                        showToast("File berhasil dibaca, namun tidak ditemukan data transaksi yang valid.", "warning");
+                    } else {
+                        showToast("Gagal memproses file: " + (response.error || "Terjadi kesalahan sistem"), "error");
+                    }
+                })
+                .withFailureHandler(function(err) {
+                    uploadCard.innerHTML = originalContent;
+                    lucide.createIcons();
+                    input.value = '';
+                    showToast("Error: " + err.message, "error");
+                })
+                .processExcelFromBase64(base64Data, file.name);
+        };
+
+        reader.onerror = function() {
+            uploadCard.innerHTML = originalContent;
+            lucide.createIcons();
+            input.value = '';
+            showToast("Gagal membaca file", "error");
+        };
+
+        reader.readAsDataURL(file); // Convert to Base64
+    }
+</script>

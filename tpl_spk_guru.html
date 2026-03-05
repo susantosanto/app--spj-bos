@@ -5,7 +5,9 @@
         const tanggalStr = document.getElementById('custTanggal')?.value || "15/07/2024";
         const dt = getDateText(tanggalStr);
         const dateTerbilang = dt.dateTerbilang || tanggalStr;
-        const dayName = dt.dayName || 'Sabtu';
+        // Use custom hari input if provided, otherwise use from date
+        const customHari = document.getElementById('custSpkGuruHari')?.value;
+        const dayName = customHari || dt.dayName || 'Sabtu';
         const kepalaNama = document.getElementById('custSpkGuruKepalaNama')?.value || schoolData.principal;
         const kepalaTtl = document.getElementById('custSpkGuruKepalaTtl')?.value || "Bandung, 07 Juli 1966";
         const kepalaNip = document.getElementById('custSpkGuruKepalaNip')?.value || schoolData.principalNip;
