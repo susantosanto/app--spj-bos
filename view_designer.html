@@ -1,60 +1,249 @@
-<!-- View 4: Desain Nota Custom -->
+<!-- View 4: Desain Nota Custom - Premium Elite 2026 -->
 <section id="designer-view" class="view-section">
-    <div class="settings-container">
-        <div class="settings-header">
-            <div class="settings-icon" style="background: #f0fdf4; color: #16a34a;">
-                <i data-lucide="pen-tool" size="32"></i>
+    <style>
+        .designer-container-elite {
+            max-width: 850px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 48px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            animation: designerPop 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes designerPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .designer-header-elite {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 2px dashed #e2e8f0;
+        }
+
+        .designer-icon-elite {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            color: #16a34a;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(22, 163, 74, 0.2);
+            transform: rotate(-5deg);
+        }
+
+        .designer-title-elite h3 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .designer-title-elite p {
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        .form-grid-elite {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .form-group-elite {
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        .form-group-elite.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group-elite label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .input-elite {
+            width: 100%;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 15px;
+            color: #1e293b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .input-elite:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: #ffffff;
+            box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.1);
+        }
+
+        .select-elite {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 20px;
+        }
+
+        .btn-submit-elite {
+            grid-column: span 2;
+            margin-top: 24px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-submit-elite:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -5px rgba(16, 185, 129, 0.5);
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .saved-templates-section {
+            margin-top: 50px;
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .saved-templates-section h4 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .custom-file-upload {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            padding: 24px;
+            border-radius: 16px;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+            color: #334155;
+        }
+
+        .custom-file-upload input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+
+    <div class="designer-container-elite">
+        <div class="designer-header-elite">
+            <div class="designer-icon-elite">
+                <i data-lucide="pen-tool" size="40"></i>
             </div>
-            <div class="settings-title">
-                <h3>Konfigurasi Nota Custom</h3>
-                <p>Buat template nota standar dengan identitas toko Anda sendiri.</p>
+            <div class="designer-title-elite">
+                <h3>Workspace Nota Custom</h3>
+                <p>Kreasikan identitas visual vendor pada bukti pengeluaran dengan engine template premium.</p>
             </div>
         </div>
 
-        <div class="form-grid">
-            <div class="form-group full-width">
-                <label>Nama Template (Untuk disimpan di list)</label>
-                <input type="text" id="customTplName" placeholder="Contoh: Toko Bangunan Sejahtera">
+        <div class="form-grid-elite">
+            <div class="form-group-elite full-width">
+                <label>Nama Alias Template</label>
+                <input type="text" id="customTplName" class="input-elite" placeholder="Misal: CV. Global Teknologi">
             </div>
 
-            <div class="form-group">
-                <label>Nama Toko / Vendor</label>
-                <input type="text" id="customStoreName" placeholder="Nama Toko">
+            <div class="form-group-elite">
+                <label>Nama Entitas / Toko</label>
+                <input type="text" id="customStoreName" class="input-elite" placeholder="Label toko resmi">
             </div>
 
-            <div class="form-group">
-                <label>Alamat Toko</label>
-                <input type="text" id="customStoreAddress" placeholder="Alamat Lengkap">
+            <div class="form-group-elite">
+                <label>Alamat Operasional</label>
+                <input type="text" id="customStoreAddress" class="input-elite" placeholder="Jalan, Kota, Kode Pos">
             </div>
 
-            <div class="form-group">
-                <label>Warna Tema Nota</label>
-                <select id="customStoreColor"
-                    style="width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
-                    <option value="#000000">Hitam (Standard)</option>
-                    <option value="#1e40af">Biru (Professional)</option>
-                    <option value="#b91c1c">Merah (Classic)</option>
-                    <option value="#15803d">Hijau (Fresh)</option>
-                    <option value="#d97706">Oranye (Modern)</option>
-                    <option value="#7e22ce">Ungu (Creative)</option>
+            <div class="form-group-elite">
+                <label>Skema Warna Merek</label>
+                <select id="customStoreColor" class="input-elite select-elite">
+                    <option value="#000000">🌑 Carbon Black (Standard)</option>
+                    <option value="#1e40af">🌊 Sapphire Blue (Corporate)</option>
+                    <option value="#b91c1c">🔥 Ruby Red (Classic)</option>
+                    <option value="#15803d">🌲 Emerald Green (Fresh)</option>
+                    <option value="#d97706">⚡ Amber Orange (Dynamic)</option>
+                    <option value="#7e22ce">🔮 Amethyst Purple (Creative)</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label>Logo Toko (Opsional, Max 500KB)</label>
-                <input type="file" id="customStoreLogo" accept="image/*" style="font-size: 12px;">
+            <div class="form-group-elite">
+                <label>Logo Vektor / Raster (Opsional)</label>
+                <div class="custom-file-upload">
+                    <i data-lucide="image-plus" size="24"></i>
+                    <span>Pilih Gambar Resolusi Tinggi (Max 500KB)</span>
+                    <input type="file" id="customStoreLogo" accept="image/*">
+                </div>
             </div>
 
-            <button type="button" class="btn-primary btn-submit" onclick="saveCustomTemplate()">
-                <i data-lucide="plus-circle" size="18"></i>
-                Simpan & Buat Template
+            <button type="button" class="btn-submit-elite" onclick="saveCustomTemplate()">
+                <i data-lucide="sparkles" size="22"></i>
+                Hasilkan & Simpan Template
             </button>
         </div>
 
         <!-- Saved Templates List -->
-        <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 30px;">
-            <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #1e293b;">Template
-                Tersimpan</h4>
+        <div class="saved-templates-section">
+            <h4>
+                <i data-lucide="layers" size="20" style="color: #3b82f6;"></i>
+                Koleksi Template Tersimpan
+            </h4>
             <div id="savedTemplatesList">
                 <!-- Populated by JS -->
             </div>

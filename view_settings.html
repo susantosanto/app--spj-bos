@@ -1,159 +1,148 @@
-<!-- View 3: Data Sekolah - Split Panel Design 2026 -->
+<!-- View 3: Data Sekolah - Premium Elite Design 2026 -->
 <section id="settings-view" class="view-section">
-    <div class="settings-split-container">
+    <div class="settings-elite-container">
         <!-- Left Panel - School Data -->
-        <div class="settings-panel-left">
-            <div class="school-data-card">
-                <div class="panel-header">
-                    <div class="panel-icon">
-                        <i data-lucide="school" size="28"></i>
+        <div class="settings-elite-panel main">
+            <div class="panel-elite-header">
+                <div class="panel-elite-title">
+                    <div class="icon-elite-box" style="--box-color: #3b82f6;">
+                        <i data-lucide="school" size="24"></i>
                     </div>
-                    <div class="panel-title">
-                        <h3>Data Sekolah</h3>
-                        <p>Konfigurasi informasi sekolah untuk kop surat</p>
+                    <div>
+                        <h3>Profil Instansi Pribadi</h3>
+                        <p>Konfigurasi data master untuk otomatisasi dokumen SPJ & Kop Surat.</p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="schoolForm" class="form-elite">
+                <div class="form-grid-elite">
+                    <div class="form-group-elite full">
+                        <label>Nama Sekolah / Instansi</label>
+                        <div class="input-elite-wrapper">
+                            <i data-lucide="building"></i>
+                            <input type="text" id="schoolName" name="schoolName"
+                                placeholder="Contoh: SD NEGERI 01 CONTOH">
+                        </div>
+                    </div>
+
+                    <div class="form-group-elite full">
+                        <label>Alamat Lengkap</label>
+                        <div class="input-elite-wrapper">
+                            <i data-lucide="map-pin"></i>
+                            <input type="text" id="schoolAddress" name="schoolAddress"
+                                placeholder="Jl. Pendidikan No. 123">
+                        </div>
+                    </div>
+
+                    <div class="form-group-elite">
+                        <label>NPSN / Kode Registrasi</label>
+                        <div class="input-elite-wrapper">
+                            <i data-lucide="hash"></i>
+                            <input type="text" id="npsn" name="npsn" placeholder="12345678">
+                        </div>
+                    </div>
+
+                    <div class="form-group-elite">
+                        <label>Kecamatan</label>
+                        <div class="input-elite-wrapper">
+                            <i data-lucide="map"></i>
+                            <input type="text" id="kecamatan" name="kecamatan" placeholder="Contoh: Cikalongwetan">
+                        </div>
+                    </div>
+
+                    <div class="form-elite-divider"><span>Pejabat Penandatangan</span></div>
+
+                    <div class="form-group-elite">
+                        <label>Nama Kepala Sekolah</label>
+                        <div class="input-elite-wrapper">
+                            <i data-lucide="user"></i>
+                            <input type="text" id="principalName" name="principalName"
+                                placeholder="Nama Lengkap & Gelar">
+                        </div>
+                    </div>
+
+                    <div class="form-group-elite">
+                        <label>NIP Kepala Sekolah</label>
+                        <div class="input-elite-wrapper">
+                            <i data-lucide="credit-card"></i>
+                            <input type="text" id="principalNip" name="principalNip"
+                                placeholder="19XXXXXXXX XXXXXX X XXX">
+                        </div>
+                    </div>
+
+                    <div class="form-group-elite">
+                        <label>Nama Bendahara</label>
+                        <div class="input-elite-wrapper">
+                            <i data-lucide="user-check"></i>
+                            <input type="text" id="treasurerName" name="treasurerName"
+                                placeholder="Nama Lengkap & Gelar">
+                        </div>
+                    </div>
+
+                    <div class="form-group-elite">
+                        <label>NIP Bendahara</label>
+                        <div class="input-elite-wrapper">
+                            <i data-lucide="credit-card"></i>
+                            <input type="text" id="treasurerNip" name="treasurerNip"
+                                placeholder="19XXXXXXXX XXXXXX X XXX">
+                        </div>
                     </div>
                 </div>
 
-                <form id="schoolForm">
-                    <div class="form-grid-split">
-                        <div class="form-group-split full-width">
-                            <label>Nama Sekolah</label>
-                            <input type="text" id="schoolName" name="schoolName" placeholder="Contoh: SD NEGERI 01 CONTOH">
-                        </div>
-                        
-                        <div class="form-group-split full-width">
-                            <label>Alamat Lengkap</label>
-                            <input type="text" id="schoolAddress" name="schoolAddress" placeholder="Jl. Pendidikan No. 123">
-                        </div>
-                        
-                        <div class="form-group-split">
-                            <label>NPSN</label>
-                            <input type="text" id="npsn" name="npsn" placeholder="12345678">
-                        </div>
-                        
-                        <div class="form-group-split">
-                            <label>Kecamatan</label>
-                            <input type="text" id="kecamatan" name="kecamatan" placeholder="Cikalongwetan">
-                        </div>
-                        
-                        <div class="form-group-split">
-                            <label>Nama Kepala Sekolah</label>
-                            <input type="text" id="principalName" name="principalName" placeholder="Nama Lengkap & Gelar">
-                        </div>
-                        
-                        <div class="form-group-split">
-                            <label>NIP Kepala Sekolah</label>
-                            <input type="text" id="principalNip" name="principalNip" placeholder="19XXXXXXXX XXXXXX X XXX">
-                        </div>
-                        
-                        <div class="form-group-split">
-                            <label>Nama Bendahara</label>
-                            <input type="text" id="treasurerName" name="treasurerName" placeholder="Nama Lengkap & Gelar">
-                        </div>
-                        
-                        <div class="form-group-split">
-                            <label>NIP Bendahara</label>
-                            <input type="text" id="treasurerNip" name="treasurerNip" placeholder="19XXXXXXXX XXXXXX X XXX">
-                        </div>
-                    </div>
-
-                    <button type="button" class="btn-save-premium" onclick="saveData()">
-                        <i data-lucide="save" size="18"></i>
-                        Simpan Perubahan
+                <div class="form-elite-footer">
+                    <button type="button" class="btn-elite-save" onclick="saveData()">
+                        <span>Simpan Konfigurasi</span>
+                        <i data-lucide="save" size="20"></i>
                     </button>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
 
         <!-- Right Panel - Backup & Restore -->
-        <div class="settings-panel-right">
+        <div class="settings-elite-panel side">
             <!-- Backup Card -->
-            <div class="backup-card">
-                <div class="panel-header">
-                    <div class="panel-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
-                        <i data-lucide="database" size="28"></i>
-                    </div>
-                    <div class="panel-title">
-                        <h3>Backup & Restore</h3>
-                        <p>Kelola data transaksi dan konfigurasi SPJ Flow</p>
+            <div class="backup-elite-card">
+                <div class="panel-elite-header">
+                    <div class="panel-elite-title">
+                        <div class="icon-elite-box" style="--box-color: #10b981;">
+                            <i data-lucide="database" size="24"></i>
+                        </div>
+                        <div>
+                            <h3>Pusat Keamanan Data</h3>
+                            <p>Manajemen enkripsi & backup</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="backup-actions">
-                    <div class="backup-action-item download" onclick="backupData()">
-                        <div class="backup-action-icon">
-                            <i data-lucide="download-cloud" size="24"></i>
-                        </div>
-                        <div class="backup-action-content">
-                            <div class="backup-action-title">Download Backup</div>
-                            <div class="backup-action-desc">Ekspor semua data ke file JSON</div>
-                        </div>
-                        <div class="backup-action-arrow">
-                            <i data-lucide="arrow-right" size="16"></i>
+                <div class="backup-elite-actions">
+                    <div class="backup-action-elite download" onclick="backupData()">
+                        <div class="action-icon"><i data-lucide="download-cloud" size="24"></i></div>
+                        <div class="action-text">
+                            <span class="title">Ekspor Backup Data</span>
+                            <span class="desc">JSON Terenkripsi Format Baru</span>
                         </div>
                     </div>
 
-                    <div class="backup-action-item restore" onclick="document.getElementById('restoreFile').click()">
-                        <div class="backup-action-icon">
-                            <i data-lucide="upload-cloud" size="24"></i>
-                        </div>
-                        <div class="backup-action-content">
-                            <div class="backup-action-title">Restore Data</div>
-                            <div class="backup-action-desc">Impor data dari file backup</div>
-                        </div>
-                        <div class="backup-action-arrow">
-                            <i data-lucide="arrow-right" size="16"></i>
+                    <div class="backup-action-elite restore" onclick="document.getElementById('restoreFile').click()">
+                        <div class="action-icon"><i data-lucide="upload-cloud" size="24"></i></div>
+                        <div class="action-text">
+                            <span class="title">Pulihkan Data (Restore)</span>
+                            <span class="desc">Timpa dari Sistem Cadangan Lokal</span>
                         </div>
                     </div>
                 </div>
 
                 <input type="file" id="restoreFile" accept=".json" style="display: none;" onchange="restoreData(this)">
 
-                <div class="backup-stats">
-                    <div class="backup-stat-item">
-                        <div class="backup-stat-value" id="statTransactions">0</div>
-                        <div class="backup-stat-label">Transaksi</div>
+                <div class="backup-elite-stats">
+                    <div class="stat-bubble">
+                        <div class="value" id="statTransactions">0</div>
+                        <div class="label">Transaksi</div>
                     </div>
-                    <div class="backup-stat-item">
-                        <div class="backup-stat-value" id="statTemplates">0</div>
-                        <div class="backup-stat-label">Template</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Info Card -->
-            <div class="backup-card">
-                <div class="panel-header">
-                    <div class="panel-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
-                        <i data-lucide="shield-check" size="28"></i>
-                    </div>
-                    <div class="panel-title">
-                        <h3>Keamanan Data</h3>
-                        <p>Informasi penyimpanan data</p>
-                    </div>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 16px;">
-                    <div style="display: flex; align-items: flex-start; gap: 12px;">
-                        <i data-lucide="check-circle" size="20" style="color: #10b981; flex-shrink: 0; margin-top: 2px;"></i>
-                        <div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Penyimpanan Lokal</h4>
-                            <p style="font-size: 12px; color: #64748b; line-height: 1.5;">Data disimpan di browser Anda, tidak ada data yang dikirim ke server eksternal</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: flex-start; gap: 12px;">
-                        <i data-lucide="check-circle" size="20" style="color: #10b981; flex-shrink: 0; margin-top: 2px;"></i>
-                        <div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Backup Otomatis</h4>
-                            <p style="font-size: 12px; color: #64748b; line-height: 1.5;">Disarankan untuk backup data secara berkala untuk keamanan</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: flex-start; gap: 12px;">
-                        <i data-lucide="check-circle" size="20" style="color: #10b981; flex-shrink: 0; margin-top: 2px;"></i>
-                        <div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Format JSON</h4>
-                            <p style="font-size: 12px; color: #64748b; line-height: 1.5;">File backup menggunakan format JSON yang universal dan mudah dibaca</p>
-                        </div>
+                    <div class="stat-bubble">
+                        <div class="value" id="statTemplates">0</div>
+                        <div class="label">Template</div>
                     </div>
                 </div>
             </div>
@@ -167,15 +156,18 @@
         const transactionCount = typeof allTransactions !== 'undefined' ? allTransactions.length : 0;
         const templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
         const templateCount = Object.keys(templates).length;
-        
-        document.getElementById('statTransactions').textContent = transactionCount;
-        document.getElementById('statTemplates').textContent = templateCount;
+
+        const elTx = document.getElementById('statTransactions');
+        const elTpl = document.getElementById('statTemplates');
+
+        if (elTx) elTx.textContent = transactionCount;
+        if (elTpl) elTpl.textContent = templateCount;
     }
 
     // Call updateBackupStats when settings view is shown
-    const originalShowView = window.showView;
-    window.showView = function(viewId, element) {
-        if (originalShowView) originalShowView.call(this, viewId, element);
+    const originalShowViewSettings = window.showView;
+    window.showView = function (viewId, element) {
+        if (originalShowViewSettings) originalShowViewSettings.call(this, viewId, element);
         if (viewId === 'settings-view') {
             setTimeout(updateBackupStats, 100);
         }

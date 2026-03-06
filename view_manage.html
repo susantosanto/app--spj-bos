@@ -1,36 +1,209 @@
-<!-- View 2: Kelola Transaksi -->
+<!-- View 2: Kelola Transaksi - Premium Elite 2026 -->
 <section id="manage-view" class="view-section">
-    <div class="view-header">
-        <div class="view-header-text">
-            <h2>Kelola Transaksi BKU</h2>
-            <p id="extractionInfo">Daftar pengeluaran yang terdeteksi. Silakan periksa dan cetak dokumen.</p>
+    <style>
+        .manage-header-elite {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 32px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .manage-title-elite h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .manage-title-elite p {
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        .btn-elite-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 16px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-elite-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.5);
+        }
+
+        .empty-state-elite {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border: 2px dashed rgba(203, 213, 225, 0.8);
+            border-radius: 32px;
+            padding: 80px 40px;
+            text-align: center;
+            color: #64748b;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .empty-elite-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .empty-state-elite p {
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .table-container-elite {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            animation: fadeInUp 0.6s ease;
+            overflow-x: auto;
+        }
+
+        .table-elite {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .table-elite th {
+            padding: 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #f1f5f9;
+            text-align: left;
+        }
+
+        .table-elite td {
+            padding: 20px 16px;
+            background: #f8fafc;
+            font-size: 14px;
+            color: #334155;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .table-elite tr td:first-child {
+            border-radius: 16px 0 0 16px;
+        }
+
+        .table-elite tr td:last-child {
+            border-radius: 0 16px 16px 0;
+        }
+
+        .table-elite tbody tr {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .table-elite tbody tr:hover {
+            transform: scale(1.01);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-elite tbody tr:hover td {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table-elite tbody tr:hover td:first-child {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .table-elite tbody tr:hover td:last-child {
+            border-right: 1px solid #e2e8f0;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <div class="manage-header-elite">
+        <div class="manage-title-elite">
+            <h2>Kelola Transaksi Integrasi</h2>
+            <p id="extractionInfo">Verifikasi data pengeluaran dan cetak dokumen SPJ Anda.</p>
         </div>
-        <button class="btn-primary" onclick="openAddModal()">
-            <i data-lucide="plus" size="18"></i>
-            Tambah Manual
+        <button class="btn-elite-primary" onclick="openAddModal()">
+            <i data-lucide="plus" size="20"></i>
+            Entri Manual
         </button>
     </div>
 
-    <div id="emptyState" class="empty-state">
-        <div class="empty-icon">
-            <i data-lucide="alert-circle" size="64"></i>
+    <div id="emptyState" class="empty-state-elite">
+        <div class="empty-elite-icon">
+            <i data-lucide="inbox" size="48"></i>
         </div>
-        <p>Belum ada data. Silakan unggah file BKU atau tambah manual.</p>
-        <div style="margin-top: 20px;">
-            <button class="btn-primary" style="margin: 0 auto;" onclick="openPreview()">Demo Preview</button>
+        <p>Belum ada data transaksi yang dimuat. Silakan sinkronisasikan BKU atau tambah riwayat baru.</p>
+        <div>
+            <button class="btn-elite-primary" style="margin: 0 auto;" onclick="openPreview()">
+                <i data-lucide="play-circle" size="20"></i> Demokan Preview
+            </button>
         </div>
     </div>
 
-    <div id="transactionTableContainer" style="display: none;">
-        <table
-            style="width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow);">
+    <div id="transactionTableContainer" class="table-container-elite" style="display: none;">
+        <table class="table-elite">
             <thead>
-                <tr style="background: #f1f5f9; text-align: left;">
-                    <th style="padding: 16px; font-size: 13px;">Tanggal</th>
-                    <th style="padding: 16px; font-size: 13px;">No Bukti</th>
-                    <th style="padding: 16px; font-size: 13px;">Uraian</th>
-                    <th style="padding: 16px; font-size: 13px;">Jumlah</th>
-                    <th style="padding: 16px; font-size: 13px;">Aksi</th>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>No Bukti</th>
+                    <th>Uraian Ekstraksi</th>
+                    <th>Jumlah (Rp)</th>
+                    <th style="text-align: right;">Mode Aksi</th>
                 </tr>
             </thead>
             <tbody id="transactionTbody">

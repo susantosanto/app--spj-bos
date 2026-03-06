@@ -3,7 +3,7 @@
     // This file is included by js_templates.html
     // The template logic is handled inline in updatePreview() function
     // This file provides helper functions for nota rendering
-    
+
     function getNotaRmFamilyHtml(schoolData, vendorAddress, tanggal, nomorSurat, hwAttr, itemsHtml, jumlah) {
         return `
             <div style="font-family: 'Arial Narrow', Arial, sans-serif; color: #000; border: 2px solid #000; padding: 20px; background: #fff; width: 100%;">
@@ -81,17 +81,26 @@
         return `<div style="font-family: 'Arial', sans-serif; color: #1a1a1a; padding: 22px 26px; background: #fffef5; width: 100%; border: 1.5px solid #c8b89a; border-radius: 3px; box-shadow: inset 0 0 40px rgba(180,150,80,0.06);"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;"><div style="font-size:13px; line-height:2;"><div>Kepada Yth. <span style="border-bottom:1px solid #888; display:inline-block; min-width:180px; padding-bottom:1px; ${hwAttr}">${schoolData.name}</span></div><div>di &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tempat</div></div><div style="text-align:right; font-size:13px; line-height:2;"><div>${schoolData.kecamatan}, <span style="border-bottom:1px solid #888; display:inline-block; min-width:120px; padding-bottom:1px; ${hwAttr}">${dateInfo.fullDate}</span></div><div>No. &nbsp;<span style="border-bottom:1px solid #888; display:inline-block; min-width:80px; padding-bottom:1px; ${hwAttr}">-</span></div></div></div><div style="border-top:1.5px solid #888; margin-bottom:0;"></div><table style="width:100%; border-collapse:collapse; font-size:13px; font-family: inherit;"><thead><tr style="border-bottom:1.5px solid #888;"><th style="border-right:1.5px solid #888; padding:6px 8px; width:60px; font-weight:600; text-align: center;">Banyak</th><th style="border-right:1.5px solid #888; padding:6px 8px; text-align:left; font-weight:600;">Nama Barang</th><th style="border-right:1.5px solid #888; padding:6px 8px; width:110px; font-weight:600; text-align: right;">Harga</th><th style="padding:6px 8px; text-align:right; width:120px; font-weight:600;">Jumlah</th></tr></thead><tbody>${plainRows}</tbody></table><div style="display:flex; justify-content:flex-end; border-top:1.5px solid #888; padding-top:8px; margin-top:0;"><div style="font-size:14px; font-weight:700; display:flex; gap:20px; align-items:center;"><span>Jumlah</span><span style="border-bottom:1.5px solid #333; min-width:140px; text-align:right; display:inline-block; padding-bottom:2px; ${hwAttr}">Rp ${jumlah.toLocaleString('id-ID')}</span></div></div><div style="font-size:11px; color:#555; margin-top:4px; font-style:italic; text-align:right; ${hwAttr}">Terbilang: ${terbilangText}</div><div style="display:flex; justify-content:space-between; margin-top:30px; font-size:13px;"><div style="text-align:center;"><div style="margin-bottom:50px;">Yang Menerima,</div><div style="border-top:1px solid #555; width:130px; padding-top:4px;">( ..................... )</div></div><div style="text-align:center; position:relative;"><div style="margin-bottom:50px;">Hormat Kami,</div><div style="border-top:1px solid #555; width:130px; padding-top:4px;">( ..................... )</div></div></div></div>`;
     }
 
-    function getNotaCustomHtml(vendorStyle, vendorName, vendorAddress, tanggal, schoolData, nomorSurat, jumlah, terbilangText, hwAttr) {
+    function getNotaCustomHtml(vendorStyle, vendorName, vendorAddress, tanggal, schoolData, nomorSurat, jumlah, terbilangText, hwAttr, itemsHtml) {
         const templates = JSON.parse(localStorage.getItem('spj_custom_templates') || '{}');
         const template = templates[vendorStyle];
-        if (!template) return getNotaStandardHtml(schoolData, vendorName, vendorAddress, tanggal, hwAttr, jumlah, "Barang");
-        
+
+        let customItemsHtml = itemsHtml || '';
+        if (!customItemsHtml || customItemsHtml === '') {
+            customItemsHtml = `<tr><td style="border: 1px solid #ddd; padding: 10px; ${hwAttr}">Barang/Jasa</td><td style="border: 1px solid #ddd; padding: 10px; text-align: center; ${hwAttr}">1</td><td style="border: 1px solid #ddd; padding: 10px; text-align: right; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td><td style="border: 1px solid #ddd; padding: 10px; text-align: right; ${hwAttr}">${jumlah.toLocaleString('id-ID')}</td></tr>`;
+        }
+
+        // Ensure table styling blends correctly into custom template
+        customItemsHtml = customItemsHtml.replace(/border-right: 2px solid #000/g, 'border: 1px solid #ddd').replace(/border-bottom: 1px solid #000/g, 'border: 1px solid #ddd');
+
+        if (!template) return getNotaStandardHtml(schoolData, vendorName, vendorAddress, tanggal, hwAttr, jumlah, "Barang", customItemsHtml);
+
         // Replace template variables
         let html = template.html
             .replace(/\$\{tanggal\}/g, tanggal)
             .replace(/\$\{schoolData\.name\}/g, schoolData.name)
             .replace(/\$\{jumlah\.toLocaleString\('id-ID'\)\}/g, jumlah.toLocaleString('id-ID'))
-            .replace(/\$\{itemsHtml\}/g, '<tr><td colspan="4" style="padding: 20px; text-align: center;">Custom template - items not available</td></tr>');
+            .replace(/\$\{itemsHtml\}/g, customItemsHtml);
         return html;
     }
 </script>

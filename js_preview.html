@@ -277,7 +277,7 @@
             } else if (vendorStyle === 'plain') {
                 html = getNotaPlainHtml(schoolData, vendorAddress, tanggal, dateInfo, hwAttr, jumlah, uraian, terbilangText, itemsHtml);
             } else if (vendorStyle.startsWith('custom_')) {
-                html = getNotaCustomHtml(vendorStyle, vendorName, vendorAddress, tanggal, schoolData, nomorSurat, jumlah, terbilangText, hwAttr);
+                html = getNotaCustomHtml(vendorStyle, vendorName, vendorAddress, tanggal, schoolData, nomorSurat, jumlah, terbilangText, hwAttr, itemsHtml);
             }
         } else if (docType === 'pesanan') {
             html = getPesananHtml(schoolData, schoolKop, uraian, cleanUraian, tanggalPesan, tanggalKegiatan, datePesanInfo, dateKegiatanInfo, perihal, tempatKegiatan, waktuKegiatan, tembusan, vendorName, nomorSurat, jenisKegiatanPesanan, jumlahPesanan);
