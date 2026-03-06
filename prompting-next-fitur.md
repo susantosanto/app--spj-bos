@@ -9,4 +9,6 @@ coba research dengan sangat detail dan menyeluruh di peraturan siplah yang berla
 2. Kegiatan makan dan minum rapat maupun kegiatan
 3. Perjalanan dinas SPPD untuk rapat atau kegiatan,
 4. pembelian barang / jasa di bawah 500rb
+
+Tolong Update di file plan-fitur.md
    
